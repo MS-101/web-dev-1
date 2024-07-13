@@ -20,4 +20,6 @@ export const Users = dbConnection.define('Users', {
         type: DataTypes.STRING,
         allowNull: false,
     },
+}, {
+    timestamps: false
 });
