@@ -14,7 +14,7 @@ export const signAccessToken = (userId) => {
             if (err) reject(err.message);
             resolve(token);
         })
-    })
+     })
 }
 
 export const verifyAccessToken = (token) => {
