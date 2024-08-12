@@ -1,13 +1,13 @@
-import React from 'react';
-import Feed from './Feed';
-import Trending from './Trending';
+import React, {useContext} from 'react';
+import { Navigate } from 'react-router-dom';
+import { AuthContext } from '../contexts/AuthContext';
 
 const Home = () => {
-    const isAuthenticated = () => {
-        return true;
-    };
+    const { user } = useContext(AuthContext);
 
-    return isAuthenticated() ? <Feed /> : <Trending />;
+    return user
+        ? <Navigate to="/feed" replace />
+        : <Navigate to="/trending" replace />;
 };
 
 export default Home;

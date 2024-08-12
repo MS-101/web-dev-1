@@ -1,0 +1,36 @@
+.SideBar {
+  background-color: rgb(200, 0, 0);
+  color: black;
+  width: 200px;
+  display: flex;
+  padding: 10px;
+}
+
+.SideBar ul {
+  list-style-type: none;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+.SideBar li {
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: large;
+}
+
+.SideBar li:hover {
+  background-color: #777;
+}
+
+.SideBar li.active {
+  background-color: black;
+  color: white;
+}
+
+.SideBar a {
+  color: inherit;
+  text-decoration: none;
+}
