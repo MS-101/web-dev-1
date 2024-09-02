@@ -6,8 +6,6 @@ function Login() {
     const [ username, setUsername ] = useState(null);
     const [ password, setPassword ] = useState(null);
 
-    
-
     return (
         <>
             <div className='modal-header'>
