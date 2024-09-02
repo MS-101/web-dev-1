@@ -1,11 +1,11 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Link } from "react-router-dom";
-import { AuthContext } from '../contexts/AuthContext';
+import { useAuthContext } from '../contexts/AuthContext';
 import SearchBar from './SearchBar';
 import '../styles/TopPanel.css'
 
 const TopPanel = () => {
-    const { user } = useContext(AuthContext);
+    const { user, showLogin } = useAuthContext();
 
     return (
         <nav className='TopPanel'>
@@ -18,7 +18,7 @@ const TopPanel = () => {
                 <SearchBar/>
             </div>
             <nav className='ButtonContainer'>
-                {user ? <button>Logout</button> : <button>Login</button>}
+                {user ? <button>Logout</button> : <button onClick={showLogin}>Login</button>}
             </nav>
         </nav>
     )

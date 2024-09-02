@@ -1,34 +1,37 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 
 export const AuthContext = createContext();
 
+export const useAuthContext = () =>  {
+    return useContext(AuthContext);
+}
+
 export const AuthProvider = ({ children }) => {
-    const [authToken, setAuthToken] = useState(null);
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState(null)
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [authView, setAuthView] = useState('login');
 
-    useEffect(() => {
-        const authToken = localStorage.getItem('authToken');
+    const openModal = () => setIsModalOpen(true);
+    const closeModal = () => setIsModalOpen(false);
+    
+    const showLogin = () => {
+        console.log('test');
+        setAuthView('login');
+        openModal();
+    }
 
-        if (authToken) {
-            setAuthToken(authToken);
-            setUser(true);
-        }
-    }, []);
+    const showRegister = () => {
+        setAuthView('register');
+        openModal();
+    }
 
-    const login = (token) => {
-        setAuthToken(token);
-        setUser(true);
-        localStorage.setItem('authToken', token);
-    };
-
-    const logout = () => {
-        setAuthToken(null);
-        setUser(false);
-        localStorage.removeItem('authToken');
-    };
+    const showResetPassword = () => {
+        setAuthView('resetPassword');
+        openModal();
+    }
 
     return (
-        <AuthContext.Provider value={{ authToken, user, login, logout }}>
+        <AuthContext.Provider value={{ isModalOpen, openModal, closeModal, authView, showLogin, showRegister, showResetPassword }}>
             {children}
         </AuthContext.Provider>
     );
