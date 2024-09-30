@@ -1,13 +1,13 @@
-import { Users } from '../models/users.js';
+import { User } from '../models/user.js';
 import { signAccessToken, signRefreshToken, verifyRefreshToken } from '../helpers/jwt_helpers.js';
 import bcrypt from 'bcrypt';
 
 export const login = async (req, res) => {
-    const { username, password } = req.body;
+    const { name, password } = req.body;
 
-    const user = await Users.findOne({
+    const user = await User.findOne({
         where: {
-            username: username
+            name: name
         },
     })
 
@@ -21,7 +21,7 @@ export const login = async (req, res) => {
         const refreshToken = await signRefreshToken(user.idUser);
     
         return res.status(201).json({
-            message: 'Registration successfull!',
+            message: 'Login successfull!',
             accessToken: accessToken,
             refreshToken: refreshToken
         });
@@ -31,18 +31,18 @@ export const login = async (req, res) => {
 };
 
 export const register = async (req, res) => {
-    const { username, email, password } = req.body;
+    const { name, email, password } = req.body;
 
-    const userWithUsername = await Users.findOne({
+    const userWithName = await User.findOne({
         where: {
-            username: username
+            name: name
         }
     });
     
-    if (userWithUsername != null)
+    if (userWithName != null)
         return res.status(400).json({ message: 'Username is occupied!' });
 
-    const userWithEmail = await Users.findOne({
+    const userWithEmail = await User.findOne({
         where: {
             email: email
         }
@@ -53,8 +53,8 @@ export const register = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const newUser = await Users.create({
-        username: username,
+    const newUser = await User.create({
+        name: name,
         email: email,
         password: hashedPassword
     });
@@ -74,11 +74,11 @@ export const refresh = async (req, res) => {
     const userId = await verifyRefreshToken(refreshToken)
 
     const accessToken = await signAccessToken(userId)
-    const refToken = await signRefreshToken(userId)
+    const newRefreshToken = await signRefreshToken(userId)
 
     return res.status(201).json({
         message: 'Token refresh successfull!',
         accessToken: accessToken,
-        refreshToken: refreshToken
+        refreshToken: newRefreshToken
     })
 }
