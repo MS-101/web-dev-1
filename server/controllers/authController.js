@@ -3,44 +3,68 @@ import { signAccessToken, signRefreshToken, verifyRefreshToken } from '../helper
 import bcrypt from 'bcrypt';
 
 export const login = async (req, res) => {
-    const { name, password } = req.body;
+    const { usernameOrEmail, password } = req.body;
 
-    const user = await User.findOne({
+    let user = await User.findOne({
         where: {
-            name: name
+            email: usernameOrEmail
         },
     })
 
     if (user === null)
-        return res.json('Login Failed!');
+        user = await User.findOne({
+            where: {
+                username: usernameOrEmail
+            },
+        })
+
+    if (user === null)
+        return res.status(401).json({
+            message: 'Login Failed!'
+        });
     
     const isMatch = await bcrypt.compare(password, user.password);
     
-    if (isMatch) {
+    if (!isMatch)
+        return res.status(401).json({
+            message: 'Login Failed!'
+        });
+
+    try {
         const accessToken = await signAccessToken(user.idUser);
         const refreshToken = await signRefreshToken(user.idUser);
     
-        return res.status(201).json({
+        return res.status(200).json({
             message: 'Login successfull!',
+            user: {
+                email: user.email,
+                username: user.usernam
+            },
             accessToken: accessToken,
             refreshToken: refreshToken
         });
-    } else {
-        return res.json('Login Failed!');
+    } catch (error) {
+        console.log(error)
+
+        return res.status(401).json({
+            message: 'Login Failed!'
+        });
     }
 };
 
 export const register = async (req, res) => {
-    const { name, email, password } = req.body;
+    const { username, email, password } = req.body;
 
-    const userWithName = await User.findOne({
+    const userWithUsername = await User.findOne({
         where: {
-            name: name
+            username: username
         }
     });
     
-    if (userWithName != null)
-        return res.status(400).json({ message: 'Username is occupied!' });
+    if (userWithUsername != null)
+        return res.status(401).json({
+            message: 'Username is occupied!' }
+        );
 
     const userWithEmail = await User.findOne({
         where: {
@@ -49,36 +73,58 @@ export const register = async (req, res) => {
     });
 
     if (userWithEmail != null)
-        return res.status(400).json({ message: 'Email is occupied!' });
+        return res.status(401).json({
+            message: 'Email is occupied!'
+        });
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    try {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const newUser = await User.create({
+            username: username,
+            email: email,
+            password: hashedPassword
+        });
+    
+        const accessToken = await signAccessToken(newUser.id);
+        const refreshToken = await signRefreshToken(newUser.id);
+    
+        return res.status(201).json({
+            message: 'Registration successfull!',
+            user: {
+                email: newUser.email,
+                username: newUser.username
+            },
+            accessToken: accessToken,
+            refreshToken: refreshToken
+        });
+    } catch (error) {
+        console.log(error)
 
-    const newUser = await User.create({
-        name: name,
-        email: email,
-        password: hashedPassword
-    });
-
-    const accessToken = await signAccessToken(newUser.id);
-    const refreshToken = await signRefreshToken(newUser.id);
-
-    return res.status(201).json({
-        message: 'Registration successfull!',
-        accessToken: accessToken,
-        refreshToken: refreshToken
-    });
+        return res.status(401).json({
+            message: 'Registration failed!'
+        })
+    }
 }
 
 export const refresh = async (req, res) => {
     const { refreshToken } = req.body
-    const userId = await verifyRefreshToken(refreshToken)
 
-    const accessToken = await signAccessToken(userId)
-    const newRefreshToken = await signRefreshToken(userId)
+    try {
+        const userId = await verifyRefreshToken(refreshToken)
 
-    return res.status(201).json({
-        message: 'Token refresh successfull!',
-        accessToken: accessToken,
-        refreshToken: newRefreshToken
-    })
+        const accessToken = await signAccessToken(userId)
+        const newRefreshToken = await signRefreshToken(userId)
+    
+        return res.status(200).json({
+            message: 'Token refresh successfull!',
+            accessToken: accessToken,
+            refreshToken: newRefreshToken
+        })
+    } catch (error) {
+        console.log(error)
+
+        return res.status(403).json({
+            message: 'Token refresh failed!'
+        })
+    }
 }

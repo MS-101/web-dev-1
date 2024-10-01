@@ -3,14 +3,26 @@ import { useAuthContext } from '../../contexts/AuthContext';
 
 function ResetPassword() {
     const { closeModal, showLogin } = useAuthContext();
-    const [ email, setEmail ] = useState(null);
+    const [ email, setEmail ] = useState('');
+
+    const onReturnClick = () => {
+        showLogin();
+    }
+
+    const onCloseClick = () => {
+        closeModal();
+    }
+
+    const onResetPasswordClick = () => {
+
+    }
 
     return (
         <>
             <div className='modal-header'>
-                <button className='return-btn' onClick={showLogin}>&lt;</button>
+                <button className='return-btn' onClick={onReturnClick}>&lt;</button>
                 <h2 className='title'>Reset Password</h2>
-                <button className='close-btn' onClick={closeModal}>&times;</button>
+                <button className='close-btn' onClick={onCloseClick}>&times;</button>
             </div>
             <div className='modal-body'>
                 <div className='input-container'>
@@ -24,7 +36,7 @@ function ResetPassword() {
                 </div>
             </div>
             <div className='modal-footer'>
-                <button className='submit-btn' type='submit' onClick={closeModal}>Reset Password</button>
+                <button className='submit-btn' type='submit' onClick={onResetPasswordClick}>Reset Password</button>
             </div>
         </>
     )

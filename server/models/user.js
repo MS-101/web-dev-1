@@ -15,7 +15,7 @@ export const User = dbConnection.define(
             allowNull: false,
             unique: true,
         },
-        name: {
+        username: {
             type: DataTypes.STRING,
             allowNull: false,
             unique: true,

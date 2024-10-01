@@ -56,7 +56,7 @@
 }
 
 .modal-body .input-container label {
-    width: 100px;
+    width: 150px;
 }
 
 .modal-body .input-container input {
@@ -76,4 +76,8 @@
     text-align: center;
     font-size: larger;
     font-weight: bold;
+}
+
+.error-message {
+    color: red;
 }
