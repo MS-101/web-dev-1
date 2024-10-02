@@ -20,14 +20,13 @@ function Login() {
         showRegister();
     }
 
-    const onLoginClick = async () => {
+    const onLoginClick = () => {
         login(usernameOrEmail, password)
-        .then((response) => {
-            if (response.success) {
-                closeModal(); // Close the modal if login is successful
-            } else {
-                setErrorMessage(response.message); // Show error message
-            }
+        .then(() => {
+            closeModal();
+        })
+        .catch((error) => {
+            setErrorMessage(error);
         });
     }
 
@@ -59,9 +58,7 @@ function Login() {
                 <div className='spacer'></div>
             </div>
             <div className='modal-footer'>
-                {errorMessage && ( // Conditionally render error message
-                    <p className='error-message'>{errorMessage}</p>
-                )}
+                {errorMessage && <p className='error-message'>{errorMessage}</p>}
                 <button className='link-btn' onClick={onForgotPasswordClick}>Forgot your password?</button>
                 <p>Don't have an account? <button className='link-btn' onClick={onShowRegisterClick}>Register</button></p> 
                 <button className='submit-btn' type='submit' onClick={onLoginClick}>Login</button>

@@ -23,71 +23,59 @@ export const AuthProvider = ({ children }) => {
     const closeModal = () => setIsModalOpen(false);
 
     const login = (usernameOrEmail, password) => {
-        return axios.post(new URL('/auth/login', baseUrl).href, {
-            'usernameOrEmail': usernameOrEmail,
-            'password': password,
-        })
-        .then((response) => {
-            setAuthentication(response.data);
-
-            return {
-                success: true,
-                message: 'Login successful!'
-            }
-        })
-        .catch((error) => {
-            console.log(error);
-
-            return {
-                success: false,
-                message: 'Login failed!'
-            }
+        return new Promise((resolve, reject) => {
+            axios.post(new URL('/auth/login', baseUrl).href, {
+                'usernameOrEmail': usernameOrEmail,
+                'password': password,
+            })
+            .then((response) => {
+                setAuthentication(response.data);
+    
+                resolve();
+            })
+            .catch((error) => {
+                const message = error.response.data.message;
+    
+                reject(message);
+            });
         });
     }
 
     const register = (username, email, password) => {
-        return axios.post(new URL('/auth/register', baseUrl).href, {
-            'username': username,
-            'email': email,
-            'password': password,
-        })
-        .then((response) => {
-            setAuthentication(response.data);
+        return new Promise((resolve, reject) => {
+            axios.post(new URL('/auth/register', baseUrl).href, {
+                'username': username,
+                'email': email,
+                'password': password,
+            })
+            .then((response) => {
+                setAuthentication(response.data);
 
-            return {
-                success: true,
-                message: 'Registration successful!'
-            }
-        })
-        .catch((error) => {
-            console.log(error);
+                resolve();
+            })
+            .catch((error) => {
+                const message = error.response.data.message;
 
-            return {
-                success: false,
-                message: 'Registration failed!'
-            }
-        });
+                reject(message);
+            })
+        })
     }
 
     const refresh = () => {
-        return axios.post(new URL('/auth/refresh', baseUrl).href, {
-            'refreshToken': refreshToken
-        })
-        .then((response) => {
-            setAuthentication(response.data);
+        return new Promise((resolve, reject) => {
+            axios.post(new URL('/auth/refresh', baseUrl).href, {
+                'refreshToken': refreshToken
+            })
+            .then((response) => {
+                setAuthentication(response.data);
 
-            return {
-                success: true,
-                message: 'Refresh successful!'
-            }
-        })
-        .catch((error) => {
-            console.log(error);
+                resolve();
+            })
+            .catch((error) => {
+                const message = error.response.data.message;
 
-            return {
-                success: false,
-                message: 'Refresh failed!'
-            }
+                reject(message);
+            })
         });
     }
 
@@ -142,7 +130,9 @@ export const AuthProvider = ({ children }) => {
             login,
             register,
             refresh,
-            logout
+            logout,
+            user,
+            accessToken
         }}>
             {children}
         </AuthContext.Provider>

@@ -6,18 +6,24 @@ function Login() {
     const [ email, setEmail ] = useState('');
     const [ username, setUsername ] = useState('');
     const [ password, setPassword ] = useState('');
+    const [ errorMessage, setErrorMessage ] = useState(null)
 
     const onCloseClick = () => {
         closeModal();
     }
 
     const onShowLoginClick = () => {
-        showLogin()
+        showLogin();
     }
 
     const onRegisterClick = () => {
         register(username, email, password)
-        closeModal()
+        .then(() => {
+            closeModal();
+        })
+        .catch((error) => {
+            setErrorMessage(error);
+        });
     }
 
     return (
@@ -56,6 +62,7 @@ function Login() {
                 </div>
             </div>
             <div className='modal-footer'>
+                {errorMessage && <p className='error-message'>{errorMessage}</p>}
                 <p>Already have an account? <button className='link-btn' onClick={onShowLoginClick}>Login</button></p> 
                 <button className='submit-btn' type='submit' onClick={onRegisterClick}>Register</button>
             </div>

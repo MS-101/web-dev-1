@@ -5,7 +5,7 @@ import SearchBar from './SearchBar';
 import '../styles/TopPanel.css'
 
 const TopPanel = () => {
-    const { user, showLogin } = useAuthContext();
+    const { user, showLogin, logout } = useAuthContext();
 
     return (
         <nav className='TopPanel'>
@@ -18,7 +18,7 @@ const TopPanel = () => {
                 <SearchBar/>
             </div>
             <nav className='ButtonContainer'>
-                {user ? <button>Logout</button> : <button onClick={showLogin}>Login</button>}
+                {user ? <button onClick={logout}>Logout</button> : <button onClick={showLogin}>Login</button>}
             </nav>
         </nav>
     )
