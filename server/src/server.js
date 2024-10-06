@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import authRoute from './routes/auth-route.js';
+import communityRoute from './routes/community-route.js';
+import postRoute from './routes/post-route.js';
 
 const app = express();
 
@@ -10,6 +12,8 @@ app.use(express.json());
 
 // routes
 app.use('/auth', authRoute);
+app.use('/community', communityRoute);
+app.use('/post', postRoute);
 
 app.listen(8081, () => {
     console.log('Server is listening...');
