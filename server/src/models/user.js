@@ -1,7 +1,7 @@
 import { DataTypes, Sequelize } from 'sequelize';
 import dbConnection from '../config/database.js';
 
-export const User = dbConnection.define(
+const User = dbConnection.define(
     'user',
     {
         id: {
@@ -35,3 +35,5 @@ export const User = dbConnection.define(
         timestamps: false
     }
 );
+
+export default User;

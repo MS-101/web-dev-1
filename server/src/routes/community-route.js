@@ -1,6 +1,6 @@
 import express from 'express';
-import { getCommunities, postCommunity, putCommunity, getSubscribedCommunities } from '../controllers/community-controller';
-import { authModerator, authUser } from '../middlewares/authorization';
+import { getCommunities, postCommunity, putCommunity, getSubscribedCommunities } from '../controllers/community-controller.js';
+import { authModerator, authUser } from '../middlewares/authorization.js';
 
 const communityRoute = express.Router();
 

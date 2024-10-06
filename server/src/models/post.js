@@ -2,7 +2,7 @@ import { DataTypes } from 'sequelize';
 import dbConnection from '../config/database.js';
 import User from './user.js'
 
-export const Post = dbConnection.define(
+const Post = dbConnection.define(
     'post',
     {
         id: {
@@ -37,3 +37,5 @@ export const Post = dbConnection.define(
         timestamps: false
     }
 );
+
+export default Post;

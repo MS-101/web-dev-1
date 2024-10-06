@@ -2,7 +2,7 @@ import { DataTypes } from 'sequelize';
 import dbConnection from '../config/database.js';
 import User from './user.js'
 
-export const Community = dbConnection.define(
+const Community = dbConnection.define(
     'community',
     {
         id: {
@@ -38,3 +38,5 @@ export const Community = dbConnection.define(
         timestamps: false
     }
 );
+
+export default Community;

@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { User } from '../models/user.js';
+import User from '../models/user.js';
 import { signAccessToken, signRefreshToken, verifyRefreshToken } from '../helpers/jwt-helpers.js';
 
 export const login = async (req, res) => {

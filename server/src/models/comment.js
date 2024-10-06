@@ -3,7 +3,7 @@ import dbConnection from '../config/database.js';
 import User from './user.js'
 import Post from './post.js'
 
-export const Comment = dbConnection.define(
+const Comment = dbConnection.define(
     'comment',
     {
         id: {
@@ -50,3 +50,5 @@ export const Comment = dbConnection.define(
         timestamps: false
     }
 );
+
+export default Comment;
