@@ -1,12 +1,12 @@
 import React from 'react'
-import { AuthProvider } from './contexts/AuthContext';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import AppLayout from './layouts/AppLayout'
-import Home from './pages/Home'
-import Feed from './pages/Feed'
-import Trending from './pages/Trending'
-import Community from './pages/Community'
-import './App.css'
+import { AuthProvider } from 'contexts/auth-context'
+import AppLayout from 'layouts/app-layout'
+import Home from 'pages/home'
+import Feed from 'pages/feed'
+import Trending from 'pages/trending'
+import Community from 'pages/community'
+import 'app.css'
 
 
 function App() {
