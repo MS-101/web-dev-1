@@ -9,7 +9,7 @@
             "cwd": "${workspaceFolder}/client"
         },
         {
-            "command": "npm start",
+            "command": "nodemon npm start",
             "name": "Run Server",
             "request": "launch",
             "type": "node-terminal",
