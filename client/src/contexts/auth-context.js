@@ -8,7 +8,6 @@ export const useAuthContext = () =>  {
 }
 
 export const AuthProvider = ({ children }) => {
-    const baseUrl = 'http://localhost:8081'
     const userKey = 'banter-user'
     const accessTokenKey = 'banter-accessToken'
     const refreshTokenKey = 'banter-refreshToken'
@@ -21,63 +20,6 @@ export const AuthProvider = ({ children }) => {
 
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
-
-    const login = (usernameOrEmail, password) => {
-        return new Promise((resolve, reject) => {
-            axios.post(new URL('/auth/login', baseUrl).href, {
-                'usernameOrEmail': usernameOrEmail,
-                'password': password,
-            })
-            .then((response) => {
-                setAuthentication(response.data);
-    
-                resolve();
-            })
-            .catch((error) => {
-                const message = error.response.data.message;
-    
-                reject(message);
-            });
-        });
-    }
-
-    const register = (username, email, password) => {
-        return new Promise((resolve, reject) => {
-            axios.post(new URL('/auth/register', baseUrl).href, {
-                'username': username,
-                'email': email,
-                'password': password,
-            })
-            .then((response) => {
-                setAuthentication(response.data);
-
-                resolve();
-            })
-            .catch((error) => {
-                const message = error.response.data.message;
-
-                reject(message);
-            })
-        })
-    }
-
-    const refresh = () => {
-        return new Promise((resolve, reject) => {
-            axios.post(new URL('/auth/refresh', baseUrl).href, {
-                'refreshToken': refreshToken
-            })
-            .then((response) => {
-                setAuthentication(response.data);
-
-                resolve();
-            })
-            .catch((error) => {
-                const message = error.response.data.message;
-
-                reject(message);
-            })
-        });
-    }
 
     const setAuthentication = (data) => {
         const user  = data.user;
@@ -93,7 +35,7 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem(refreshTokenKey, refreshToken);
     }
 
-    const logout = () => {
+    const clearAuthentication = () => {
         setUser(null);
         setAccessToken(null);
         setRefreshToken(null);
@@ -127,10 +69,8 @@ export const AuthProvider = ({ children }) => {
             showLogin,
             showRegister,
             showResetPassword,
-            login,
-            register,
-            refresh,
-            logout,
+            setAuthentication,
+            logout: clearAuthentication,
             user,
             accessToken
         }}>

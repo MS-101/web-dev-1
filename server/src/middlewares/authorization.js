@@ -1,20 +1,6 @@
 import { verifyAccessToken } from '../helpers/jwt-helpers.js'
 import { isCommunityModerator } from '../services/community-service.js';
 
-export const authRole = (roles) => {
-    return async (req, res, next) => {
-        const authHeader = req.headers.authorization;
-        const bearerToken = authHeader.split(' ')
-        const token = bearerToken[1]
-
-        const idUser = await verifyAccessToken(token);
-        
-        // using the id of user I can retrieve list of assigned roles
-
-        next();
-    }
-}
-
 export const authUser = async (req, res, next) => {
     const accessToken = req.headers['accessToken'];
 

@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import { useAuthContext } from 'contexts/auth-context';
+import { login } from 'controllers/auth-controller';
 
 function Login() {
-    const { closeModal, showRegister, showResetPassword, login } = useAuthContext();
+    const { closeModal, showRegister, showResetPassword, setAuthentication } = useAuthContext();
     const [ usernameOrEmail, setUsernameOrEmail ] = useState('');
     const [ password, setPassword ] = useState('');
     const [ errorMessage, setErrorMessage ] = useState(null)
@@ -22,7 +23,8 @@ function Login() {
 
     const onLoginClick = () => {
         login(usernameOrEmail, password)
-        .then(() => {
+        .then((data) => {
+            setAuthentication(data)
             closeModal();
         })
         .catch((error) => {

@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import { useAuthContext } from 'contexts/auth-context';
+import { register } from 'controllers/auth-controller';
 
 function Login() {
-    const { closeModal, showLogin, register } = useAuthContext();
+    const { closeModal, showLogin, setAuthentication } = useAuthContext();
     const [ email, setEmail ] = useState('');
     const [ username, setUsername ] = useState('');
     const [ password, setPassword ] = useState('');
@@ -18,7 +19,8 @@ function Login() {
 
     const onRegisterClick = () => {
         register(username, email, password)
-        .then(() => {
+        .then((data) => {
+            setAuthentication(data)
             closeModal();
         })
         .catch((error) => {

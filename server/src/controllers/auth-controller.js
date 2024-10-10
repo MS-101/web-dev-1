@@ -31,14 +31,14 @@ export const login = async (req, res) => {
         });
 
     try {
-        const accessToken = await signAccessToken(user.idUser);
-        const refreshToken = await signRefreshToken(user.idUser);
+        const accessToken = await signAccessToken(user);
+        const refreshToken = await signRefreshToken(user);
     
         return res.status(200).json({
             message: 'Login successfull!',
             user: {
                 email: user.email,
-                username: user.usernam
+                username: user.username
             },
             accessToken: accessToken,
             refreshToken: refreshToken
@@ -79,20 +79,20 @@ export const register = async (req, res) => {
 
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = await User.create({
+        const user = await User.create({
             username: username,
             email: email,
             password: hashedPassword
         });
     
-        const accessToken = await signAccessToken(newUser.id);
-        const refreshToken = await signRefreshToken(newUser.id);
+        const accessToken = await signAccessToken(user);
+        const refreshToken = await signRefreshToken(user);
     
         return res.status(201).json({
             message: 'Registration successfull!',
             user: {
-                email: newUser.email,
-                username: newUser.username
+                email: user.email,
+                username: user.username
             },
             accessToken: accessToken,
             refreshToken: refreshToken
@@ -110,10 +110,10 @@ export const refresh = async (req, res) => {
     const { refreshToken } = req.body
 
     try {
-        const userId = await verifyRefreshToken(refreshToken)
+        const user = await verifyRefreshToken(refreshToken)
 
-        const accessToken = await signAccessToken(userId)
-        const newRefreshToken = await signRefreshToken(userId)
+        const accessToken = await signAccessToken(user)
+        const newRefreshToken = await signRefreshToken(user)
     
         return res.status(200).json({
             message: 'Token refresh successfull!',
