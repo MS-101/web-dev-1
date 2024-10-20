@@ -1,19 +1,19 @@
-import User from '../models/user.js'
+import User from "../models/user.js";
 
 export const authUser = async (req, res) => {
-    const { id } = req.params
+    const { id } = req.params;
 
     const user = await User.findOne({
-        id: id
-    })
+        id: id,
+    });
 
     if (user) {
-        req.user = user
+        req.user = user;
 
-        next()
+        next();
     } else {
         return res.status(StatusCodes.NOT_FOUND).json({
-            message: 'User does not exist!'
-        })
+            message: "User does not exist!",
+        });
     }
-}
+};

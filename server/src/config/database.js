@@ -1,5 +1,5 @@
-import dotenv from 'dotenv'
-import { Sequelize } from 'sequelize';
+import dotenv from "dotenv";
+import { Sequelize } from "sequelize";
 
 dotenv.config();
 
@@ -10,7 +10,7 @@ const dbConnection = new Sequelize(
     {
         host: process.env.DB_HOST,
         port: process.env.DB_PORT,
-        dialect: 'mysql'
+        dialect: "mysql",
     }
 );
 
