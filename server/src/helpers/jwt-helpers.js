@@ -1,4 +1,3 @@
-import { reject } from "bcrypt/promises";
 import jwt from "jsonwebtoken";
 
 export const signAccessToken = (user) => {
@@ -24,7 +23,9 @@ export const verifyAccessToken = (token) => {
         const secret = process.env.ACCESS_TOKEN_SECRET
 
         jwt.verify(token, secret, (err, payload) => {
-            if (err) reject(err.message);
+            if (err)
+                reject(err.message);
+
             resolve(payload.user);
         })
     })
@@ -42,7 +43,9 @@ export const signRefreshToken = (user) => {
         }
 
         jwt.sign(payload, secret, options, (err, token) => {
-            if (err) reject(err.message);
+            if (err)
+                reject(err.message);
+
             resolve(token);
         })
     })    
@@ -53,7 +56,8 @@ export const verifyRefreshToken = (token) => {
         const secret = process.env.REFRESH_TOKEN_SECRET;
 
         jwt.verify(token, secret, (err, payload) => {
-            if (err) reject(err.message);
+            if (err)
+                reject(err.message);
 
             resolve(payload.user);
         })
@@ -72,7 +76,9 @@ export const signResetToken = (user) => {
         }
 
         jwt.sign(payload, secret, options, (err, token) => {
-            if (err) reject(err.message);
+            if (err)
+                reject(err.message);
+
             resolve(token);
         })
      })
@@ -83,7 +89,8 @@ export const verifyResetToken = (token) => {
         const secret = process.env.RESET_TOKEN_SECRET;
 
         jwt.verify(token, secret, (err, payload) => {
-            if (err) reject(err.message);
+            if (err)
+                reject(err.message);
 
             resolve(payload.user);
         })

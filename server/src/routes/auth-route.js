@@ -1,13 +1,13 @@
 import express from 'express';
-import { login, register, refresh, resetPassword } from '../controllers/auth-controller.js'
+import { login, register, refresh, requestResetToken, resetPassword } from '../controllers/auth-controller.js'
+import { authRefreshToken, authResetToken } from '../middlewares/auth-middlewares.js';
 
 const authRoute = express.Router();
 
 authRoute.post('/login', login);
 authRoute.post('/register', register);
-authRoute.post('/refresh', refresh);
-authRoute.post('/reset-password/generate-token', generateResetToken);
-authRoute.post('/reset-password/verify-token', verifyResetToken);
-authRoute.post('/reset-password', resetPassword);
+authRoute.post('/refresh', authRefreshToken, refresh);
+authRoute.post('/request-reset-token', requestResetToken);
+authRoute.post('/reset-password', authResetToken, resetPassword);
 
 export default authRoute
