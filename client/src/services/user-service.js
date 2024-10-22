@@ -1,6 +1,6 @@
 import { publicAxios } from "config/axios";
 
-class UserController {
+class UserService {
 	static baseUrl = "/user";
 
 	static async getUsers(query, lastId) {
@@ -65,4 +65,4 @@ class UserController {
 	}
 }
 
-export default UserController;
+export default UserService;

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useAuthContext } from "contexts/auth-context";
-import AuthController from "controllers/auth-controller";
+import AuthService from "services/auth-service";
 
 function Login() {
 	const { closeModal, showRegister, showResetPassword, setAuthentication } =
@@ -23,7 +23,7 @@ function Login() {
 	};
 
 	const onLoginClick = () => {
-		AuthController.login(usernameOrEmail, password)
+		AuthService.login(usernameOrEmail, password)
 			.then((data) => {
 				setAuthentication(data);
 				closeModal();

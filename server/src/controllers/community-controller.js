@@ -1,7 +1,7 @@
 import Community from "../models/community.js";
 import CommunityMember, {
 	CommunityMemberTypes,
-} from "../models/community_member.js";
+} from "../models/community-member.js";
 import User from "../models/user.js";
 import Post from "../models/post.js";
 import { StatusCodes } from "http-status-codes";

@@ -1,6 +1,6 @@
 import { publicAxios } from "config/axios";
 
-class PostController {
+class PostService {
 	static baseUrl = "/post";
 
 	static async getPosts(query, lastId) {
@@ -22,4 +22,4 @@ class PostController {
 	}
 }
 
-export default PostController;
+export default PostService;

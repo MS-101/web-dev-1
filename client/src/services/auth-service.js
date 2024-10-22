@@ -1,11 +1,11 @@
-import axios from "axios";
+import { publicAxios } from "config/axios";
 
-class AuthController {
-	static baseUrl = "http://localhost:8081/auth";
+class AuthService {
+	static baseUrl = "/auth";
 
 	static async login(usernameOrEmail, password) {
 		return new Promise((resolve, reject) => {
-			axios
+			publicAxios
 				.post(new URL("/login", this.baseUrl).href, {
 					usernameOrEmail: usernameOrEmail,
 					password: password,
@@ -21,7 +21,7 @@ class AuthController {
 
 	static async register(username, email, password) {
 		return new Promise((resolve, reject) => {
-			axios
+			publicAxios
 				.post(new URL("/register", this.baseUrl).href, {
 					username: username,
 					email: email,
@@ -31,16 +31,14 @@ class AuthController {
 					resolve(response.data);
 				})
 				.catch((error) => {
-					const message = error.response.data.message;
-
-					reject(message);
+					reject(error.response.data.message);
 				});
 		});
 	}
 
 	static async refresh(refreshToken) {
 		return new Promise((resolve, reject) => {
-			axios
+			publicAxios
 				.post(new URL("/refresh", baseUrl).href, {
 					refreshToken: refreshToken,
 				})
@@ -48,12 +46,10 @@ class AuthController {
 					resolve(response.data);
 				})
 				.catch((error) => {
-					const message = error.response.data.message;
-
-					reject(message);
+					reject(error.response.data.message);
 				});
 		});
 	}
 }
 
-export default AuthController;
+export default AuthService;

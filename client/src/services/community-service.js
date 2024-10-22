@@ -1,6 +1,6 @@
 import { publicAxios, authAxios } from "config/axios";
 
-class CommunityController {
+class CommunityService {
 	static baseUrl = "/community";
 
 	static async getCommunities(query, lastId) {
@@ -156,4 +156,4 @@ class CommunityController {
 	}
 }
 
-export default CommunityController;
+export default CommunityService;
