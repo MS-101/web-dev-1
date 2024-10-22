@@ -1,6 +1,6 @@
 import Community from "../models/community.js";
 import CommunityMember, {
-    CommunityMemberTypes,
+	CommunityMemberTypes,
 } from "../models/community_member.js";
 import User from "../models/user.js";
 import Post from "../models/post.js";
@@ -8,238 +8,284 @@ import { StatusCodes } from "http-status-codes";
 import { Op } from "sequelize";
 
 class CommunityController {
-    static async getCommunities(req, res) {
-        const { query } = req.query;
+	static async getCommunities(req, res) {
+		const { query, lastId } = req.query;
+		const limit = 20;
 
-        const filter = query
-            ? {
-                  where: {
-                      [Op.or]: [
-                          { name: { [Op.iLike]: `%${query}%` } },
-                          { description: { [Op.iLike]: `%${query}%` } },
-                      ],
-                  },
-              }
-            : {};
+		try {
+			const communities = await Community.findAll({
+				where: {
+					...(query
+						? {
+								[Op.or]: [
+									{ name: { [Op.iLike]: `%${query}%` } },
+									{ description: { [Op.iLike]: `%${query}%` } },
+								],
+						  }
+						: {}),
+					...(lastId ? { id: { [Op.lt]: lastId } } : {}),
+				},
+				order: [["id", "ASC"]],
+				limit: limit + 1,
+			});
 
-        try {
-            const communities = await Community.findAll(filter);
+			let lastPage = true;
+			if (communities.length > limit) {
+				communities.pop();
+				lastPage = false;
+			}
 
-            return res.status(StatusCodes.OK).json(communities);
-        } catch (error) {
-            console.log(error);
+			return res.status(StatusCodes.OK).json({
+				records: communities,
+				lastPage: lastPage,
+			});
+		} catch (error) {
+			console.log(error);
 
-            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-                message: "Failed to fetch communities.",
-            });
-        }
-    }
+			return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+				message: "Failed to fetch communities.",
+			});
+		}
+	}
 
-    static async postCommunity(req, res) {
-        const { user, name, description } = req.body;
+	static async postCommunity(req, res) {
+		const { user, name, description } = req.body;
 
-        try {
-            const communityWithName = await Community.findOne({
-                name: name,
-            });
+		try {
+			const communityWithName = await Community.findOne({
+				name: name,
+			});
 
-            if (communityWithName != null)
-                return res.status(StatusCodes.CONFLICT).json({
-                    message: "Name is occupied!",
-                });
+			if (communityWithName != null)
+				return res.status(StatusCodes.CONFLICT).json({
+					message: "Name is occupied!",
+				});
 
-            const community = await Community.create({
-                createdBy: user.id,
-                name: name,
-                description: description,
-            });
+			const community = await Community.create({
+				createdBy: user.id,
+				name: name,
+				description: description,
+			});
 
-            return res.status(StatusCodes.CREATED).json({
-                message: "Successfully created community!",
-                community: community,
-            });
-        } catch (error) {
-            console.log(error);
+			return res.status(StatusCodes.CREATED).json({
+				message: "Successfully created community!",
+				community: community,
+			});
+		} catch (error) {
+			console.log(error);
 
-            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-                message: "Failed to create community.",
-            });
-        }
-    }
+			return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+				message: "Failed to create community.",
+			});
+		}
+	}
 
-    static async getCommunity(req, res) {
-        const { community } = req.body;
+	static async getCommunity(req, res) {
+		const { community } = req.body;
 
-        return res.status(201).json(community);
-    }
+		return res.status(201).json(community);
+	}
 
-    static async putCommunity(req, res) {
-        const { community, name, description } = req.body;
+	static async putCommunity(req, res) {
+		const { community, name, description } = req.body;
 
-        const updates = {};
-        if (name !== undefined) updates.name = name;
-        if (description !== undefined) updates.description = description;
+		const updates = {};
+		if (name !== undefined) updates.name = name;
+		if (description !== undefined) updates.description = description;
 
-        try {
-            const updatedCommunity = await community.update(updates);
+		try {
+			const updatedCommunity = await community.update(updates);
 
-            return res.status(StatusCodes.OK).json({
-                message: "Successfully updated community!",
-                community: updatedCommunity,
-            });
-        } catch (error) {
-            console.log(error);
+			return res.status(StatusCodes.OK).json({
+				message: "Successfully updated community!",
+				community: updatedCommunity,
+			});
+		} catch (error) {
+			console.log(error);
 
-            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-                message: "Failed to update community.",
-            });
-        }
-    }
+			return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+				message: "Failed to update community.",
+			});
+		}
+	}
 
-    static async joinCommunity(req, res) {
-        const { community, user } = req.body;
+	static async joinCommunity(req, res) {
+		const { community, user } = req.body;
 
-        try {
-            await CommunityMember.create({
-                id_community: community.id,
-                id_user: user.id,
-            });
+		try {
+			await CommunityMember.create({
+				id_community: community.id,
+				id_user: user.id,
+			});
 
-            return res.status(StatusCodes.OK).json({
-                message: "Successfully join community!",
-            });
-        } catch (error) {
-            console.log(error);
+			return res.status(StatusCodes.OK).json({
+				message: "Successfully join community!",
+			});
+		} catch (error) {
+			console.log(error);
 
-            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-                message: "Failed to join community.",
-            });
-        }
-    }
+			return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+				message: "Failed to join community.",
+			});
+		}
+	}
 
-    static async leaveCommunity(req, res) {
-        const { communityMember } = req.body;
+	static async leaveCommunity(req, res) {
+		const { communityMember } = req.body;
 
-        try {
-            communityMember.destroy();
+		try {
+			communityMember.destroy();
 
-            return res.status(StatusCodes.OK).json({
-                message: "Successfully left community!",
-            });
-        } catch (error) {
-            console.log(error);
+			return res.status(StatusCodes.OK).json({
+				message: "Successfully left community!",
+			});
+		} catch (error) {
+			console.log(error);
 
-            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-                message: "Failed to leave community.",
-            });
-        }
-    }
+			return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+				message: "Failed to leave community.",
+			});
+		}
+	}
 
-    static async getCommunityPosts(req, res) {
-        const { community } = req.body;
-        const { lastPostId } = req.query;
-        const limit = 20;
+	static async getCommunityPosts(req, res) {
+		const { community } = req.body;
+		const { lastId } = req.query;
+		const limit = 20;
 
-        try {
-            const posts = await Post.findAll({
-                where: {
-                    id_community: community.id,
-                    ...(lastPostId ? { id: { [Op.lt]: lastPostId } } : {}),
-                },
-                order: [["created_date", "DESC"]],
-                limit: limit,
-            });
+		try {
+			const posts = await Post.findAll({
+				where: {
+					id_community: community.id,
+					...(query
+						? {
+								[Op.or]: [
+									{ title: { [Op.iLike]: `%${query}%` } },
+									{ body: { [Op.iLike]: `%${query}%` } },
+								],
+						  }
+						: {}),
+					...(lastId ? { id: { [Op.lt]: lastId } } : {}),
+				},
+				order: [["id", "DESC"]],
+				limit: limit + 1,
+			});
 
-            return res.status(StatusCodes.OK).json(posts);
-        } catch (error) {
-            console.log(error);
+			let lastPage = true;
+			if (posts.count() > limit) {
+				posts.pop();
+				lastPage = false;
+			}
 
-            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-                message: "Failed to fetch community posts.",
-            });
-        }
-    }
+			return res.status(StatusCodes.OK).json({
+				records: posts,
+				lastPage: lastPage,
+			});
+		} catch (error) {
+			console.log(error);
 
-    static async postCommunityPost(req, res) {
-        const { user, community, title, body } = req.body;
+			return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+				message: "Failed to fetch community posts.",
+			});
+		}
+	}
 
-        try {
-            const post = await Post.create({
-                createdBy: user.id,
-                id_community: community.id,
-                title: title,
-                body: body,
-            });
+	static async postCommunityPost(req, res) {
+		const { user, community, title, body } = req.body;
 
-            return res.status(StatusCodes.CREATED).json(post);
-        } catch (error) {
-            console.log(error);
+		try {
+			const post = await Post.create({
+				createdBy: user.id,
+				id_community: community.id,
+				title: title,
+				body: body,
+			});
 
-            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-                message: "Failed to create community post.",
-            });
-        }
-    }
+			return res.status(StatusCodes.CREATED).json(post);
+		} catch (error) {
+			console.log(error);
 
-    static async getCommunityMembers(req, res) {
-        const { community } = req.body;
+			return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+				message: "Failed to create community post.",
+			});
+		}
+	}
 
-        try {
-            const users = await User.findAll({
-                include: {
-                    model: CommunityMember,
-                    required: true,
-                    where: {
-                        id_community: community.id_community,
-                    },
-                    attributes: ["id_community_member_type"],
-                },
-            });
+	static async getCommunityMembers(req, res) {
+		const { community } = req.body;
+		const { lastId } = req.query;
+		const limit = 20;
 
-            return res.status(StatusCodes.OK).json(users);
-        } catch (error) {
-            console.log(error);
+		try {
+			const users = await User.findAll({
+				include: {
+					model: CommunityMember,
+					required: true,
+					where: {
+						id_community: community.id,
+						...(lastId ? { id: { [Op.lt]: lastId } } : {}),
+					},
+					attributes: ["id_community_member_type"],
+				},
+				order: [["id", "DESC"]],
+				limit: limit + 1,
+			});
 
-            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-                message: "Failed to fetch community members.",
-            });
-        }
-    }
+			let lastPage = true;
+			if (users.count() > limit) {
+				users.pop();
+				lastPage = false;
+			}
 
-    static async getCommunityModerators(req, res) {
-        const { community } = req.body;
+			return res.status(StatusCodes.OK).json({
+				records: users,
+				lastPage: lastPage,
+			});
+		} catch (error) {
+			console.log(error);
 
-        try {
-            const users = await User.findAll({
-                include: {
-                    model: CommunityMember,
-                    required: true,
-                    where: {
-                        id_community: community.id_community,
-                        [Op.or]: [
-                            {
-                                id_community_member_type:
-                                    CommunityMemberTypes.MODERATOR,
-                            },
-                            {
-                                id_community_member_type:
-                                    CommunityMemberTypes.ADMIN,
-                            },
-                        ],
-                    },
-                    attributes: ["id_community_member_type"],
-                },
-            });
+			return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+				message: "Failed to fetch community members.",
+			});
+		}
+	}
 
-            return res.status(StatusCodes.OK).json(users);
-        } catch (error) {
-            console.log(error);
+	static async getCommunityModerators(req, res) {
+		const { community } = req.body;
 
-            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-                message: "Failed to fetch community moderators.",
-            });
-        }
-    }
+		try {
+			const users = await User.findAll({
+				include: {
+					model: CommunityMember,
+					required: true,
+					where: {
+						id_community: community.id,
+						[Op.or]: [
+							{
+								id_community_member_type: CommunityMemberTypes.MODERATOR,
+							},
+							{
+								id_community_member_type: CommunityMemberTypes.ADMIN,
+							},
+						],
+					},
+					attributes: ["id_community_member_type"],
+				},
+				order: [
+					["id_community_member_type", "DESC"],
+					["username", "ASC"],
+				],
+			});
+
+			return res.status(StatusCodes.OK).json(users);
+		} catch (error) {
+			console.log(error);
+
+			return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+				message: "Failed to fetch community moderators.",
+			});
+		}
+	}
 }
 
 export default CommunityController;

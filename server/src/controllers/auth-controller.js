@@ -1,201 +1,139 @@
 import bcrypt from "bcrypt";
 import User from "../models/user.js";
 import {
-    signAccessToken,
-    signRefreshToken,
-    verifyRefreshToken,
-    signResetToken,
+	signAccessToken,
+	signRefreshToken,
+	verifyRefreshToken,
 } from "../helpers/jwt-helpers.js";
 import { StatusCodes } from "http-status-codes";
 
-export const login = async (req, res) => {
-    const { usernameOrEmail, password } = req.body;
+class AuthController {
+	static async register(req, res) {
+		const { username, email, password } = req.body;
 
-    let user = await User.findOne({
-        where: {
-            email: usernameOrEmail,
-        },
-    });
+		const userWithUsername = await User.findOne({
+			where: {
+				username: username,
+			},
+		});
 
-    if (user === null)
-        user = await User.findOne({
-            where: {
-                username: usernameOrEmail,
-            },
-        });
+		if (userWithUsername != null)
+			return res.status(StatusCodes.UNAUTHORIZED).json({
+				message: "Username is occupied!",
+			});
 
-    if (user === null)
-        return res.status(StatusCodes.NOT_FOUND).json({
-            message: "User does not exist!",
-        });
+		const userWithEmail = await User.findOne({
+			where: {
+				email: email,
+			},
+		});
 
-    const isMatch = await bcrypt.compare(password, user.password);
+		if (userWithEmail != null)
+			return res.status(StatusCodes.UNAUTHORIZED).json({
+				message: "Email is occupied!",
+			});
 
-    if (!isMatch)
-        return res.status(StatusCodes.UNAUTHORIZED).json({
-            message: "Password is incorrect!",
-        });
+		try {
+			const hashedPassword = await bcrypt.hash(password, 10);
+			const user = await User.create({
+				username: username,
+				email: email,
+				password: hashedPassword,
+			});
 
-    try {
-        const accessToken = await signAccessToken(user);
-        const refreshToken = await signRefreshToken(user);
+			const accessToken = await signAccessToken(user);
+			const refreshToken = await signRefreshToken(user);
 
-        return res.status(StatusCodes.OK).json({
-            message: "Login successfull!",
-            user: {
-                email: user.email,
-                username: user.username,
-            },
-            accessToken: accessToken,
-            refreshToken: refreshToken,
-        });
-    } catch (error) {
-        console.log(error);
+			return res.status(StatusCodes.CREATED).json({
+				message: "Registration successfull!",
+				user: {
+					email: user.email,
+					username: user.username,
+				},
+				accessToken: accessToken,
+				refreshToken: refreshToken,
+			});
+		} catch (error) {
+			console.log(error);
 
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-            message: "Login Failed!",
-        });
-    }
-};
+			return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+				message: "Registration failed!",
+			});
+		}
+	}
 
-export const register = async (req, res) => {
-    const { username, email, password } = req.body;
+	static async login(req, res) {
+		const { usernameOrEmail, password } = req.body;
 
-    const userWithUsername = await User.findOne({
-        where: {
-            username: username,
-        },
-    });
+		let user = await User.findOne({
+			where: {
+				email: usernameOrEmail,
+			},
+		});
 
-    if (userWithUsername != null)
-        return res.status(StatusCodes.UNAUTHORIZED).json({
-            message: "Username is occupied!",
-        });
+		if (user === null)
+			user = await User.findOne({
+				where: {
+					username: usernameOrEmail,
+				},
+			});
 
-    const userWithEmail = await User.findOne({
-        where: {
-            email: email,
-        },
-    });
+		if (user === null)
+			return res.status(StatusCodes.NOT_FOUND).json({
+				message: "User does not exist!",
+			});
 
-    if (userWithEmail != null)
-        return res.status(StatusCodes.UNAUTHORIZED).json({
-            message: "Email is occupied!",
-        });
+		const isMatch = await bcrypt.compare(password, user.password);
 
-    try {
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const user = await User.create({
-            username: username,
-            email: email,
-            password: hashedPassword,
-        });
+		if (!isMatch)
+			return res.status(StatusCodes.UNAUTHORIZED).json({
+				message: "Password is incorrect!",
+			});
 
-        const accessToken = await signAccessToken(user);
-        const refreshToken = await signRefreshToken(user);
+		try {
+			const accessToken = await signAccessToken(user);
+			const refreshToken = await signRefreshToken(user);
 
-        return res.status(StatusCodes.CREATED).json({
-            message: "Registration successfull!",
-            user: {
-                email: user.email,
-                username: user.username,
-            },
-            accessToken: accessToken,
-            refreshToken: refreshToken,
-        });
-    } catch (error) {
-        console.log(error);
+			return res.status(StatusCodes.OK).json({
+				message: "Login successfull!",
+				user: {
+					email: user.email,
+					username: user.username,
+				},
+				accessToken: accessToken,
+				refreshToken: refreshToken,
+			});
+		} catch (error) {
+			console.log(error);
 
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-            message: "Registration failed!",
-        });
-    }
-};
+			return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+				message: "Login Failed!",
+			});
+		}
+	}
 
-export const refresh = async (req, res) => {
-    const { refreshToken } = req.body;
+	static async refresh(req, res) {
+		const { refreshToken } = req.body;
 
-    try {
-        const user = await verifyRefreshToken(refreshToken);
+		try {
+			const user = await verifyRefreshToken(refreshToken);
 
-        const accessToken = await signAccessToken(user);
-        const newRefreshToken = await signRefreshToken(user);
+			const accessToken = await signAccessToken(user);
+			const newRefreshToken = await signRefreshToken(user);
 
-        return res.status(StatusCodes.OK).json({
-            message: "Token refresh successfull!",
-            accessToken: accessToken,
-            refreshToken: newRefreshToken,
-        });
-    } catch (error) {
-        console.log(error);
+			return res.status(StatusCodes.OK).json({
+				message: "Token refresh successfull!",
+				accessToken: accessToken,
+				refreshToken: newRefreshToken,
+			});
+		} catch (error) {
+			console.log(error);
 
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-            message: "Token refresh failed!",
-        });
-    }
-};
+			return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+				message: "Token refresh failed!",
+			});
+		}
+	}
+}
 
-export const requestResetToken = async (req, res) => {
-    const { email } = req.body;
-
-    const user = await User.findOne({
-        where: {
-            email: email,
-        },
-    });
-
-    if (user === null)
-        return res.status(StatusCodes.NOT_FOUND).json({
-            message: "User does not exist!",
-        });
-
-    const resetToken = await signResetToken(user);
-};
-
-export const resetPassword = async (req, res) => {
-    const { usernameOrEmail, password } = req.body;
-
-    let user = await User.findOne({
-        where: {
-            email: usernameOrEmail,
-        },
-    });
-
-    if (user === null)
-        user = await User.findOne({
-            where: {
-                username: usernameOrEmail,
-            },
-        });
-
-    if (user === null)
-        return res.status(StatusCodes.NOT_FOUND).json({
-            message: "User does not exist!",
-        });
-
-    try {
-        const hashedPassword = await bcrypt.hash(password, 10);
-        user.update({
-            password: hashedPassword,
-        });
-
-        const accessToken = await signAccessToken(user);
-        const refreshToken = await signRefreshToken(user);
-
-        return res.status(StatusCodes.OK).json({
-            message: "Login successfull!",
-            user: {
-                email: user.email,
-                username: user.username,
-            },
-            accessToken: accessToken,
-            refreshToken: refreshToken,
-        });
-    } catch (error) {
-        console.log(error);
-
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-            message: "Login Failed!",
-        });
-    }
-};
+export default AuthController;

@@ -1,22 +1,11 @@
 import express from "express";
-import {
-    login,
-    register,
-    refresh,
-    requestResetToken,
-    resetPassword,
-} from "../controllers/auth-controller.js";
-import {
-    authRefreshToken,
-    authResetToken,
-} from "../middlewares/auth-middlewares.js";
+import AuthController from "../controllers/auth-controller.js";
+import { authRefreshToken } from "../middlewares/auth-middlewares.js";
 
 const authRoute = express.Router();
 
-authRoute.post("/login", login);
-authRoute.post("/register", register);
-authRoute.post("/refresh", authRefreshToken, refresh);
-authRoute.post("/request-reset-token", requestResetToken);
-authRoute.post("/reset-password", authResetToken, resetPassword);
+authRoute.post("/login", AuthController.login);
+authRoute.post("/register", AuthController.register);
+authRoute.post("/refresh", authRefreshToken, AuthController.refresh);
 
 export default authRoute;

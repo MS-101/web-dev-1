@@ -12,9 +12,13 @@ export const CommunityMemberTypes = {
 const CommunityMember = dbConnection.define(
     "communityMember",
     {
-        id_community: {
+        id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
+            allowNull: false,
+        },
+        id_community: {
+            type: DataTypes.INTEGER,
             allowNull: false,
             references: {
                 model: Community,
@@ -23,7 +27,6 @@ const CommunityMember = dbConnection.define(
         },
         id_user: {
             type: DataTypes.INTEGER,
-            primaryKey: true,
             allowNull: false,
             references: {
                 model: User,
