@@ -6,11 +6,11 @@ export const publicAxios = axios.create({
 	baseUrl: baseUrl,
 });
 
-export const authAxios = (accessToken) => {
+export const authAxios = (token) => {
 	return axios.create({
 		baseURL: baseUrl,
 		headers: {
-			Authorization: `Bearer ${accessToken}`,
+			Authorization: `Bearer ${token}`,
 		},
 	});
 };

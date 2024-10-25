@@ -9,10 +9,10 @@ const SidebarGroup = ({ title, open: initOpen, children }) => {
 	};
 
 	return (
-		<div>
-			<li onClick={onToggleGroup}>{title}</li>
-			{open && <div>{children}</div>}
-		</div>
+		<li>
+			<h2 onClick={onToggleGroup}>{title}</h2>
+			{open && <ul className="SideBarGroupContent">{children}</ul>}
+		</li>
 	);
 };
 

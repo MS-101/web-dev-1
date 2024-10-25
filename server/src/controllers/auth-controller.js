@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import User from "../models/user.js";
 import {
+	extractToken,
 	signAccessToken,
 	signRefreshToken,
 	verifyRefreshToken,
@@ -47,6 +48,7 @@ class AuthController {
 			return res.status(StatusCodes.CREATED).json({
 				message: "Registration successfull!",
 				user: {
+					id: user.id,
 					email: user.email,
 					username: user.username,
 				},
@@ -97,6 +99,7 @@ class AuthController {
 			return res.status(StatusCodes.OK).json({
 				message: "Login successfull!",
 				user: {
+					id: user.id,
 					email: user.email,
 					username: user.username,
 				},
@@ -113,7 +116,7 @@ class AuthController {
 	}
 
 	static async refresh(req, res) {
-		const { refreshToken } = req.body;
+		const refreshToken = extractToken(req.headers);
 
 		try {
 			const user = await verifyRefreshToken(refreshToken);

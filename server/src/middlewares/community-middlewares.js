@@ -7,11 +7,13 @@ export const authCommunity = async (req, res) => {
 	const { id } = req.params;
 
 	const community = await Community.findOne({
-		id: id,
+		where: {
+			id: id,
+		},
 	});
 
 	if (community != null) {
-		req.community = community;
+		req.body.community = community;
 
 		next();
 	} else {
@@ -51,7 +53,7 @@ export const authCommunityMember = async (req, res, next) => {
 	});
 
 	if (communityMember) {
-		req.communityMember = communityMember;
+		req.body.communityMember = communityMember;
 
 		next();
 	} else {
@@ -76,7 +78,7 @@ export const authCommunityModerator = async (req, res, next) => {
 	});
 
 	if (communityMember) {
-		req.communityMember = communityMember;
+		req.body.communityMember = communityMember;
 
 		next();
 	} else {
@@ -98,7 +100,7 @@ export const authCommunityAdmin = async (req, res, next) => {
 	});
 
 	if (communityMember) {
-		req.communityMember = communityMember;
+		req.body.communityMember = communityMember;
 
 		next();
 	} else {

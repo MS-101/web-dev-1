@@ -1,0 +1,28 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Install Server",
+			"type": "shell",
+			"command": "npm install",
+			"options": {
+				"cwd": "${workspaceFolder}/server"
+			},
+			"group": "build"
+		},
+		{
+			"label": "Install Client",
+			"type": "shell",
+			"command": "npm install",
+			"options": {
+				"cwd": "${workspaceFolder}/client"
+			},
+			"group": "build"
+		},
+		{
+			"label": "Install Server and Client",
+			"dependsOn": ["Install Server", "Install Client"],
+			"group": "build"
+		}
+	]
+}

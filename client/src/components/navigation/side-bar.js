@@ -18,7 +18,6 @@ const Sidebar = () => {
 					<SidebarGroup title="Communities" open={true}>
 						{communities.map((element) => (
 							<SidebarItem
-								key={element.id}
 								title={element.name}
 								to={`/Community/${element.id}`}
 							/>

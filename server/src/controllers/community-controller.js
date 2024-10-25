@@ -49,7 +49,7 @@ class CommunityController {
 	}
 
 	static async postCommunity(req, res) {
-		const { user, name, description } = req.body;
+		const { authUser, name, description } = req.body;
 
 		try {
 			const communityWithName = await Community.findOne({
@@ -62,14 +62,18 @@ class CommunityController {
 				});
 
 			const community = await Community.create({
-				createdBy: user.id,
+				created_by: authUser.id,
 				name: name,
 				description: description,
 			});
 
 			return res.status(StatusCodes.CREATED).json({
 				message: "Successfully created community!",
-				community: community,
+				community: {
+					id: community.id,
+					name: community.name,
+					description: community.description,
+				},
 			});
 		} catch (error) {
 			console.log(error);
@@ -110,12 +114,12 @@ class CommunityController {
 	}
 
 	static async joinCommunity(req, res) {
-		const { community, user } = req.body;
+		const { authUser, community } = req.body;
 
 		try {
 			await CommunityMember.create({
 				id_community: community.id,
-				id_user: user.id,
+				id_user: authUser.id,
 			});
 
 			return res.status(StatusCodes.OK).json({
@@ -191,11 +195,11 @@ class CommunityController {
 	}
 
 	static async postCommunityPost(req, res) {
-		const { user, community, title, body } = req.body;
+		const { authUser, community, title, body } = req.body;
 
 		try {
 			const post = await Post.create({
-				createdBy: user.id,
+				createdBy: authUser.id,
 				id_community: community.id,
 				title: title,
 				body: body,
