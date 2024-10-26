@@ -1,27 +1,29 @@
 import React, { useContext } from "react";
 import { AuthContext } from "contexts/auth-context";
-import SidebarGroup from "./side-bar-group";
-import SidebarItem from "./side-bar-item";
+import SidebarGroup from "./sidebar-group";
+import SidebarItem from "./sidebar-item";
 import useUserCommunities from "hooks/use-user-communities";
-import "styles/side-bar.css";
+import "styles/navigation/sidebar.css";
 
 const Sidebar = () => {
 	const { user } = useContext(AuthContext);
-	const communities = useUserCommunities(user);
+	const { communities, communitiesLoaded, fetchCommunities } =
+		useUserCommunities(user);
 
 	return (
-		<nav className="SideBar">
+		<nav className="Sidebar">
 			<ul>
 				{user && <SidebarItem title="Feed" to="/Feed" />}
 				<SidebarItem title="Trending" to="/Trending" />
-				{user && (
+				{communitiesLoaded && (
 					<SidebarGroup title="Communities" open={true}>
-						{communities.map((element) => (
-							<SidebarItem
-								title={element.name}
-								to={`/Community/${element.id}`}
-							/>
-						))}
+						{communities &&
+							communities.map((element) => (
+								<SidebarItem
+									title={element.name}
+									to={`/Community/${element.id}`}
+								/>
+							))}
 					</SidebarGroup>
 				)}
 			</ul>

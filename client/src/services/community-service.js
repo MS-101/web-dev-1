@@ -40,7 +40,7 @@ class CommunityService {
 	static async getCommunity(idCommunity) {
 		return new Promise((resolve, reject) => {
 			publicAxios
-				.get(new URL(`/${idCommunity}`, this.baseUrl).href)
+				.get(`${this.baseUrl}/${idCommunity}`)
 				.then((response) => {
 					resolve(response.data);
 				})
@@ -53,7 +53,7 @@ class CommunityService {
 	static async putCommunity(accessToken, idCommunity, name, description) {
 		return new Promise((resolve, reject) => {
 			authAxios(accessToken)
-				.put(new URL(`/${idCommunity}`, this.baseUrl).href, {
+				.put(`${this.baseUrl}/${idCommunity}`, {
 					name: name,
 					description: description,
 				})
@@ -69,7 +69,7 @@ class CommunityService {
 	static async joinCommunity(accessToken, idCommunity) {
 		return new Promise((resolve, reject) => {
 			authAxios(accessToken)
-				.post(new URL(`/${idCommunity}/join`, this.baseUrl).href)
+				.post(`${this.baseUrl}/${idCommunity}/join`)
 				.then((response) => {
 					resolve(response.data);
 				})
@@ -82,7 +82,7 @@ class CommunityService {
 	static async leaveCommunity(accessToken, idCommunity) {
 		return new Promise((resolve, reject) => {
 			authAxios(accessToken)
-				.post(new URL(`/${idCommunity}/leave`, this.baseUrl).href)
+				.post(`${this.baseUrl}/${idCommunity}/leave`)
 				.then((response) => {
 					resolve(response.data);
 				})
@@ -95,7 +95,7 @@ class CommunityService {
 	static async getCommunityPosts(idCommunity, lastId) {
 		return new Promise((resolve, reject) => {
 			publicAxios
-				.get(new URL(`/${idCommunity}/posts`, this.baseUrl).href, {
+				.get(`${this.baseUrl}/${idCommunity}/post`, {
 					params: {
 						lastId: lastId,
 					},
@@ -112,7 +112,7 @@ class CommunityService {
 	static async postCommunityPost(accessToken, idCommunity, title, body) {
 		return new Promise((resolve, reject) => {
 			authAxios(accessToken)
-				.post(new URL(`/${idCommunity}/posts`, this.baseUrl).href, {
+				.post(`${this.baseUrl}/${idCommunity}/post`, {
 					title: title,
 					body: body,
 				})
@@ -128,7 +128,7 @@ class CommunityService {
 	static async getCommunityMembers(idCommunity, lastId) {
 		return new Promise((resolve, reject) => {
 			publicAxios
-				.get(new URL(`/${idCommunity}/members`, this.baseUrl).href, {
+				.get(`${this.baseUrl}/${idCommunity}/members`, {
 					params: {
 						lastId: lastId,
 					},
@@ -142,10 +142,10 @@ class CommunityService {
 		});
 	}
 
-	static async getCommunityModerators(idCommunity, lastId) {
+	static async getCommunityModerators(idCommunity) {
 		return new Promise((resolve, reject) => {
 			publicAxios
-				.get(new URL(`/${idCommunity}/moderators`, this.baseUrl).href)
+				.get(`${this.baseUrl}/${idCommunity}/moderators`)
 				.then((response) => {
 					resolve(response.data);
 				})

@@ -6,7 +6,7 @@ const userRoute = express.Router();
 const specificUserRoute = express.Router();
 
 userRoute.get("/", UserController.getUsers);
-userRoute.get("/:id", authUser, specificUserRoute);
+userRoute.use("/:id", authUser, specificUserRoute);
 
 specificUserRoute.get("/", UserController.getUser);
 specificUserRoute.get("/community", UserController.getUserCommunitites);

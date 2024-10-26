@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "styles/side-bar-group.css";
+import "styles/navigation/sidebar-group.css";
 
 const SidebarGroup = ({ title, open: initOpen, children }) => {
 	const [open, setOpen] = useState(initOpen);
@@ -10,8 +10,8 @@ const SidebarGroup = ({ title, open: initOpen, children }) => {
 
 	return (
 		<li>
-			<h2 onClick={onToggleGroup}>{title}</h2>
-			{open && <ul className="SideBarGroupContent">{children}</ul>}
+			<h3 onClick={onToggleGroup}>{title}</h3>
+			{open && <ul className="SidebarGroupContent">{children}</ul>}
 		</li>
 	);
 };

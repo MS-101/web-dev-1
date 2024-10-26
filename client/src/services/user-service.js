@@ -24,7 +24,7 @@ class UserService {
 	static async getUser(idUser) {
 		return new Promise((resolve, reject) => {
 			publicAxios
-				.get(new URL(`/${idUser}`, this.baseUrl).href)
+				.get(`${this.baseUrl}/${idUser}/`)
 				.then((response) => {
 					resolve(response.data);
 				})
@@ -37,7 +37,7 @@ class UserService {
 	static async getUserCommunities(idUser) {
 		return new Promise((resolve, reject) => {
 			publicAxios
-				.get(new URL(`/${idUser}/community`, this.baseUrl).href)
+				.get(`${this.baseUrl}/${idUser}/community/`)
 				.then((response) => {
 					resolve(response.data);
 				})
@@ -50,7 +50,7 @@ class UserService {
 	static async getUserPosts(idUser, lastId) {
 		return new Promise((resolve, reject) => {
 			publicAxios
-				.get(new URL(`/${idUser}/post`, this.baseUrl).href, {
+				.get(`${this.baseUrl}/${idUser}/post/`, {
 					params: {
 						lastId: lastId,
 					},

@@ -51,10 +51,10 @@ class UserController {
 		try {
 			const communities = await Community.findAll({
 				include: {
-					model: CommunityMember,
+					model: User,
 					require: true,
 					where: {
-						id_user: user.id,
+						id: user.id,
 					},
 				},
 				order: [["name", "ASC"]],

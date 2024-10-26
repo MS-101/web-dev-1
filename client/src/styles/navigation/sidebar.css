@@ -1,19 +1,19 @@
-.SideBar nav {
+.Sidebar nav {
 	background-color: rgb(200, 0, 0);
 	color: black;
-	width: 200px;
+	width: 300px;
 	display: flex;
 	padding: 10px;
 }
 
-.SideBar ul {
+.Sidebar ul {
 	list-style-type: none;
 	width: 100%;
 	padding: 0;
 	margin: 0;
 }
 
-.SideBar li {
+.Sidebar li {
 	height: 30px;
 	display: flex;
 	justify-content: center;
@@ -21,16 +21,16 @@
 	font-size: large;
 }
 
-.SideBar li:hover {
+.Sidebar li:hover {
 	background-color: #777;
 }
 
-.SideBar li.active {
+.Sidebar li.active {
 	background-color: black;
 	color: white;
 }
 
-.SideBar a {
+.Sidebar a {
 	color: inherit;
 	text-decoration: none;
 }
