@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useState, useAuthContext } from "react";
+import { jwtDecode } from "jwt-decode";
 
 export const AuthContext = createContext();
 
@@ -18,11 +19,28 @@ export const AuthProvider = ({ children }) => {
 	const [refreshToken, setRefreshToken] = useState(
 		localStorage.getItem(refreshTokenKey)
 	);
-	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [authView, setAuthView] = useState("login");
 
-	const openModal = () => setIsModalOpen(true);
-	const closeModal = () => setIsModalOpen(false);
+	const isTokenValid = (token) => {
+		if (!token) return false;
+
+		const decodedToken = jwtDecode(token);
+		const expiredTime = decodedToken.exp;
+		const currentTime = Date.now() / 1000;
+
+		return expiredTime >= currentTime + 60;
+	};
+
+	const getAccessToken = async () => {
+		if (isTokenValid(accessToken)) {
+			return accessToken;
+		} else {
+			AuthService.refresh(refreshToken).then((response) => {
+				setAuthentication(response.data);
+
+				return accessToken;
+			});
+		}
+	};
 
 	const setAuthentication = (data) => {
 		const user = data.user;
@@ -48,35 +66,14 @@ export const AuthProvider = ({ children }) => {
 		localStorage.removeItem(refreshTokenKey);
 	};
 
-	const showLogin = () => {
-		setAuthView("login");
-		openModal();
-	};
-
-	const showRegister = () => {
-		setAuthView("register");
-		openModal();
-	};
-
-	const showResetPassword = () => {
-		setAuthView("resetPassword");
-		openModal();
-	};
-
 	return (
 		<AuthContext.Provider
 			value={{
-				isModalOpen,
-				openModal,
-				closeModal,
-				authView,
-				showLogin,
-				showRegister,
-				showResetPassword,
 				setAuthentication,
-				logout: clearAuthentication,
+				clearAuthentication,
 				user,
-				accessToken,
+				getAccessToken,
+				refreshToken,
 			}}
 		>
 			{children}

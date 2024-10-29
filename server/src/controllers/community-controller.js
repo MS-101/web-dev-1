@@ -26,19 +26,10 @@ class CommunityController {
 					...(lastId ? { id: { [Op.lt]: lastId } } : {}),
 				},
 				order: [["id", "ASC"]],
-				limit: limit + 1,
+				limit: limit,
 			});
 
-			let lastPage = true;
-			if (communities.length > limit) {
-				communities.pop();
-				lastPage = false;
-			}
-
-			return res.status(StatusCodes.OK).json({
-				records: communities,
-				lastPage: lastPage,
-			});
+			return res.status(StatusCodes.OK).json(communities);
 		} catch (error) {
 			console.log(error);
 
@@ -65,6 +56,12 @@ class CommunityController {
 				created_by: authUser.id,
 				name: name,
 				description: description,
+			});
+
+			const communityMember = await CommunityMember.create({
+				id_user: authUser.id,
+				id_community: community.id,
+				id_community_member_type: CommunityMemberTypes.ADMIN,
 			});
 
 			return res.status(StatusCodes.CREATED).json({
@@ -172,19 +169,10 @@ class CommunityController {
 					...(lastId ? { id: { [Op.lt]: lastId } } : {}),
 				},
 				order: [["id", "DESC"]],
-				limit: limit + 1,
+				limit: limit,
 			});
 
-			let lastPage = true;
-			if (posts.count() > limit) {
-				posts.pop();
-				lastPage = false;
-			}
-
-			return res.status(StatusCodes.OK).json({
-				records: posts,
-				lastPage: lastPage,
-			});
+			return res.status(StatusCodes.OK).json(posts);
 		} catch (error) {
 			console.log(error);
 

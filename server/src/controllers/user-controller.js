@@ -17,19 +17,10 @@ class UserController {
 					...(lastId ? { id: { [Op.lt]: lastId } } : {}),
 				},
 				order: [["id", "ASC"]],
-				limit: limit + 1,
+				limit: limit,
 			});
 
-			let lastPage = true;
-			if (users.count() > limit) {
-				users.pop();
-				lastPage = false;
-			}
-
-			return res.status(StatusCodes.OK).json({
-				records: users,
-				lastPage: lastPage,
-			});
+			return res.status(StatusCodes.OK).json(users);
 		} catch (error) {
 			console.log(error);
 
@@ -85,16 +76,7 @@ class UserController {
 				limit: limit,
 			});
 
-			let lastPage = true;
-			if (posts.count() > limit) {
-				posts.pop();
-				lastPage = false;
-			}
-
-			return res.status(StatusCodes.OK).json({
-				records: posts,
-				lastPage: lastPage,
-			});
+			return res.status(StatusCodes.OK).json(posts);
 		} catch (error) {
 			console.log(error);
 

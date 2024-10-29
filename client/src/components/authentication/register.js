@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import { useAuthContext } from "contexts/auth-context";
+import { useModalContext } from "contexts/modal-context";
+import { ModalTypes } from "components/modal";
 import AuthService from "services/auth-service";
+import "styles/auth-modal.css";
 
-function Login() {
-	const { closeModal, showLogin, setAuthentication } = useAuthContext();
+function Register() {
+	const { openModal, closeModal } = useModalContext;
+	const { setAuthentication } = useAuthContext();
 	const [email, setEmail] = useState("");
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
@@ -14,7 +18,7 @@ function Login() {
 	};
 
 	const onShowLoginClick = () => {
-		showLogin();
+		openModal(ModalTypes.LOGIN);
 	};
 
 	const onRegisterClick = () => {
@@ -81,4 +85,4 @@ function Login() {
 	);
 }
 
-export default Login;
+export default Register;

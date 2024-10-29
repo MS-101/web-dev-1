@@ -1,4 +1,4 @@
-import { publicAxios } from "config/axios";
+import { publicAxios, authAxios } from "config/axios";
 
 class AuthService {
 	static baseUrl = "/auth";
@@ -38,10 +38,8 @@ class AuthService {
 
 	static async refresh(refreshToken) {
 		return new Promise((resolve, reject) => {
-			publicAxios
-				.post(`${this.baseUrl}/refresh`, {
-					refreshToken: refreshToken,
-				})
+			authAxios(refreshToken)
+				.post(`${this.baseUrl}/refresh`)
 				.then((response) => {
 					resolve(response.data);
 				})

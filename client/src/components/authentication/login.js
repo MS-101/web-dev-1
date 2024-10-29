@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import { useAuthContext } from "contexts/auth-context";
+import { ModalTypes } from "components/modal";
+import { useModalContext } from "contexts/modal-context";
 import AuthService from "services/auth-service";
+import "styles/auth-modal.css";
 
 function Login() {
-	const { closeModal, showRegister, showResetPassword, setAuthentication } =
-		useAuthContext();
+	const { openModal, closeModal } = useModalContext;
+	const { setAuthentication } = useAuthContext;
 	const [usernameOrEmail, setUsernameOrEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [errorMessage, setErrorMessage] = useState(null);
@@ -15,11 +18,11 @@ function Login() {
 	};
 
 	const onForgotPasswordClick = () => {
-		showResetPassword();
+		openModal(ModalTypes.RESET_PASSWORD);
 	};
 
 	const onShowRegisterClick = () => {
-		showRegister();
+		openModal(ModalTypes.REGISTER);
 	};
 
 	const onLoginClick = () => {
