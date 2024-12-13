@@ -84,7 +84,7 @@ class CommunityController {
 	static async getCommunity(req, res) {
 		const { community } = req.body;
 
-		return res.status(201).json(community);
+		return res.status(StatusCodes.OK).json(community);
 	}
 
 	static async putCommunity(req, res) {

@@ -51,7 +51,7 @@ const useCommunityPosts = (idCommunity) => {
 				body
 			);
 		},
-		[accessToken, idCommunity]
+		[getAccessToken, idCommunity]
 	);
 
 	return { posts, postsLoaded, fetchTopPosts, fetchNextPosts, createNewPost };

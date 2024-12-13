@@ -3,10 +3,10 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "contexts/auth-context";
 import { ModalProvider } from "contexts/modal-context";
 import AppLayout from "layouts/app-layout";
-import Home from "pages/home";
-import Feed from "pages/feed";
-import Trending from "pages/trending";
-import Community from "pages/community";
+import Home from "pages/home-page";
+import Feed from "pages/feed-page";
+import Trending from "pages/trending-page";
+import Community from "pages/community-page";
 import "app.css";
 
 function App() {

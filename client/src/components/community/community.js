@@ -8,6 +8,7 @@ function Community(community) {
 		<div>
 			<h2>{name}</h2>
 			<p>{description}</p>
+			<button></button>
 		</div>
 	);
 }
