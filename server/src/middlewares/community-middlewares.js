@@ -1,9 +1,10 @@
 import Community from "../models/community.js";
 import CommunityMember from "../models/community-member.js";
-import { CommunityMemberTypes } from "../models/community-member.js";
+import { CommunityMemberTypeEnum } from "../models/community-member-type.js";
 import { StatusCodes } from "http-status-codes";
+import { Op } from "sequelize";
 
-export const authCommunity = async (req, res) => {
+export const authCommunity = async (req, res, next) => {
 	const { id } = req.params;
 
 	const community = await Community.findOne({
@@ -71,8 +72,8 @@ export const authCommunityModerator = async (req, res, next) => {
 			id_user: authUser.id,
 			id_community: community.id,
 			[Op.or]: [
-				{ id_community_member_type: CommunityMemberTypes.MODERATOR },
-				{ id_community_member_type: CommunityMemberTypes.ADMIN },
+				{ id_community_member_type: CommunityMemberTypeEnum.MODERATOR },
+				{ id_community_member_type: CommunityMemberTypeEnum.ADMIN },
 			],
 		},
 	});
@@ -95,7 +96,7 @@ export const authCommunityAdmin = async (req, res, next) => {
 		where: {
 			id_user: authUser.id,
 			id_community: community.id,
-			id_community_member_type: CommunityMemberTypes.ADMIN,
+			id_community_member_type: CommunityMemberTypeEnum.ADMIN,
 		},
 	});
 

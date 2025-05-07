@@ -15,8 +15,8 @@ class PostController {
 					...(query
 						? {
 								[Op.or]: [
-									{ title: { [Op.iLike]: `%${query}%` } },
-									{ body: { [Op.iLike]: `%${query}%` } },
+									{ title: { [Op.like]: `%${query}%` } },
+									{ body: { [Op.like]: `%${query}%` } },
 								],
 						  }
 						: {}),

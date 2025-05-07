@@ -3,17 +3,12 @@ import dbConnection from "../config/database.js";
 import Community from "./community.js";
 import User from "./user.js";
 
-export const CommunityMemberTypes = {
-	MEMBER: 1,
-	MODERATOR: 2,
-	ADMIN: 3,
-};
-
 const CommunityMember = dbConnection.define(
 	"communityMember",
 	{
 		id: {
 			type: DataTypes.INTEGER,
+			autoIncrement: true,
 			primaryKey: true,
 			allowNull: false,
 		},
@@ -32,6 +27,10 @@ const CommunityMember = dbConnection.define(
 				model: User,
 				key: "id",
 			},
+		},
+		id_community_member_type: {
+			type: DataTypes.INTEGER,
+			allowNull: false,
 		},
 	},
 	{

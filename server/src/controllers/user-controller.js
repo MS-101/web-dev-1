@@ -2,7 +2,6 @@ import { StatusCodes } from "http-status-codes";
 import { Op } from "sequelize";
 import User from "../models/user.js";
 import Community from "../models/community.js";
-import CommunityMember from "../models/community-member.js";
 import Post from "../models/post.js";
 
 class UserController {
@@ -13,7 +12,7 @@ class UserController {
 		try {
 			const users = await User.findAll({
 				where: {
-					...(query ? { username: { [Op.iLike]: `%${query}%` } } : {}),
+					...(query ? { username: { [Op.like]: `%${query}%` } } : {}),
 					...(lastId ? { id: { [Op.lt]: lastId } } : {}),
 				},
 				order: [["id", "ASC"]],

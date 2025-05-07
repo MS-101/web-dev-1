@@ -1,11 +1,12 @@
 import Community from "../models/community.js";
-import CommunityMember, {
-	CommunityMemberTypes,
-} from "../models/community-member.js";
+import CommunityMember from "../models/community-member.js";
+import CommunityMemberType, {
+	CommunityMemberTypeEnum,
+} from "../models/community-member-type.js";
 import User from "../models/user.js";
 import Post from "../models/post.js";
 import { StatusCodes } from "http-status-codes";
-import { Op } from "sequelize";
+import { Op, Sequelize } from "sequelize";
 
 class CommunityController {
 	static async getCommunities(req, res) {
@@ -18,8 +19,8 @@ class CommunityController {
 					...(query
 						? {
 								[Op.or]: [
-									{ name: { [Op.iLike]: `%${query}%` } },
-									{ description: { [Op.iLike]: `%${query}%` } },
+									{ name: { [Op.like]: `%${query}%` } },
+									{ description: { [Op.like]: `%${query}%` } },
 								],
 						  }
 						: {}),
@@ -44,7 +45,9 @@ class CommunityController {
 
 		try {
 			const communityWithName = await Community.findOne({
-				name: name,
+				where: {
+					name: name,
+				},
 			});
 
 			if (communityWithName != null)
@@ -61,7 +64,7 @@ class CommunityController {
 			const communityMember = await CommunityMember.create({
 				id_user: authUser.id,
 				id_community: community.id,
-				id_community_member_type: CommunityMemberTypes.ADMIN,
+				id_community_member_type: CommunityMemberTypeEnum.ADMIN,
 			});
 
 			return res.status(StatusCodes.CREATED).json({
@@ -117,6 +120,7 @@ class CommunityController {
 			await CommunityMember.create({
 				id_community: community.id,
 				id_user: authUser.id,
+				id_community_member_type: CommunityMemberTypeEnum.MEMBER,
 			});
 
 			return res.status(StatusCodes.OK).json({
@@ -150,7 +154,7 @@ class CommunityController {
 	}
 
 	static async getCommunityPosts(req, res) {
-		const { community } = req.body;
+		const { query, community } = req.body;
 		const { lastId } = req.query;
 		const limit = 20;
 
@@ -161,8 +165,8 @@ class CommunityController {
 					...(query
 						? {
 								[Op.or]: [
-									{ title: { [Op.iLike]: `%${query}%` } },
-									{ body: { [Op.iLike]: `%${query}%` } },
+									{ title: { [Op.like]: `%${query}%` } },
+									{ body: { [Op.like]: `%${query}%` } },
 								],
 						  }
 						: {}),
@@ -210,21 +214,28 @@ class CommunityController {
 
 		try {
 			const users = await User.findAll({
-				include: {
-					model: CommunityMember,
-					required: true,
-					where: {
-						id_community: community.id,
-						...(lastId ? { id: { [Op.lt]: lastId } } : {}),
+				attributes: ["id", "username"],
+				include: [
+					{
+						model: Community,
+						attributes: [],
+						required: true,
+						through: {
+							model: CommunityMember,
+							attributes: ["id_community_member_type"],
+						},
+						where: {
+							id: community.id,
+							...(lastId ? { id: { [Op.lt]: lastId } } : {}),
+						},
 					},
-					attributes: ["id_community_member_type"],
-				},
-				order: [["id", "DESC"]],
+				],
+				order: [["username", "ASC"]],
 				limit: limit + 1,
 			});
 
 			let lastPage = true;
-			if (users.count() > limit) {
+			if (users.length > limit) {
 				users.pop();
 				lastPage = false;
 			}
@@ -247,29 +258,39 @@ class CommunityController {
 
 		try {
 			const users = await User.findAll({
+				attributes: ["id", "username"],
 				include: {
-					model: CommunityMember,
+					model: Community,
 					required: true,
-					where: {
-						id_community: community.id,
-						[Op.or]: [
-							{
-								id_community_member_type: CommunityMemberTypes.MODERATOR,
+					through: {
+						model: CommunityMember,
+						include: {
+							model: CommunityMemberType,
+							required: true,
+							where: {
+								[Op.or]: [
+									{ id: CommunityMemberTypeEnum.MODERATOR },
+									{ id: CommunityMemberTypeEnum.ADMIN },
+								],
 							},
-							{
-								id_community_member_type: CommunityMemberTypes.ADMIN,
-							},
-						],
+						},
 					},
-					attributes: ["id_community_member_type"],
+					where: { id: community.id },
 				},
-				order: [
-					["id_community_member_type", "DESC"],
-					["username", "ASC"],
-				],
+				order: [["username", "ASC"]],
 			});
 
-			return res.status(StatusCodes.OK).json(users);
+			const formattedUsers = users.map((user) => {
+				const communityMember = user.communities[0].communityMember;
+				return {
+					id: user.id,
+					username: user.username,
+					id_community_member_type: communityMember.id_community_member_type,
+					community_member_type: communityMember.name,
+				};
+			});
+
+			return res.status(StatusCodes.OK).json(formattedUsers);
 		} catch (error) {
 			console.log(error);
 
