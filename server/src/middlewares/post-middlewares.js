@@ -1,5 +1,4 @@
 import Post from "../models/post.js";
-import Community from "../models/community.js";
 import { StatusCodes } from "http-status-codes";
 
 export const authPost = async (req, res) => {
@@ -12,14 +11,7 @@ export const authPost = async (req, res) => {
 	});
 
 	if (post != null) {
-		const community = await Community.findOne({
-			where: {
-				id: post.id_community,
-			},
-		});
-
 		req.body.post = post;
-		req.body.community = community;
 
 		next();
 	} else {

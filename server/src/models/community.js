@@ -11,18 +11,18 @@ const Community = dbConnection.define(
 			primaryKey: true,
 			allowNull: false,
 		},
-		created_by: {
+		date: {
+			type: DataTypes.DATE,
+			allowNull: false,
+			defaultValue: Sequelize.fn("NOW"),
+		},
+		id_user: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
 			references: {
 				model: User,
 				key: "id",
 			},
-		},
-		created_date: {
-			type: DataTypes.DATE,
-			allowNull: false,
-			defaultValue: Sequelize.fn("NOW"),
 		},
 		name: {
 			type: DataTypes.STRING,
@@ -37,7 +37,21 @@ const Community = dbConnection.define(
 	{
 		tableName: "community",
 		timestamps: false,
+		defaultScope: {
+			attributes: ["id", "date", "name", "description"],
+			include: {
+				model: User,
+				attributes: ["id", "username"],
+			},
+		},
 	}
 );
+
+Community.belongsTo(User, {
+	foreignKey: "id_user",
+});
+User.hasMany(Community, {
+	foreignKey: "id",
+});
 
 export default Community;

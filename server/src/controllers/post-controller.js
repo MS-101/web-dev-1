@@ -1,7 +1,6 @@
 import { StatusCodes } from "http-status-codes";
 import { Op } from "sequelize";
 import Post from "../models/post.js";
-import User from "../models/user.js";
 import PostReaction from "../models/post-reaction.js";
 
 class PostController {
@@ -22,8 +21,7 @@ class PostController {
 						: {}),
 					...(lastId ? { id: { [Op.lt]: lastId } } : {}),
 				},
-				include: User,
-				order: [["id", "ASC"]],
+				order: [["id", "DESC"]],
 				limit: limit,
 			});
 
@@ -43,7 +41,7 @@ class PostController {
 		return res.status(StatusCodes.OK).json(post);
 	}
 
-	static async reactPost(req, res, is_positive) {
+	static async reactPost(req, res) {
 		const { post, user, is_positive } = req.body;
 
 		try {
@@ -53,7 +51,7 @@ class PostController {
 				},
 			});
 
-			if (postResponse != null) {
+			if (postResponse == null) {
 				await PostReaction.create({
 					id_post: post.id,
 					id_user: user.id,

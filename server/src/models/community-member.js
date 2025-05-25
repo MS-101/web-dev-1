@@ -1,6 +1,7 @@
 import { DataTypes } from "sequelize";
 import dbConnection from "../config/database.js";
 import Community from "./community.js";
+import CommunityMemberType from "./community-member-type.js";
 import User from "./user.js";
 
 const CommunityMember = dbConnection.define(
@@ -31,6 +32,10 @@ const CommunityMember = dbConnection.define(
 		id_community_member_type: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
+			references: {
+				model: CommunityMemberType,
+				key: "id",
+			},
 		},
 	},
 	{
@@ -46,6 +51,27 @@ User.belongsToMany(Community, {
 Community.belongsToMany(User, {
 	through: CommunityMember,
 	foreignKey: "id_community",
+});
+
+CommunityMember.belongsTo(Community, {
+	foreignKey: "id_community",
+});
+Community.hasMany(CommunityMember, {
+	foreignKey: "id",
+});
+
+CommunityMember.belongsTo(User, {
+	foreignKey: "id_user",
+});
+User.hasMany(CommunityMember, {
+	foreignKey: "id",
+});
+
+CommunityMember.belongsTo(CommunityMemberType, {
+	foreignKey: "id_community_member_type",
+});
+CommunityMemberType.hasMany(CommunityMember, {
+	foreignKey: "id",
 });
 
 export default CommunityMember;
