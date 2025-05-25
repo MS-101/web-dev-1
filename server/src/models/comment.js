@@ -1,4 +1,4 @@
-import { DataTypes } from "sequelize";
+import { DataTypes, Sequelize } from "sequelize";
 import dbConnection from "../config/database.js";
 import User from "./user.js";
 import Post from "./post.js";
@@ -15,6 +15,7 @@ const Comment = dbConnection.define(
 		date: {
 			type: DataTypes.DATE,
 			allowNull: false,
+			defaultValue: Sequelize.fn("NOW"),
 		},
 		id_post: {
 			type: DataTypes.INTEGER,
@@ -36,7 +37,7 @@ const Comment = dbConnection.define(
 			type: DataTypes.INTEGER,
 			allowNull: true,
 			references: {
-				model: Comment,
+				model: "comment",
 				key: "id",
 			},
 		},

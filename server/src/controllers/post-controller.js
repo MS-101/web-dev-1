@@ -2,6 +2,7 @@ import { StatusCodes } from "http-status-codes";
 import { Op } from "sequelize";
 import Post from "../models/post.js";
 import PostReaction from "../models/post-reaction.js";
+import Comment from "../models/comment.js";
 
 class PostController {
 	static async getPosts(req, res) {
@@ -42,19 +43,19 @@ class PostController {
 	}
 
 	static async reactPost(req, res) {
-		const { post, user, is_positive } = req.body;
+		const { post, authUser, is_positive } = req.body;
 
 		try {
 			const postResponse = await PostReaction.findOne({
 				where: {
-					[Op.and]: [{ id_post: post.id }, { id_user: user.id }],
+					[Op.and]: [{ id_post: post.id }, { id_user: authUser.id }],
 				},
 			});
 
 			if (postResponse == null) {
 				await PostReaction.create({
 					id_post: post.id,
-					id_user: user.id,
+					id_user: authUser.id,
 					is_positive: is_positive,
 				});
 			} else {
@@ -76,12 +77,12 @@ class PostController {
 	}
 
 	static async unreactPost(req, res) {
-		const { post, user } = req.body;
+		const { post, authUser } = req.body;
 
 		try {
 			const postResponse = await PostReaction.findOne({
 				where: {
-					[Op.and]: [{ id_post: post.id }, { id_user: user.id }],
+					[Op.and]: [{ id_post: post.id }, { id_user: authUser.id }],
 				},
 			});
 
@@ -106,9 +107,22 @@ class PostController {
 	}
 
 	static async commentPost(req, res) {
-		const { post, user, text } = req.body;
+		const { post, authUser, text } = req.body;
 
 		try {
+			const comment = await Comment.create({
+				id_post: post.id,
+				id_user: authUser.id,
+				text: text,
+			});
+
+			return res.status(StatusCodes.OK).json({
+				message: "Successfully created comment!",
+				comment: {
+					id: comment.id,
+					text: text,
+				},
+			});
 		} catch (error) {
 			console.log(error);
 

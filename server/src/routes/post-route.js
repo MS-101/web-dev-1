@@ -7,7 +7,7 @@ const postRoute = express.Router();
 const specificPostRoute = express.Router();
 
 postRoute.get("/", PostController.getPosts);
-postRoute.get("/:id", authPost, specificPostRoute);
+postRoute.use("/:id", authPost, specificPostRoute);
 
 specificPostRoute.get("/", PostController.getPost);
 specificPostRoute.post("/react", authAccessToken, PostController.reactPost);

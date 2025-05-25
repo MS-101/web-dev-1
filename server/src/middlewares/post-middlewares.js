@@ -1,7 +1,7 @@
 import Post from "../models/post.js";
 import { StatusCodes } from "http-status-codes";
 
-export const authPost = async (req, res) => {
+export const authPost = async (req, res, next) => {
 	const { id } = req.params;
 
 	const post = await Post.findOne({
