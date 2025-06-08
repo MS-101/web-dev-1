@@ -52,4 +52,43 @@ const Comment = dbConnection.define(
 	}
 );
 
+Comment.belongsTo(Post, {
+	foreignKey: "id_post",
+});
+Post.hasMany(Comment, {
+	foreignKey: "id",
+});
+
+Comment.belongsTo(User, {
+	foreignKey: "id_user",
+});
+User.hasMany(Comment, {
+	foreignKey: "id",
+});
+
+Comment.belongsTo(Comment, {
+	as: "Parent",
+	foreignKey: "id_parent",
+});
+Comment.hasMany(Comment, {
+	as: "Children",
+	foreignKey: "id_parent",
+});
+
+Comment.addScope("defaultScope", {
+	attributes: ["id", "date", "text"],
+	include: [
+		{
+			model: Post,
+			attributes: ["id", "date", "title", "body"],
+			required: true,
+		},
+		{
+			model: User,
+			attributes: ["id", "username"],
+			required: true,
+		},
+	],
+});
+
 export default Comment;

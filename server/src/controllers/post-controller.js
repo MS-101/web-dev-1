@@ -31,7 +31,7 @@ class PostController {
 			console.log(error);
 
 			return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-				message: "Failed to fetch posts.",
+				message: "Failed to fetch posts!",
 			});
 		}
 	}
@@ -46,20 +46,20 @@ class PostController {
 		const { post, authUser, is_positive } = req.body;
 
 		try {
-			const postResponse = await PostReaction.findOne({
+			const postReaction = await PostReaction.findOne({
 				where: {
 					[Op.and]: [{ id_post: post.id }, { id_user: authUser.id }],
 				},
 			});
 
-			if (postResponse == null) {
+			if (postReaction == null) {
 				await PostReaction.create({
 					id_post: post.id,
 					id_user: authUser.id,
 					is_positive: is_positive,
 				});
 			} else {
-				postResponse.update({
+				postReaction.update({
 					is_positive: is_positive,
 				});
 			}
@@ -71,7 +71,7 @@ class PostController {
 			console.log(error);
 
 			return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-				message: "Failed to set post reaction.",
+				message: "Failed to set post reaction!",
 			});
 		}
 	}
@@ -80,14 +80,14 @@ class PostController {
 		const { post, authUser } = req.body;
 
 		try {
-			const postResponse = await PostReaction.findOne({
+			const postReaction = await PostReaction.findOne({
 				where: {
 					[Op.and]: [{ id_post: post.id }, { id_user: authUser.id }],
 				},
 			});
 
-			if (postResponse != null) {
-				postResponse.destroy();
+			if (postReaction != null) {
+				postReaction.destroy();
 
 				return res.status(StatusCodes.OK).json({
 					message: "Successfully removed post reaction!",
@@ -101,33 +101,33 @@ class PostController {
 			console.log(error);
 
 			return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-				message: "Failed to remove post reaction.",
+				message: "Failed to remove post reaction!",
 			});
 		}
 	}
 
-	static async commentPost(req, res) {
+	static async respondPost(req, res) {
 		const { post, authUser, text } = req.body;
 
 		try {
-			const comment = await Comment.create({
+			const postResponse = await Comment.create({
 				id_post: post.id,
 				id_user: authUser.id,
 				text: text,
 			});
 
 			return res.status(StatusCodes.OK).json({
-				message: "Successfully created comment!",
+				message: "Successfully responded to post!",
 				comment: {
-					id: comment.id,
-					text: text,
+					id: postResponse.id,
+					text: postResponse.text,
 				},
 			});
 		} catch (error) {
 			console.log(error);
 
 			return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-				message: "Failed to create new comment.",
+				message: "Failed to respond to post!",
 			});
 		}
 	}

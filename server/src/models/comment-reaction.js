@@ -1,17 +1,17 @@
 import { DataTypes } from "sequelize";
 import dbConnection from "../config/database.js";
-import Post from "./post.js";
+import Comment from "./comment.js";
 import User from "./user.js";
 
-const PostReaction = dbConnection.define(
-	"postReaction",
+const CommentReaction = dbConnection.define(
+	"commentReaction",
 	{
-		id_post: {
+		id_comment: {
 			type: DataTypes.INTEGER,
 			primaryKey: true,
 			allowNull: false,
 			references: {
-				model: Post,
+				model: Comment,
 				key: "id",
 			},
 		},
@@ -30,23 +30,23 @@ const PostReaction = dbConnection.define(
 		},
 	},
 	{
-		tableName: "post_reaction",
+		tableName: "comment_reaction",
 		timestamps: false,
 	}
 );
 
-PostReaction.belongsTo(Post, {
-	foreignKey: "id_post",
+CommentReaction.belongsTo(Comment, {
+	foreignKey: "id_comment",
 });
-Post.hasMany(PostReaction, {
-	foreignKey: "id_post",
-});
-
-PostReaction.belongsTo(User, {
-	foreignKey: "id_user",
-});
-User.hasMany(PostReaction, {
-	foreignKey: "id_user",
+Comment.hasMany(CommentReaction, {
+	foreignKey: "id_comment",
 });
 
-export default PostReaction;
+CommentReaction.belongsTo(User, {
+	foreignKey: "id_user",
+});
+User.hasMany(CommentReaction, {
+	foreignKey: "id_user",
+});
+
+export default CommentReaction;
