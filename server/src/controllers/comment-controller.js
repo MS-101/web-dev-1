@@ -2,6 +2,7 @@ import { StatusCodes } from "http-status-codes";
 import { Op } from "sequelize";
 import Comment from "../models/comment.js";
 import CommentReaction from "../models/comment-reaction.js";
+import { setCommentResponses } from "../helpers/comment-helpers.js";
 
 class CommentController {
 	static async getComment(req, res) {
@@ -10,7 +11,29 @@ class CommentController {
 		return res.status(StatusCodes.OK).json(comment);
 	}
 
-	static async reactComment(req, res) {
+	static async putComment(req, res) {
+		const { comment, text } = req.body;
+
+		const updates = {};
+		if (title !== undefined) updates.text = text;
+
+		try {
+			const updatedComment = await comment.update(updates);
+
+			return res.status(StatusCodes.OK).json({
+				message: "Successfully updated comment!",
+				comment: updatedComment,
+			});
+		} catch (error) {
+			console.log(error);
+
+			return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+				message: "Failed to update comment!",
+			});
+		}
+	}
+
+	static async postReaction(req, res) {
 		const { comment, authUser, is_positive } = req.body;
 
 		try {
@@ -44,7 +67,7 @@ class CommentController {
 		}
 	}
 
-	static async unreactComment(req, res) {
+	static async deleteReaction(req, res) {
 		const { comment, authUser } = req.body;
 
 		try {
@@ -74,7 +97,40 @@ class CommentController {
 		}
 	}
 
-	static async respondComment(req, res) {
+	static async getComments(req, res) {
+		const { comment } = req.body;
+		const { lastId } = req.query;
+		const maxWidth = 20;
+		const maxDepth = 5;
+
+		try {
+			const { commentResponsesCount, commentResponses } =
+				await Comment.findAndCountAll({
+					where: {
+						id_post: comment.id_post,
+						id_parent: comment.id,
+						...(lastId ? { id: { [Op.lt]: lastId } } : {}),
+					},
+					order: [["id", "DESC"]],
+					limit: maxWidth,
+				});
+
+			await setCommentResponses(commentResponses, maxWidth, maxDepth);
+
+			return res.status(StatusCodes.OK).json({
+				comments: commentResponses,
+				hasMore: commentResponsesCount > maxWidth,
+			});
+		} catch (error) {
+			console.log(error);
+
+			return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+				message: "Failed to fetch comments!",
+			});
+		}
+	}
+
+	static async postComment(req, res) {
 		const { comment, authUser, text } = req.body;
 
 		try {
@@ -86,7 +142,7 @@ class CommentController {
 			});
 
 			return res.status(StatusCodes.OK).json({
-				message: "Successfully responded to comment!",
+				message: "Successfully posted comment!",
 				comment: {
 					id: commentResponse.id,
 					text: commentResponse.text,
@@ -96,7 +152,7 @@ class CommentController {
 			console.log(error);
 
 			return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-				message: "Failed to respond to comment!",
+				message: "Failed to fetch comments!",
 			});
 		}
 	}

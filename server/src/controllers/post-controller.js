@@ -3,6 +3,7 @@ import { Op } from "sequelize";
 import Post from "../models/post.js";
 import PostReaction from "../models/post-reaction.js";
 import Comment from "../models/comment.js";
+import { setCommentResponses } from "../helpers/comment-helpers.js";
 
 class PostController {
 	static async getPosts(req, res) {
@@ -42,7 +43,30 @@ class PostController {
 		return res.status(StatusCodes.OK).json(post);
 	}
 
-	static async reactPost(req, res) {
+	static async putPost(req, res) {
+		const { post, title, body } = req.body;
+
+		const updates = {};
+		if (title !== undefined) updates.title = title;
+		if (body !== undefined) updates.body = body;
+
+		try {
+			const updatedPost = await post.update(updates);
+
+			return res.status(StatusCodes.OK).json({
+				message: "Successfully updated post!",
+				post: updatedPost,
+			});
+		} catch (error) {
+			console.log(error);
+
+			return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+				message: "Failed to update post!",
+			});
+		}
+	}
+
+	static async postReaction(req, res) {
 		const { post, authUser, is_positive } = req.body;
 
 		try {
@@ -76,7 +100,7 @@ class PostController {
 		}
 	}
 
-	static async unreactPost(req, res) {
+	static async deleteReaction(req, res) {
 		const { post, authUser } = req.body;
 
 		try {
@@ -106,7 +130,39 @@ class PostController {
 		}
 	}
 
-	static async respondPost(req, res) {
+	static async getComments(req, res) {
+		const { post } = req.body;
+		const { lastId } = req.query;
+		const maxWidth = 20;
+		const maxDepth = 5;
+
+		try {
+			const { commentsCount, comments } = await Comment.findAndCountAll({
+				where: {
+					id_post: post.id,
+					id_parent: null,
+					...(lastId ? { id: { [Op.lt]: lastId } } : {}),
+				},
+				order: [["id", "DESC"]],
+				limit: maxWidth,
+			});
+
+			await setCommentResponses(comments, maxWidth, maxDepth);
+
+			return res.status(StatusCodes.OK).json({
+				comments: comments,
+				hasMore: commentsCount > maxWidth,
+			});
+		} catch (error) {
+			console.log(error);
+
+			return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+				message: "Failed to fetch comments!",
+			});
+		}
+	}
+
+	static async postComment(req, res) {
 		const { post, authUser, text } = req.body;
 
 		try {
@@ -117,7 +173,7 @@ class PostController {
 			});
 
 			return res.status(StatusCodes.OK).json({
-				message: "Successfully responded to post!",
+				message: "Successfully posted comment!",
 				comment: {
 					id: postResponse.id,
 					text: postResponse.text,
@@ -127,7 +183,7 @@ class PostController {
 			console.log(error);
 
 			return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-				message: "Failed to respond to post!",
+				message: "Failed to post comment!",
 			});
 		}
 	}

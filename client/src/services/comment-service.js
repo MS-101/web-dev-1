@@ -16,18 +16,33 @@ class CommentService {
 		});
 	}
 
+	static async putComment(accessToken, idComment, text) {
+		return new Promise((resolve, reject) => {
+			authAxios(accessToken)
+				.put(`${this.baseUrl}/${idComment}`, {
+					text: text,
+				})
+				.then((response) => {
+					resolve(response.data);
+				})
+				.catch((error) => {
+					reject(error.response.data.message);
+				});
+		});
+	}
+
 	static async likeComment(accessToken, idComment) {
-		return this.reactComment(accessToken, idComment, true);
+		return this.postReaction(accessToken, idComment, true);
 	}
 
 	static async dislikeComment(accessToken, idComment) {
-		return this.reactComment(accessToken, idComment, false);
+		return this.postReaction(accessToken, idComment, false);
 	}
 
-	static async reactComment(accessToken, idComment, isPositive) {
+	static async postReaction(accessToken, idComment, isPositive) {
 		return new Promise((resolve, reject) => {
 			authAxios(accessToken)
-				.post(`${this.baseUrl}/${idComment}/react`, {
+				.post(`${this.baseUrl}/${idComment}/reaction`, {
 					is_positive: isPositive,
 				})
 				.then((response) => {
@@ -39,10 +54,10 @@ class CommentService {
 		});
 	}
 
-	static async unreactComment(accessToken, idComment) {
+	static async deleteReaction(accessToken, idComment) {
 		return new Promise((resolve, reject) => {
 			authAxios(accessToken)
-				.post(`${this.baseUrl}/${idComment}/unreact`)
+				.delete(`${this.baseUrl}/${idComment}/reaction`)
 				.then((response) => {
 					resolve(response.data);
 				})
@@ -52,10 +67,27 @@ class CommentService {
 		});
 	}
 
-	static async respondComment(accessToken, idComment, text) {
+	static async getComments(idComment, lastId) {
+		return new Promise((resolve, reject) => {
+			publicAxios
+				.get(`${this.baseUrl}/${idComment}/comment`, {
+					params: {
+						lastId: lastId,
+					},
+				})
+				.then((response) => {
+					resolve(response.data);
+				})
+				.catch((error) => {
+					reject(error.response.data.message);
+				});
+		});
+	}
+
+	static async postComment(accessToken, idComment, text) {
 		return new Promise((resolve, reject) => {
 			authAxios(accessToken)
-				.post(`${this.baseUrl}/${idComment}/response`, {
+				.post(`${this.baseUrl}/${idComment}/comment`, {
 					text: text,
 				})
 				.then((response) => {

@@ -9,20 +9,22 @@ const specificCommentRoute = express.Router();
 commentRoute.use("/:id", authComment, specificCommentRoute);
 
 specificCommentRoute.get("/", CommentController.getComment);
+specificCommentRoute.put("/", authAccessToken, CommentController.putComment);
 specificCommentRoute.post(
-	"/react",
+	"/reaction",
 	authAccessToken,
-	CommentController.reactComment
+	CommentController.postReaction
 );
-specificCommentRoute.post(
-	"/unreact",
+specificCommentRoute.delete(
+	"/reaction",
 	authAccessToken,
-	CommentController.unreactComment
+	CommentController.deleteReaction
 );
+specificCommentRoute.get("/comment", CommentController.getComments);
 specificCommentRoute.post(
-	"/response",
+	"/comment",
 	authAccessToken,
-	CommentController.respondComment
+	CommentController.postComment
 );
 
 export default commentRoute;

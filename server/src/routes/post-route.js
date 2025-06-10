@@ -10,12 +10,18 @@ postRoute.get("/", PostController.getPosts);
 postRoute.use("/:id", authPost, specificPostRoute);
 
 specificPostRoute.get("/", PostController.getPost);
-specificPostRoute.post("/react", authAccessToken, PostController.reactPost);
-specificPostRoute.post("/unreact", authAccessToken, PostController.unreactPost);
+specificPostRoute.put("/", authAccessToken, PostController.putPost);
 specificPostRoute.post(
-	"/response",
+	"/reaction",
 	authAccessToken,
-	PostController.respondPost
+	PostController.postReaction
 );
+specificPostRoute.delete(
+	"/reaction",
+	authAccessToken,
+	PostController.deleteReaction
+);
+specificPostRoute.get("/comment", PostController.getComments);
+specificPostRoute.post("/comment", authAccessToken, PostController.postComment);
 
 export default postRoute;

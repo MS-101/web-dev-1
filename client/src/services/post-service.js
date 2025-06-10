@@ -1,4 +1,4 @@
-import { publicAxios } from "config/axios";
+import { authAxios, publicAxios } from "config/axios";
 
 class PostService {
 	static baseUrl = "/post";
@@ -34,18 +34,34 @@ class PostService {
 		});
 	}
 
+	static async putPost(accessToken, idPost) {
+		return new Promise((resolve, reject) => {
+			authAxios(accessToken)
+				.put(`${this.baseUrl}/${idPost}`, {
+					title: title,
+					body: body,
+				})
+				.then((response) => {
+					resolve(response.data);
+				})
+				.catch((error) => {
+					reject(error.response.data.message);
+				});
+		});
+	}
+
 	static async likePost(accessToken, idPost) {
-		return this.reactPost(accessToken, idPost, true);
+		return this.postReaction(accessToken, idPost, true);
 	}
 
 	static async dislikePost(accessToken, idPost) {
-		return this.reactPost(accessToken, idPost, false);
+		return this.postReaction(accessToken, idPost, false);
 	}
 
-	static async reactPost(accessToken, idPost, isPositive) {
+	static async postReaction(accessToken, idPost, isPositive) {
 		return new Promise((resolve, reject) => {
 			authAxios(accessToken)
-				.post(`${this.baseUrl}/${idPost}/react`, {
+				.post(`${this.baseUrl}/${idPost}/reaction`, {
 					is_positive: isPositive,
 				})
 				.then((response) => {
@@ -57,10 +73,10 @@ class PostService {
 		});
 	}
 
-	static async unreactPost(accessToken, idPost) {
+	static async deleteReaction(accessToken, idPost) {
 		return new Promise((resolve, reject) => {
 			authAxios(accessToken)
-				.post(`${this.baseUrl}/${idPost}/unreact`)
+				.delete(`${this.baseUrl}/${idPost}/reaction`)
 				.then((response) => {
 					resolve(response.data);
 				})
@@ -70,7 +86,24 @@ class PostService {
 		});
 	}
 
-	static async commentPost(accessToken, idPost, text) {
+	static async getComments(idComment, lastId) {
+		return new Promise((resolve, reject) => {
+			publicAxios
+				.get(`${this.baseUrl}/${idComment}/comment`, {
+					params: {
+						lastId: lastId,
+					},
+				})
+				.then((response) => {
+					resolve(response.data);
+				})
+				.catch((error) => {
+					reject(error.response.data.message);
+				});
+		});
+	}
+
+	static async postComment(accessToken, idPost, text) {
 		return new Promise((resolve, reject) => {
 			authAxios(accessToken)
 				.post(`${this.baseUrl}/${idPost}/comment`, {
