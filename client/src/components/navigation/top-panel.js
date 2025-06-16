@@ -1,11 +1,22 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useAuthContext } from "contexts/auth-context";
+import { useModalContext } from "contexts/modal-context";
 import SearchBar from "./search-bar";
 import "styles/navigation/top-panel.css";
+import { ModalTypes } from "components/modal";
 
 const TopPanel = () => {
-	const { user, showLogin, logout } = useAuthContext();
+	const { user, clearAuthentication } = useAuthContext();
+	const { openModal } = useModalContext();
+
+	const onLogoutClick = () => {
+		clearAuthentication();
+	};
+
+	const onLoginClick = () => {
+		openModal(ModalTypes.LOGIN);
+	};
 
 	return (
 		<nav className="TopPanel">
@@ -19,9 +30,9 @@ const TopPanel = () => {
 			</div>
 			<nav className="ButtonContainer">
 				{user ? (
-					<button onClick={logout}>Logout</button>
+					<button onClick={onLogoutClick}>Logout</button>
 				) : (
-					<button onClick={showLogin}>Login</button>
+					<button onClick={onLoginClick}>Login</button>
 				)}
 			</nav>
 		</nav>

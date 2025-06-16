@@ -1,6 +1,6 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import AuthModal from "components/authentication/auth-modal";
+import Modal from "components/modal";
 import TopPanel from "components/navigation/top-panel";
 import SideBar from "components/navigation/sidebar";
 import "styles/app-layout.css";
@@ -9,7 +9,7 @@ const AppLayout = () => {
 	return (
 		<div className="App">
 			<TopPanel />
-			<AuthModal />
+			<Modal />
 			<div className="ContentWrapper">
 				<SideBar />
 				<div className="Content">

@@ -7,7 +7,7 @@ import Home from "pages/home-page";
 import Feed from "pages/feed-page";
 import Trending from "pages/trending-page";
 import Community from "pages/community-page";
-import "app.css";
+import "App.css";
 
 function App() {
 	return (
