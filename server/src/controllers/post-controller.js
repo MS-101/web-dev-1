@@ -66,7 +66,7 @@ class PostController {
 		}
 	}
 
-	static async postReaction(req, res) {
+	static async postPostReaction(req, res) {
 		const { post, authUser, is_positive } = req.body;
 
 		try {
@@ -100,7 +100,7 @@ class PostController {
 		}
 	}
 
-	static async deleteReaction(req, res) {
+	static async deletePostReaction(req, res) {
 		const { post, authUser } = req.body;
 
 		try {
@@ -130,14 +130,14 @@ class PostController {
 		}
 	}
 
-	static async getComments(req, res) {
+	static async getPostResponses(req, res) {
 		const { post } = req.body;
 		const { lastId } = req.query;
 		const maxWidth = 20;
 		const maxDepth = 5;
 
 		try {
-			const { commentsCount, comments } = await Comment.scope(
+			const { comments } = await Comment.scope(
 				"defaultScope",
 				"ratings"
 			).findAndCountAll({
@@ -160,12 +160,12 @@ class PostController {
 			console.log(error);
 
 			return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-				message: "Failed to fetch comments!",
+				message: "Failed to fetch post responses!",
 			});
 		}
 	}
 
-	static async postComment(req, res) {
+	static async postPostResponse(req, res) {
 		const { post, authUser, text } = req.body;
 
 		try {
@@ -176,7 +176,7 @@ class PostController {
 			});
 
 			return res.status(StatusCodes.OK).json({
-				message: "Successfully posted comment!",
+				message: "Successfully posted post response!",
 				comment: {
 					id: postResponse.id,
 					text: postResponse.text,
@@ -186,7 +186,7 @@ class PostController {
 			console.log(error);
 
 			return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-				message: "Failed to post comment!",
+				message: "Failed to post response!",
 			});
 		}
 	}

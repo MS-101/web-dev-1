@@ -14,14 +14,18 @@ specificPostRoute.put("/", authAccessToken, PostController.putPost);
 specificPostRoute.post(
 	"/reaction",
 	authAccessToken,
-	PostController.postReaction
+	PostController.postPostReaction
 );
 specificPostRoute.delete(
 	"/reaction",
 	authAccessToken,
-	PostController.deleteReaction
+	PostController.deletePostReaction
 );
-specificPostRoute.get("/comment", PostController.getComments);
-specificPostRoute.post("/comment", authAccessToken, PostController.postComment);
+specificPostRoute.get("/response", PostController.getPostResponses);
+specificPostRoute.post(
+	"/response",
+	authAccessToken,
+	PostController.postPostResponse
+);
 
 export default postRoute;

@@ -13,18 +13,18 @@ specificCommentRoute.put("/", authAccessToken, CommentController.putComment);
 specificCommentRoute.post(
 	"/reaction",
 	authAccessToken,
-	CommentController.postReaction
+	CommentController.postCommentReaction
 );
 specificCommentRoute.delete(
 	"/reaction",
 	authAccessToken,
-	CommentController.deleteReaction
+	CommentController.deleteCommentReaction
 );
-specificCommentRoute.get("/comment", CommentController.getComments);
+specificCommentRoute.get("/response", CommentController.getCommentResponses);
 specificCommentRoute.post(
-	"/comment",
+	"/response",
 	authAccessToken,
-	CommentController.postComment
+	CommentController.postCommentResponse
 );
 
 export default commentRoute;

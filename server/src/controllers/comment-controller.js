@@ -33,7 +33,7 @@ class CommentController {
 		}
 	}
 
-	static async postReaction(req, res) {
+	static async postCommentReaction(req, res) {
 		const { comment, authUser, is_positive } = req.body;
 
 		try {
@@ -67,7 +67,7 @@ class CommentController {
 		}
 	}
 
-	static async deleteReaction(req, res) {
+	static async deleteCommentReaction(req, res) {
 		const { comment, authUser } = req.body;
 
 		try {
@@ -97,19 +97,18 @@ class CommentController {
 		}
 	}
 
-	static async getComments(req, res) {
+	static async getCommentResponses(req, res) {
 		const { comment } = req.body;
 		const { lastId } = req.query;
 		const maxWidth = 20;
 		const maxDepth = 5;
 
 		try {
-			const { commentResponsesCount, commentResponses } = await Comment.scope(
+			const commentResponses = await Comment.scope(
 				"defaultScope",
 				"ratings"
 			).findAndCountAll({
 				where: {
-					id_post: comment.id_post,
 					id_parent: comment.id,
 					...(lastId ? { id: { [Op.lt]: lastId } } : {}),
 				},
@@ -117,22 +116,22 @@ class CommentController {
 				limit: maxWidth,
 			});
 
-			await setCommentResponses(commentResponses, maxWidth, maxDepth);
+			await setCommentResponses(commentResponses.rows, maxWidth, maxDepth);
 
 			return res.status(StatusCodes.OK).json({
-				comments: commentResponses,
-				hasMore: commentResponsesCount > maxWidth,
+				comments: commentResponses.rows,
+				hasMore: commentResponses.count > maxWidth,
 			});
 		} catch (error) {
 			console.log(error);
 
 			return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-				message: "Failed to fetch comments!",
+				message: "Failed to fetch comment responses!",
 			});
 		}
 	}
 
-	static async postComment(req, res) {
+	static async postCommentResponse(req, res) {
 		const { comment, authUser, text } = req.body;
 
 		try {
@@ -144,7 +143,7 @@ class CommentController {
 			});
 
 			return res.status(StatusCodes.OK).json({
-				message: "Successfully posted comment!",
+				message: "Successfully posted comment response!",
 				comment: {
 					id: commentResponse.id,
 					text: commentResponse.text,
@@ -154,7 +153,7 @@ class CommentController {
 			console.log(error);
 
 			return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-				message: "Failed to fetch comments!",
+				message: "Failed to fetch comment responses!",
 			});
 		}
 	}
