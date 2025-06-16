@@ -6,7 +6,7 @@ import AuthService from "services/auth-service";
 import "styles/auth-modal.css";
 
 function Register() {
-	const { openModal, closeModal } = useModalContext;
+	const { openModal, closeModal } = useModalContext();
 	const { setAuthentication } = useAuthContext();
 	const [email, setEmail] = useState("");
 	const [username, setUsername] = useState("");

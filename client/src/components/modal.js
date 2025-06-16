@@ -1,4 +1,5 @@
 import React from "react";
+import Modal from "react-modal";
 import { useModalContext } from "contexts/modal-context";
 import Login from "./authentication/login";
 import Register from "./authentication/register";
@@ -14,7 +15,7 @@ export const ModalTypes = {
 	CREATE_POST: "CREATE_POST",
 };
 
-const Modal = () => {
+const ModalWrapper = () => {
 	const { modalType, isModalOpen, closeModal } = useModalContext();
 
 	const renderContent = () => {
@@ -47,4 +48,4 @@ const Modal = () => {
 	);
 };
 
-export default Modal;
+export default ModalWrapper;

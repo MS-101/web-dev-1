@@ -1,16 +1,16 @@
 body {
-    margin: 0;
+	margin: 0;
 }
 
 .link-btn {
-    background: none!important;
-    border: none;
-    padding: 0!important;
-    color: #069;
-    cursor: pointer;
-    text-align: left;
+	background: none !important;
+	border: none;
+	padding: 0 !important;
+	color: #069;
+	cursor: pointer;
+	text-align: left;
 }
 
 .spacer {
-    flex: 1;
+	flex: 1;
 }

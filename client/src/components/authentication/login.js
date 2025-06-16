@@ -6,8 +6,8 @@ import AuthService from "services/auth-service";
 import "styles/auth-modal.css";
 
 function Login() {
-	const { openModal, closeModal } = useModalContext;
-	const { setAuthentication } = useAuthContext;
+	const { openModal, closeModal } = useModalContext();
+	const { setAuthentication } = useAuthContext();
 	const [usernameOrEmail, setUsernameOrEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [errorMessage, setErrorMessage] = useState(null);
