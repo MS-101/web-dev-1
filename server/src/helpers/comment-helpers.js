@@ -13,7 +13,7 @@ export const setCommentResponses = async (comments, width, depth) => {
 				limit: width,
 			});
 
-		await setCommentResponses(child_comments, depth - 1);
+		await setCommentResponses(child_comments, width, depth - 1);
 
 		comment.children = {
 			comments: child_comments,
