@@ -11,7 +11,7 @@ class PostController {
 		const limit = 20;
 
 		try {
-			const posts = await Post.findAll({
+			const posts = await Post.scope("defaultScope", "ratings").findAll({
 				where: {
 					...(query
 						? {

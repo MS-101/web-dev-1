@@ -4,7 +4,7 @@ import { StatusCodes } from "http-status-codes";
 export const authPost = async (req, res, next) => {
 	const { id } = req.params;
 
-	const post = await Post.findOne({
+	const post = await Post.scope("defaultScope", "ratings").findOne({
 		where: {
 			id: id,
 		},

@@ -159,7 +159,7 @@ class CommunityController {
 		const limit = 20;
 
 		try {
-			const posts = await Post.findAll({
+			const posts = await Post.scope("defaultScope", "ratings").findAll({
 				where: {
 					id_community: community.id,
 					...(query

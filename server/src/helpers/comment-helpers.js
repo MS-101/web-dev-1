@@ -7,7 +7,6 @@ export const setCommentResponses = async (comments, width, depth) => {
 		const { child_comments_count, child_comments } =
 			await Comment.findAndCountAll({
 				where: {
-					id_post: comment.id_post,
 					id_parent: comment.id,
 				},
 				order: [["id", "DESC"]],
