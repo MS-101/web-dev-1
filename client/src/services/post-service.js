@@ -34,7 +34,7 @@ class PostService {
 		});
 	}
 
-	static async putPost(accessToken, idPost) {
+	static async putPost(accessToken, idPost, title, body) {
 		return new Promise((resolve, reject) => {
 			authAxios(accessToken)
 				.put(`${this.baseUrl}/${idPost}`, {
@@ -51,14 +51,14 @@ class PostService {
 	}
 
 	static async likePost(accessToken, idPost) {
-		return this.postReaction(accessToken, idPost, true);
+		return this.postPostReaction(accessToken, idPost, true);
 	}
 
 	static async dislikePost(accessToken, idPost) {
-		return this.postReaction(accessToken, idPost, false);
+		return this.postPostReaction(accessToken, idPost, false);
 	}
 
-	static async postReaction(accessToken, idPost, isPositive) {
+	static async postPostReaction(accessToken, idPost, isPositive) {
 		return new Promise((resolve, reject) => {
 			authAxios(accessToken)
 				.post(`${this.baseUrl}/${idPost}/reaction`, {
@@ -73,7 +73,7 @@ class PostService {
 		});
 	}
 
-	static async deleteReaction(accessToken, idPost) {
+	static async deletePostReaction(accessToken, idPost) {
 		return new Promise((resolve, reject) => {
 			authAxios(accessToken)
 				.delete(`${this.baseUrl}/${idPost}/reaction`)
@@ -86,10 +86,10 @@ class PostService {
 		});
 	}
 
-	static async getComments(idComment, lastId) {
+	static async getPostResponses(idComment, lastId) {
 		return new Promise((resolve, reject) => {
 			publicAxios
-				.get(`${this.baseUrl}/${idComment}/comment`, {
+				.get(`${this.baseUrl}/${idComment}/response`, {
 					params: {
 						lastId: lastId,
 					},
@@ -103,10 +103,10 @@ class PostService {
 		});
 	}
 
-	static async postComment(accessToken, idPost, text) {
+	static async postPostResponse(accessToken, idPost, text) {
 		return new Promise((resolve, reject) => {
 			authAxios(accessToken)
-				.post(`${this.baseUrl}/${idPost}/comment`, {
+				.post(`${this.baseUrl}/${idPost}/response`, {
 					text: text,
 				})
 				.then((response) => {
