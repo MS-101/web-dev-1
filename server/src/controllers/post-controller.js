@@ -137,7 +137,10 @@ class PostController {
 		const maxDepth = 5;
 
 		try {
-			const { commentsCount, comments } = await Comment.findAndCountAll({
+			const { commentsCount, comments } = await Comment.scope(
+				"defaultScope",
+				"ratings"
+			).findAndCountAll({
 				where: {
 					id_post: post.id,
 					id_parent: null,

@@ -39,7 +39,10 @@ class UserController {
 		const { user } = req.body;
 
 		try {
-			const communities = await Community.findAll({
+			const communities = await Community.scope(
+				"defaultScope",
+				"membersCount"
+			).findAll({
 				include: {
 					model: User,
 					require: true,
@@ -66,7 +69,7 @@ class UserController {
 		const limit = 20;
 
 		try {
-			const posts = await Post.findAll({
+			const posts = await Post.scope("defaultScope", "ratings").findAll({
 				where: {
 					id_user: user.id,
 					...(lastId ? { id: { [Op.lt]: lastId } } : {}),

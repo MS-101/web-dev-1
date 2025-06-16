@@ -104,16 +104,18 @@ class CommentController {
 		const maxDepth = 5;
 
 		try {
-			const { commentResponsesCount, commentResponses } =
-				await Comment.findAndCountAll({
-					where: {
-						id_post: comment.id_post,
-						id_parent: comment.id,
-						...(lastId ? { id: { [Op.lt]: lastId } } : {}),
-					},
-					order: [["id", "DESC"]],
-					limit: maxWidth,
-				});
+			const { commentResponsesCount, commentResponses } = await Comment.scope(
+				"defaultScope",
+				"ratings"
+			).findAndCountAll({
+				where: {
+					id_post: comment.id_post,
+					id_parent: comment.id,
+					...(lastId ? { id: { [Op.lt]: lastId } } : {}),
+				},
+				order: [["id", "DESC"]],
+				limit: maxWidth,
+			});
 
 			await setCommentResponses(commentResponses, maxWidth, maxDepth);
 

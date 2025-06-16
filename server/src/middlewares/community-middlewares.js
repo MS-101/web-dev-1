@@ -7,7 +7,10 @@ import { Op } from "sequelize";
 export const authCommunity = async (req, res, next) => {
 	const { id } = req.params;
 
-	const community = await Community.findOne({
+	const community = await Community.scope(
+		"defaultScope",
+		"membersCount"
+	).findOne({
 		where: {
 			id: id,
 		},

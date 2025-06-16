@@ -14,7 +14,10 @@ class CommunityController {
 		const limit = 20;
 
 		try {
-			const communities = await Community.findAll({
+			const communities = await Community.scope(
+				"defaultScope",
+				"membersCount"
+			).findAll({
 				where: {
 					...(query
 						? {

@@ -1,4 +1,4 @@
-import { DataTypes } from "sequelize";
+import { DataTypes, Sequelize } from "sequelize";
 import dbConnection from "../config/database.js";
 import Comment from "./comment.js";
 import User from "./user.js";
@@ -35,11 +35,51 @@ const CommentReaction = dbConnection.define(
 	}
 );
 
+Comment.addScope("ratings", {
+	subQuery: false,
+	attributes: [
+		"id",
+		[
+			Sequelize.literal(
+				"COUNT(comment_likes.id_comment) - COUNT(comment_dislikes.id_comment)"
+			),
+			"rating",
+		],
+	],
+	include: [
+		{
+			model: CommentReaction,
+			attributes: [],
+			as: "comment_likes",
+		},
+		{
+			model: CommentReaction,
+			attributes: [],
+			as: "comment_dislikes",
+		},
+	],
+	group: ["comment.id"],
+});
+
 CommentReaction.belongsTo(Comment, {
 	foreignKey: "id_comment",
 });
 Comment.hasMany(CommentReaction, {
 	foreignKey: "id_comment",
+});
+Comment.hasMany(CommentReaction, {
+	foreignKey: "id_comment",
+	scope: {
+		is_positive: true,
+	},
+	as: "comment_likes",
+});
+Comment.hasMany(CommentReaction, {
+	foreignKey: "id_comment",
+	scope: {
+		is_positive: false,
+	},
+	as: "comment_dislikes",
 });
 
 CommentReaction.belongsTo(User, {
@@ -47,6 +87,20 @@ CommentReaction.belongsTo(User, {
 });
 User.hasMany(CommentReaction, {
 	foreignKey: "id_user",
+});
+User.hasMany(CommentReaction, {
+	foreignKey: "id_user",
+	scope: {
+		is_positive: true,
+	},
+	as: "comment_likes",
+});
+User.hasMany(CommentReaction, {
+	foreignKey: "id_user",
+	scope: {
+		is_positive: false,
+	},
+	as: "comment_dislikes",
 });
 
 export default CommentReaction;

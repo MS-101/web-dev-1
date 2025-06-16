@@ -1,4 +1,4 @@
-import { DataTypes } from "sequelize";
+import { DataTypes, Sequelize } from "sequelize";
 import dbConnection from "../config/database.js";
 import Community from "./community.js";
 import CommunityMemberType from "./community-member-type.js";
@@ -43,6 +43,24 @@ const CommunityMember = dbConnection.define(
 		timestamps: false,
 	}
 );
+
+Community.addScope("membersCount", {
+	subQuery: false,
+	attributes: [
+		"id",
+		[
+			Sequelize.fn("COUNT", Sequelize.col("communityMembers.id_community")),
+			"membersCount",
+		],
+	],
+	include: [
+		{
+			model: CommunityMember,
+			attributes: [],
+		},
+	],
+	group: ["community.id"],
+});
 
 User.belongsToMany(Community, {
 	through: CommunityMember,

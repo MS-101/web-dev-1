@@ -40,7 +40,9 @@ Post.addScope("ratings", {
 	attributes: [
 		"id",
 		[
-			Sequelize.literal("COUNT(likes.id_post) - COUNT(dislikes.id_post)"),
+			Sequelize.literal(
+				"COUNT(post_likes.id_post) - COUNT(post_dislikes.id_post)"
+			),
 			"rating",
 		],
 	],
@@ -48,12 +50,12 @@ Post.addScope("ratings", {
 		{
 			model: PostReaction,
 			attributes: [],
-			as: "likes",
+			as: "post_likes",
 		},
 		{
 			model: PostReaction,
 			attributes: [],
-			as: "dislikes",
+			as: "post_dislikes",
 		},
 	],
 	group: ["post.id"],
@@ -70,14 +72,14 @@ Post.hasMany(PostReaction, {
 	scope: {
 		is_positive: true,
 	},
-	as: "likes",
+	as: "post_likes",
 });
 Post.hasMany(PostReaction, {
 	foreignKey: "id_post",
 	scope: {
 		is_positive: false,
 	},
-	as: "dislikes",
+	as: "post_dislikes",
 });
 
 PostReaction.belongsTo(User, {
@@ -91,14 +93,14 @@ User.hasMany(PostReaction, {
 	scope: {
 		is_positive: true,
 	},
-	as: "likes",
+	as: "post_likes",
 });
 User.hasMany(PostReaction, {
 	foreignKey: "id_user",
 	scope: {
 		is_positive: false,
 	},
-	as: "dislikes",
+	as: "post_dislikes",
 });
 
 export default PostReaction;
