@@ -1,0 +1,31 @@
+.SidebarItem {
+	height: 30px;
+	display: flex;
+	justify-content: left;
+	align-items: center;
+	font-size: large;
+	padding: 0px 20px;
+}
+
+.SidebarItem:hover {
+	background-color: #777;
+}
+
+.SidebarItem.active {
+	background-color: rgb(200, 0, 0);
+	color: black;
+}
+
+.Icon {
+	width: 30px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-shrink: 0;
+	padding-right: 10px;
+}
+
+a {
+	color: inherit;
+	text-decoration: none;
+}

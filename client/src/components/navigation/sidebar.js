@@ -6,12 +6,13 @@ import SidebarGroup from "./sidebar-group";
 import SidebarItem from "./sidebar-item";
 import useUserCommunities from "hooks/use-user-communities";
 import "styles/navigation/sidebar.css";
+import { FaHome, FaHotjar, FaPlus, FaCog, FaUsers } from "react-icons/fa";
 
 const Sidebar = () => {
-	const { user } = useAuthContext;
-	const { openModal } = useModalContext;
+	const { user } = useAuthContext();
+	const { openModal } = useModalContext();
 	const { communities, communitiesLoaded, fetchCommunities } =
-		useUserCommunities(user);
+		useUserCommunities(user?.id);
 
 	const onCreateCommunityClick = () => {
 		openModal(ModalTypes.CREATE_COMMUNITY, () => {
@@ -22,15 +23,25 @@ const Sidebar = () => {
 	return (
 		<nav className="Sidebar">
 			<ul>
-				{user && <SidebarItem title="Feed" to="/Feed" />}
-				<SidebarItem title="Trending" to="/Trending" />
+				{user && <SidebarItem title="Feed" icon={<FaHome />} to="/Feed" />}
+				<SidebarItem title="Trending" icon={<FaHotjar />} to="/Trending" />
 				{communitiesLoaded && (
 					<SidebarGroup title="Communities" open={true}>
-						<button onClick={onCreateCommunityClick}>Create Community</button>
+						<SidebarItem
+							title="Create Community"
+							icon={<FaPlus />}
+							onClick={onCreateCommunityClick}
+						/>
+						<SidebarItem
+							title="Manage Communities"
+							icon={<FaCog />}
+							to={`/user/${user.username}/communities`}
+						/>
 						{communities &&
 							communities.map((element) => (
 								<SidebarItem
 									title={element.name}
+									icon={<FaUsers />}
 									to={`/Community/${element.id}`}
 								/>
 							))}
@@ -39,6 +50,15 @@ const Sidebar = () => {
 			</ul>
 		</nav>
 	);
+	/*
+	return (
+		<nav className="Sidebar">
+			<ul>
+				{communitiesLoaded && <SidebarGroup title="Communities" open={true} />}
+			</ul>
+		</nav>
+	);
+	*/
 };
 
 export default Sidebar;

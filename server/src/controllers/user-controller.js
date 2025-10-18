@@ -3,6 +3,7 @@ import { Op } from "sequelize";
 import User from "../models/user.js";
 import Community from "../models/community.js";
 import Post from "../models/post.js";
+import CommunityMember from "../models/community-member.js";
 
 class UserController {
 	static async getUsers(req, res) {
@@ -44,10 +45,11 @@ class UserController {
 				"membersCount"
 			).findAll({
 				include: {
-					model: User,
+					model: CommunityMember,
+					attributes: [],
 					require: true,
 					where: {
-						id: user.id,
+						id_user: user.id,
 					},
 				},
 				order: [["name", "ASC"]],

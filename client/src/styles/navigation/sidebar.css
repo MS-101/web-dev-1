@@ -1,9 +1,9 @@
-.Sidebar nav {
-	background-color: rgb(200, 0, 0);
-	color: black;
+.Sidebar {
+	background-color: black;
+	color: white;
 	width: 300px;
 	display: flex;
-	padding: 10px;
+	padding: 20px 0px;
 }
 
 .Sidebar ul {
@@ -13,24 +13,6 @@
 	margin: 0;
 }
 
-.Sidebar li {
-	height: 30px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	font-size: large;
-}
-
-.Sidebar li:hover {
-	background-color: #777;
-}
-
-.Sidebar li.active {
-	background-color: black;
-	color: white;
-}
-
-.Sidebar a {
-	color: inherit;
-	text-decoration: none;
+.Sidebar li.SidebarGroup {
+	height: auto;
 }

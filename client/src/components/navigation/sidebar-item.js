@@ -2,13 +2,19 @@ import React from "react";
 import { Link, useMatch, useResolvedPath } from "react-router-dom";
 import "styles/navigation/sidebar-item.css";
 
-const SidebarItem = ({ title, to }) => {
-	const resoledPath = useResolvedPath(to);
-	const isActive = useMatch({ path: resoledPath.pathname, end: true });
+const SidebarItem = ({ title, icon, to, onClick }) => {
+	const resolvedPath = useResolvedPath(to);
+	const isActive = useMatch({ path: resolvedPath.pathname, end: true });
 
-	return (
-		<li className={isActive ? "active" : ""}>
+	return to ? (
+		<li className={isActive ? "SidebarItem active" : "SidebarItem"}>
+			{icon && <div className="Icon">{icon}</div>}
 			<Link to={to}>{title}</Link>
+		</li>
+	) : (
+		<li className="SidebarItem" onClick={onClick}>
+			{icon && <div className="Icon">{icon}</div>}
+			{title}
 		</li>
 	);
 };

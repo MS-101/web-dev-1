@@ -1,4 +1,5 @@
 import User from "../models/user.js";
+import { StatusCodes } from "http-status-codes";
 
 export const authUser = async (req, res, next) => {
 	const { id } = req.params;
