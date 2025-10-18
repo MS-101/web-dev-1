@@ -6,7 +6,14 @@ import SidebarGroup from "./sidebar-group";
 import SidebarItem from "./sidebar-item";
 import useUserCommunities from "hooks/use-user-communities";
 import "styles/navigation/sidebar.css";
-import { FaHome, FaHotjar, FaPlus, FaCog, FaUsers } from "react-icons/fa";
+import {
+	FaHome,
+	FaHotjar,
+	FaPlus,
+	FaCog,
+	FaUsers,
+	FaWpexplorer,
+} from "react-icons/fa";
 
 const Sidebar = () => {
 	const { user } = useAuthContext();
@@ -23,8 +30,9 @@ const Sidebar = () => {
 	return (
 		<nav className="Sidebar">
 			<ul>
-				{user && <SidebarItem title="Feed" icon={<FaHome />} to="/Feed" />}
-				<SidebarItem title="Trending" icon={<FaHotjar />} to="/Trending" />
+				{user && <SidebarItem title="Feed" icon={<FaHome />} to="/feed" />}
+				<SidebarItem title="Trending" icon={<FaHotjar />} to="/trending" />
+				<SidebarItem title="Explore" icon={<FaWpexplorer />} to="/explore" />
 				{communitiesLoaded && (
 					<SidebarGroup title="Communities" open={true}>
 						<SidebarItem
@@ -35,7 +43,7 @@ const Sidebar = () => {
 						<SidebarItem
 							title="Manage Communities"
 							icon={<FaCog />}
-							to={`/user/${user.username}/communities`}
+							to={`/subscriptions`}
 						/>
 						{communities &&
 							communities.map((element) => (
@@ -50,15 +58,6 @@ const Sidebar = () => {
 			</ul>
 		</nav>
 	);
-	/*
-	return (
-		<nav className="Sidebar">
-			<ul>
-				{communitiesLoaded && <SidebarGroup title="Communities" open={true} />}
-			</ul>
-		</nav>
-	);
-	*/
 };
 
 export default Sidebar;

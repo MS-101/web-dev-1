@@ -6,7 +6,9 @@ import AppLayout from "layouts/app-layout";
 import Home from "pages/home-page";
 import Feed from "pages/feed-page";
 import Trending from "pages/trending-page";
+import Explore from "pages/explore-page";
 import Community from "pages/community-page";
+import Subscriptions from "pages/subscriptions-page";
 import "App.css";
 
 function App() {
@@ -19,7 +21,9 @@ function App() {
 							<Route index element={<Home />} />
 							<Route path="feed" element={<Feed />} />
 							<Route path="trending" element={<Trending />} />
+							<Route path="explore" element={<Explore />} />
 							<Route path="community" element={<Community />} />
+							<Route path="subscriptions" element={<Subscriptions />} />
 						</Route>
 					</Routes>
 				</BrowserRouter>
