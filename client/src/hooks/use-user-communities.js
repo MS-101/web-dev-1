@@ -8,11 +8,12 @@ const useUserCommunities = (idUser) => {
 	const fetchCommunities = useCallback(() => {
 		if (idUser) {
 			UserService.getUserCommunities(idUser).then((response) => {
-				setCommunities(response.array);
+				setCommunities(response);
 				setCommunitiesLoaded(true);
 			});
 		} else {
 			setCommunities([]);
+			setCommunitiesLoaded(false);
 		}
 	}, [idUser]);
 

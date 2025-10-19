@@ -12,11 +12,11 @@ const useCommunityPosts = (idCommunity) => {
 	const fetchTopPosts = useCallback(() => {
 		if (idCommunity) {
 			CommunityService.getCommunityPosts(idCommunity).then((response) => {
-				const curPosts = response.array;
+				const curPosts = response;
 				const lastPost = curPosts[curPosts.length - 1];
 
 				setPosts(curPosts);
-				setLastPostId(lastPost.id);
+				setLastPostId(lastPost?.id);
 				setPostsLoaded(true);
 			});
 		} else {
@@ -32,11 +32,11 @@ const useCommunityPosts = (idCommunity) => {
 		if (lastPostId) {
 			CommunityService.getCommunityPosts(idCommunity, lastPostId).then(
 				(response) => {
-					const curPosts = response.array;
+					const curPosts = response;
 					const lastPost = curPosts[curPosts.length - 1];
 
 					setPosts(posts.concat(curPosts));
-					setLastPostId(lastPost.id);
+					setLastPostId(lastPost?.id);
 				}
 			);
 		}

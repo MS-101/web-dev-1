@@ -3,12 +3,12 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "contexts/auth-context";
 import { ModalProvider } from "contexts/modal-context";
 import AppLayout from "layouts/app-layout";
-import Home from "pages/home-page";
-import Feed from "pages/feed-page";
-import Trending from "pages/trending-page";
-import Explore from "pages/explore-page";
-import Community from "pages/community-page";
-import Subscriptions from "pages/subscriptions-page";
+import HomePage from "pages/home-page";
+import FeedPage from "pages/feed-page";
+import TrendingPage from "pages/trending-page";
+import ExplorePage from "pages/explore-page";
+import CommunityPage from "pages/community-page";
+import SubscriptionsPage from "pages/subscriptions-page";
 import "App.css";
 
 function App() {
@@ -18,12 +18,12 @@ function App() {
 				<BrowserRouter>
 					<Routes>
 						<Route path="/" element={<AppLayout />}>
-							<Route index element={<Home />} />
-							<Route path="feed" element={<Feed />} />
-							<Route path="trending" element={<Trending />} />
-							<Route path="explore" element={<Explore />} />
-							<Route path="community" element={<Community />} />
-							<Route path="subscriptions" element={<Subscriptions />} />
+							<Route index element={<HomePage />} />
+							<Route path="feed" element={<FeedPage />} />
+							<Route path="trending" element={<TrendingPage />} />
+							<Route path="explore" element={<ExplorePage />} />
+							<Route path="community/:id" element={<CommunityPage />} />
+							<Route path="subscriptions" element={<SubscriptionsPage />} />
 						</Route>
 					</Routes>
 				</BrowserRouter>

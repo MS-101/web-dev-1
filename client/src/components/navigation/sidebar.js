@@ -50,7 +50,7 @@ const Sidebar = () => {
 								<SidebarItem
 									title={element.name}
 									icon={<FaUsers />}
-									to={`/Community/${element.id}`}
+									to={`/community/${element.id}`}
 								/>
 							))}
 					</SidebarGroup>

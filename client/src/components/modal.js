@@ -5,6 +5,7 @@ import Login from "./authentication/login";
 import Register from "./authentication/register";
 import ResetPassword from "./authentication/reset-password";
 import CreateCommunity from "./community/create-community";
+import EditCommunity from "./community/edit-community";
 import CreatePost from "./post/create-post";
 
 export const ModalTypes = {
@@ -12,6 +13,7 @@ export const ModalTypes = {
 	REGISTER: "REGISTER",
 	RESET_PASSWORD: "RESET_PASSWORD",
 	CREATE_COMMUNITY: "CREATE_COMMUNITY",
+	EDIT_COMMUNITY: "EDIT_COMMUNITY",
 	CREATE_POST: "CREATE_POST",
 };
 
@@ -28,6 +30,8 @@ const ModalWrapper = () => {
 				return <ResetPassword />;
 			case ModalTypes.CREATE_COMMUNITY:
 				return <CreateCommunity />;
+			case ModalTypes.EDIT_COMMUNITY:
+				return <EditCommunity />;
 			case ModalTypes.CREATE_POST:
 				return <CreatePost />;
 			default:

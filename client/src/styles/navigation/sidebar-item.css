@@ -5,6 +5,7 @@
 	align-items: center;
 	font-size: large;
 	padding: 0px 20px;
+	cursor: pointer;
 }
 
 .SidebarItem:hover {

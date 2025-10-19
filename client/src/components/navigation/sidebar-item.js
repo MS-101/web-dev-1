@@ -7,10 +7,12 @@ const SidebarItem = ({ title, icon, to, onClick }) => {
 	const isActive = useMatch({ path: resolvedPath.pathname, end: true });
 
 	return to ? (
-		<li className={isActive ? "SidebarItem active" : "SidebarItem"}>
-			{icon && <div className="Icon">{icon}</div>}
-			<Link to={to}>{title}</Link>
-		</li>
+		<Link to={to}>
+			<li className={isActive ? "SidebarItem active" : "SidebarItem"}>
+				{icon && <div className="Icon">{icon}</div>}
+				{title}
+			</li>
+		</Link>
 	) : (
 		<li className="SidebarItem" onClick={onClick}>
 			{icon && <div className="Icon">{icon}</div>}

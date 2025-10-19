@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useAuthContext } from "contexts/auth-context";
-import "styles/auth-modal.css";
+import "styles/modal.css";
 
 function ResetPassword() {
 	const { closeModal, showLogin } = useAuthContext();

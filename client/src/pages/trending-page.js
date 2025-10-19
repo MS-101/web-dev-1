@@ -1,6 +1,6 @@
 import React from "react";
 
-const Trending = () => {
+const TrendingPage = () => {
 	return (
 		<div>
 			<h2>Trending Page</h2>
@@ -9,4 +9,4 @@ const Trending = () => {
 	);
 };
 
-export default Trending;
+export default TrendingPage;

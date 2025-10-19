@@ -1,6 +1,6 @@
 import React from "react";
 
-const Subscriptions = () => {
+const SubscriptionsPage = () => {
 	return (
 		<div>
 			<h2>Subscriptions Page</h2>
@@ -9,4 +9,4 @@ const Subscriptions = () => {
 	);
 };
 
-export default Subscriptions;
+export default SubscriptionsPage;

@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Navigate } from "react-router-dom";
 import { AuthContext } from "contexts/auth-context";
 
-const Home = () => {
+const HomePage = () => {
 	const { user } = useContext(AuthContext);
 
 	return user ? (
@@ -12,4 +12,4 @@ const Home = () => {
 	);
 };
 
-export default Home;
+export default HomePage;

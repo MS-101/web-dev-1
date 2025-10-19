@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import CommunityService from "services/community-service";
 import { useAuthContext } from "contexts/auth-context";
 import { useModalContext } from "contexts/modal-context";
+import useCommunity from "hooks/use-community";
 import "styles/modal.css";
 
-function CreateCommunity() {
+function EditCommunity(id) {
+	const community = useCommunity(id);
+
 	const { getAccessToken } = useAuthContext();
 	const { closeModal, handleModalResult } = useModalContext();
 
@@ -15,8 +18,8 @@ function CreateCommunity() {
 		closeModal();
 	};
 
-	const onCreateCommunityClick = () => {
-		CommunityService.postCommunity(getAccessToken, name, description).then(
+	const onEditCommunityClick = () => {
+		CommunityService.putCommunity(getAccessToken, id, name, description).then(
 			(community) => {
 				handleModalResult(community);
 			}
@@ -26,7 +29,7 @@ function CreateCommunity() {
 	return (
 		<>
 			<div className="modal-header">
-				<h2 className="title">Create community</h2>
+				<h2 className="title">Edit community</h2>
 				<button className="close-btn" onClick={onCloseClick}>
 					&times;
 				</button>
@@ -53,13 +56,13 @@ function CreateCommunity() {
 				<button
 					className="submit-btn"
 					type="submit"
-					onClick={onCreateCommunityClick}
+					onClick={onEditCommunityClick}
 				>
-					Create community
+					Save
 				</button>
 			</div>
 		</>
 	);
 }
 
-export default CreateCommunity;
+export default EditCommunity;
