@@ -5,14 +5,14 @@ import { useModalContext } from "contexts/modal-context";
 import useCommunity from "hooks/use-community";
 import "styles/modal.css";
 
-function EditCommunity(id) {
-	//const community = useCommunity(id);
-
-	const { getAccessToken } = useAuthContext();
-	const { closeModal, handleModalResult } = useModalContext();
+function EditCommunity(args) {
+	const community = useCommunity(args.id);
 
 	const [name, setName] = useState("");
 	const [description, setDescription] = useState("");
+
+	const { getAccessToken } = useAuthContext();
+	const { closeModal, handleModalResult } = useModalContext();
 
 	const onCloseClick = () => {
 		closeModal();
@@ -21,7 +21,12 @@ function EditCommunity(id) {
 	const onEditCommunityClick = () => {
 		getAccessToken()
 			.then((accessToken) => {
-				CommunityService.putCommunity(accessToken, id, name, description);
+				CommunityService.putCommunity(
+					accessToken,
+					community.id,
+					name,
+					description
+				);
 			})
 			.then((response) => {
 				handleModalResult(response);

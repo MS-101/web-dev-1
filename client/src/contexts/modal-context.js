@@ -8,11 +8,13 @@ export const useModalContext = () => {
 
 export const ModalProvider = ({ children }) => {
 	const [modalType, setModalType] = useState(null);
+	const [modalArgs, setModalArgs] = useState(null);
 	const onResultCallbackRef = useRef(null);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 
-	const openModal = (modalType, onResultCallback) => {
+	const openModal = (modalType, modalArgs, onResultCallback) => {
 		setModalType(modalType);
+		setModalArgs(modalArgs);
 		onResultCallbackRef.current = onResultCallback;
 		setIsModalOpen(true);
 	};
@@ -28,6 +30,7 @@ export const ModalProvider = ({ children }) => {
 		<ModalContext.Provider
 			value={{
 				modalType,
+				modalArgs,
 				isModalOpen,
 				openModal,
 				closeModal,

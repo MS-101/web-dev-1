@@ -30,7 +30,7 @@ const CommunityPage = () => {
 	};
 
 	const onEditCommunityClick = () => {
-		openModal(ModalTypes.EDIT_COMMUNITY, () => {});
+		openModal(ModalTypes.EDIT_COMMUNITY, { id: id }, () => {});
 	};
 
 	const onSubscribeClick = () => {};

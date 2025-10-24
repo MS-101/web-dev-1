@@ -18,7 +18,7 @@ export const ModalTypes = {
 };
 
 const ModalWrapper = () => {
-	const { modalType, isModalOpen, closeModal } = useModalContext();
+	const { modalType, modalArgs, isModalOpen, closeModal } = useModalContext();
 
 	const renderContent = () => {
 		switch (modalType) {
@@ -31,7 +31,7 @@ const ModalWrapper = () => {
 			case ModalTypes.CREATE_COMMUNITY:
 				return <CreateCommunity />;
 			case ModalTypes.EDIT_COMMUNITY:
-				return <EditCommunity />;
+				return <EditCommunity {...modalArgs} />;
 			case ModalTypes.CREATE_POST:
 				return <CreatePost />;
 			default:
