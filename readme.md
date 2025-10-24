@@ -7,10 +7,11 @@ This is a side project created for learning purposes. This website is inspired b
 ## Used Technologies
 
 - Javascript
+- CSS
 - Node.js
 - Express.js
-- React.js
 - Sequelize.js
+- React.js
 - MySQL
 
 ## Finished Functionalities:

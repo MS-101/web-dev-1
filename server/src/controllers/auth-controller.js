@@ -126,6 +126,11 @@ class AuthController {
 
 			return res.status(StatusCodes.OK).json({
 				message: "Token refresh successfull!",
+				user: {
+					id: user.id,
+					email: user.email,
+					username: user.username,
+				},
 				accessToken: accessToken,
 				refreshToken: newRefreshToken,
 			});

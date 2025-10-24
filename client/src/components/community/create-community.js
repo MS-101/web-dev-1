@@ -16,11 +16,13 @@ function CreateCommunity() {
 	};
 
 	const onCreateCommunityClick = () => {
-		CommunityService.postCommunity(getAccessToken, name, description).then(
-			(community) => {
-				handleModalResult(community);
-			}
-		);
+		getAccessToken()
+			.then((accessToken) => {
+				return CommunityService.postCommunity(accessToken, name, description);
+			})
+			.then((response) => {
+				handleModalResult(response.data);
+			});
 	};
 
 	return (

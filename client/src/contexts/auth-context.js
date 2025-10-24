@@ -28,19 +28,21 @@ export const AuthProvider = ({ children }) => {
 		const expiredTime = decodedToken.exp;
 		const currentTime = Date.now() / 1000;
 
-		return expiredTime >= currentTime + 60;
+		return expiredTime >= currentTime - 10;
 	};
 
 	const getAccessToken = async () => {
-		if (isTokenValid(accessToken)) {
-			return accessToken;
-		} else {
-			AuthService.refresh(refreshToken).then((response) => {
-				setAuthentication(response.data);
+		return new Promise((resolve, reject) => {
+			if (isTokenValid(accessToken)) {
+				resolve(accessToken);
+			} else {
+				AuthService.refresh(refreshToken).then((response) => {
+					setAuthentication(response);
 
-				return accessToken;
-			});
-		}
+					resolve(response.accessToken);
+				});
+			}
+		});
 	};
 
 	const setAuthentication = (data) => {

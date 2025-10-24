@@ -11,7 +11,7 @@ class CommentService {
 					resolve(response.data);
 				})
 				.catch((error) => {
-					reject(error.response.data.message);
+					reject(error.message);
 				});
 		});
 	}
@@ -26,7 +26,7 @@ class CommentService {
 					resolve(response.data);
 				})
 				.catch((error) => {
-					reject(error.response.data.message);
+					reject(error.message);
 				});
 		});
 	}
@@ -49,7 +49,7 @@ class CommentService {
 					resolve(response.data);
 				})
 				.catch((error) => {
-					reject(error.response.data.message);
+					reject(error.message);
 				});
 		});
 	}
@@ -62,7 +62,7 @@ class CommentService {
 					resolve(response.data);
 				})
 				.catch((error) => {
-					reject(error.response.data.message);
+					reject(error.message);
 				});
 		});
 	}
@@ -79,7 +79,7 @@ class CommentService {
 					resolve(response.data);
 				})
 				.catch((error) => {
-					reject(error.response.data.message);
+					reject(error.message);
 				});
 		});
 	}
@@ -94,7 +94,7 @@ class CommentService {
 					resolve(response.data);
 				})
 				.catch((error) => {
-					reject(error.response.data.message);
+					reject(error.message);
 				});
 		});
 	}

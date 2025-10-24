@@ -18,7 +18,7 @@ export const signAccessToken = (user) => {
 		};
 		const secret = process.env.ACCESS_TOKEN_SECRET;
 		const options = {
-			expiresIn: "5m",
+			expiresIn: "30s",
 			issuer: "banter.com",
 		};
 

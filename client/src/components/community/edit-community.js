@@ -6,7 +6,7 @@ import useCommunity from "hooks/use-community";
 import "styles/modal.css";
 
 function EditCommunity(id) {
-	const community = useCommunity(id);
+	//const community = useCommunity(id);
 
 	const { getAccessToken } = useAuthContext();
 	const { closeModal, handleModalResult } = useModalContext();
@@ -19,11 +19,13 @@ function EditCommunity(id) {
 	};
 
 	const onEditCommunityClick = () => {
-		CommunityService.putCommunity(getAccessToken, id, name, description).then(
-			(community) => {
-				handleModalResult(community);
-			}
-		);
+		getAccessToken()
+			.then((accessToken) => {
+				CommunityService.putCommunity(accessToken, id, name, description);
+			})
+			.then((response) => {
+				handleModalResult(response);
+			});
 	};
 
 	return (

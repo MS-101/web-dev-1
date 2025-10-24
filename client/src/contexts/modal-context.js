@@ -1,4 +1,4 @@
-import { useState, createContext, useContext } from "react";
+import { useState, useRef, createContext, useContext } from "react";
 
 export const ModalContext = createContext();
 
@@ -8,19 +8,19 @@ export const useModalContext = () => {
 
 export const ModalProvider = ({ children }) => {
 	const [modalType, setModalType] = useState(null);
-	const [onResultCallback, setOnResultCallback] = useState(null);
+	const onResultCallbackRef = useRef(null);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 
 	const openModal = (modalType, onResultCallback) => {
 		setModalType(modalType);
-		setOnResultCallback(onResultCallback);
+		onResultCallbackRef.current = onResultCallback;
 		setIsModalOpen(true);
 	};
 
 	const closeModal = () => setIsModalOpen(false);
 
 	const handleModalResult = (result) => {
-		if (onResultCallback) onResultCallback(result);
+		if (onResultCallbackRef.current) onResultCallbackRef.current(result);
 		closeModal();
 	};
 
