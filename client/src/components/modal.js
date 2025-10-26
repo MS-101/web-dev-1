@@ -33,7 +33,7 @@ const ModalWrapper = () => {
 			case ModalTypes.EDIT_COMMUNITY:
 				return <EditCommunity {...modalArgs} />;
 			case ModalTypes.CREATE_POST:
-				return <CreatePost />;
+				return <CreatePost {...modalArgs} />;
 			default:
 				return null;
 		}

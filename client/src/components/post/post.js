@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function Post(post) {
+function Post({ post }) {
 	const [user, setUser] = useState(post.user);
 	const [title, setTitle] = useState(post.title);
 	const [body, setBody] = useState(post.body);

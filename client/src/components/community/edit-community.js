@@ -5,8 +5,8 @@ import { useModalContext } from "contexts/modal-context";
 import useCommunity from "hooks/use-community";
 import "styles/modal.css";
 
-function EditCommunity(args) {
-	const { community } = useCommunity(args.id);
+function EditCommunity({ id }) {
+	const { community } = useCommunity(id);
 
 	const [name, setName] = useState("");
 	const [description, setDescription] = useState("");

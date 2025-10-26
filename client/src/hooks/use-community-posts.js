@@ -1,10 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
-import { useAuthContext } from "contexts/auth-context";
 import CommunityService from "services/community-service";
 
 const useCommunityPosts = (idCommunity) => {
-	const { getAccessToken } = useAuthContext();
-
 	const [posts, setPosts] = useState([]);
 	const [lastPostId, setLastPostId] = useState(null);
 	const [postsLoaded, setPostsLoaded] = useState(false);
@@ -42,19 +39,11 @@ const useCommunityPosts = (idCommunity) => {
 		}
 	}, [idCommunity, posts, lastPostId]);
 
-	const createNewPost = useCallback(
-		(title, body) => {
-			CommunityService.postCommunityPost(
-				getAccessToken,
-				idCommunity,
-				title,
-				body
-			);
-		},
-		[getAccessToken, idCommunity]
-	);
+	const addPost = (post) => {
+		setPosts((prev) => [post, ...prev]);
+	};
 
-	return { posts, postsLoaded, fetchTopPosts, fetchNextPosts, createNewPost };
+	return { posts, postsLoaded, fetchTopPosts, fetchNextPosts, addPost };
 };
 
 export default useCommunityPosts;

@@ -20,22 +20,21 @@ const CommunityPage = () => {
 	const { updateNaviCommunity } = useNavigationContext();
 
 	const onEditCommunityClick = () => {
-		openModal(ModalTypes.EDIT_COMMUNITY, { id: id }, (response) => {
+		openModal(ModalTypes.EDIT_COMMUNITY, { id }, (response) => {
 			updateCommunity(response.community);
 			updateNaviCommunity(response.community);
 		});
 	};
 
-	const { posts, postsLoaded, fetchTopPosts, fetchNextPosts } =
-		useCommunityPosts(id);
+	const { posts, postsLoaded, fetchNextPosts, addPost } = useCommunityPosts(id);
 
 	const onPostScroll = (isAtBottom) => {
 		if (isAtBottom) fetchNextPosts();
 	};
 
 	const onCreatePostClick = () => {
-		openModal(ModalTypes.CREATE_POST, () => {
-			fetchTopPosts();
+		openModal(ModalTypes.CREATE_POST, { idCommunity: id }, (response) => {
+			addPost(response.post);
 		});
 	};
 
@@ -64,10 +63,7 @@ const CommunityPage = () => {
 			<div className="community-content">
 				<div className="community-feed">
 					<ScrollableFeed onScroll={onPostScroll}>
-						{postsLoaded &&
-							posts.map((element) => {
-								<Post id={element.id} />;
-							})}
+						{postsLoaded && posts.map((element) => <Post post={element} />)}
 					</ScrollableFeed>
 				</div>
 				<div className="community-info">

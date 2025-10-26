@@ -4,26 +4,34 @@ import { useAuthContext } from "contexts/auth-context";
 import { useModalContext } from "contexts/modal-context";
 import "styles/modal.css";
 
-function CreatePost(idCommunity) {
+function CreatePost({ idCommunity }) {
 	const { getAccessToken } = useAuthContext();
 	const { closeModal, handleModalResult } = useModalContext();
 
 	const [title, setTitle] = useState("");
 	const [body, setBody] = useState("");
+	const [errorMessage, setErrorMessage] = useState(null);
 
 	const onCloseClick = () => {
 		closeModal();
 	};
 
 	const onCreatePostClick = () => {
-		CommunityService.postCommunityPost(
-			getAccessToken,
-			idCommunity,
-			title,
-			body
-		).then((post) => {
-			handleModalResult(post);
-		});
+		getAccessToken()
+			.then((accessToken) => {
+				return CommunityService.postCommunityPost(
+					accessToken,
+					idCommunity,
+					title,
+					body
+				);
+			})
+			.then((response) => {
+				handleModalResult(response);
+			})
+			.catch((error) => {
+				setErrorMessage(error);
+			});
 	};
 
 	return (
@@ -53,6 +61,7 @@ function CreatePost(idCommunity) {
 				</div>
 			</div>
 			<div className="modal-footer">
+				{errorMessage && <p className="error-message">{errorMessage}</p>}
 				<button className="submit-btn" onClick={onCreatePostClick}>
 					Post
 				</button>
