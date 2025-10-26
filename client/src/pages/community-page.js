@@ -1,6 +1,7 @@
 import React from "react";
 import ScrollableFeed from "react-scrollable-feed";
 import { useModalContext } from "contexts/modal-context";
+import { useNavigationContext } from "contexts/navigation-context";
 import { ModalTypes } from "components/modal";
 import { useParams } from "react-router-dom";
 import { FaUsers, FaPlus, FaEdit } from "react-icons/fa";
@@ -13,9 +14,18 @@ import "styles/pages/community-page.css";
 const CommunityPage = () => {
 	const { id } = useParams();
 
-	const { openModal } = useModalContext();
+	const { community, communityLoaded, updateCommunity } = useCommunity(id);
 
-	const community = useCommunity(id);
+	const { openModal } = useModalContext();
+	const { updateNaviCommunity } = useNavigationContext();
+
+	const onEditCommunityClick = () => {
+		openModal(ModalTypes.EDIT_COMMUNITY, { id: id }, (response) => {
+			updateCommunity(response.community);
+			updateNaviCommunity(response.community);
+		});
+	};
+
 	const { posts, postsLoaded, fetchTopPosts, fetchNextPosts } =
 		useCommunityPosts(id);
 
@@ -29,13 +39,9 @@ const CommunityPage = () => {
 		});
 	};
 
-	const onEditCommunityClick = () => {
-		openModal(ModalTypes.EDIT_COMMUNITY, { id: id }, () => {});
-	};
-
 	const onSubscribeClick = () => {};
 
-	return community ? (
+	return communityLoaded ? (
 		<>
 			<img
 				className="community-banner"

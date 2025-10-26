@@ -17,11 +17,24 @@ const useUserCommunities = (idUser) => {
 		}
 	}, [idUser]);
 
+	const updateCommunity = (community) => {
+		setCommunities((prev) => {
+			const index = prev.findIndex((c) => c.id === community.id);
+			if (index !== -1) {
+				const updated = [...prev];
+				updated[index] = community;
+				return updated;
+			} else {
+				return [...prev, community];
+			}
+		});
+	};
+
 	useEffect(() => {
 		fetchCommunities();
 	}, [fetchCommunities]);
 
-	return { communities, communitiesLoaded, fetchCommunities };
+	return { communities, communitiesLoaded, fetchCommunities, updateCommunity };
 };
 
 export default useUserCommunities;

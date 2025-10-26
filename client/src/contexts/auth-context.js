@@ -76,7 +76,6 @@ export const AuthProvider = ({ children }) => {
 				clearAuthentication,
 				user,
 				getAccessToken,
-				refreshToken,
 			}}
 		>
 			{children}

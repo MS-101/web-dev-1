@@ -101,6 +101,19 @@ class CommunityController {
 		if (description !== undefined) updates.description = description;
 
 		try {
+			if (name !== undefined) {
+				const communityWithName = await Community.findOne({
+					where: {
+						name: name,
+					},
+				});
+
+				if (communityWithName != null)
+					return res.status(StatusCodes.CONFLICT).json({
+						message: "Name is occupied!",
+					});
+			}
+
 			const updatedCommunity = await community.update(updates);
 
 			return res.status(StatusCodes.OK).json({

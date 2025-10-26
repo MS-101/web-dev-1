@@ -10,6 +10,7 @@ function CreateCommunity() {
 
 	const [name, setName] = useState("");
 	const [description, setDescription] = useState("");
+	const [errorMessage, setErrorMessage] = useState(null);
 
 	const onCloseClick = () => {
 		closeModal();
@@ -21,7 +22,10 @@ function CreateCommunity() {
 				return CommunityService.postCommunity(accessToken, name, description);
 			})
 			.then((response) => {
-				handleModalResult(response.data);
+				handleModalResult(response);
+			})
+			.catch((error) => {
+				setErrorMessage(error);
 			});
 	};
 
@@ -52,6 +56,7 @@ function CreateCommunity() {
 				</div>
 			</div>
 			<div className="modal-footer">
+				{errorMessage && <p className="error-message">{errorMessage}</p>}
 				<button
 					className="submit-btn"
 					type="submit"

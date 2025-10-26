@@ -21,8 +21,8 @@ export const ModalProvider = ({ children }) => {
 
 	const closeModal = () => setIsModalOpen(false);
 
-	const handleModalResult = (result) => {
-		if (onResultCallbackRef.current) onResultCallbackRef.current(result);
+	const handleModalResult = async (result) => {
+		if (onResultCallbackRef.current) await onResultCallbackRef.current(result);
 		closeModal();
 	};
 

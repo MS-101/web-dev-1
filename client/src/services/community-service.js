@@ -16,7 +16,7 @@ class CommunityService {
 					resolve(response.data);
 				})
 				.catch((error) => {
-					reject(error.message);
+					reject(error.response.data.message);
 				});
 		});
 	}
@@ -32,7 +32,7 @@ class CommunityService {
 					resolve(response.data);
 				})
 				.catch((error) => {
-					reject(error.message);
+					reject(error.response.data.message);
 				});
 		});
 	}
@@ -45,7 +45,7 @@ class CommunityService {
 					resolve(response.data);
 				})
 				.catch((error) => {
-					reject(error.message);
+					reject(error.response.data.message);
 				});
 		});
 	}
@@ -61,7 +61,7 @@ class CommunityService {
 					resolve(response.data);
 				})
 				.catch((error) => {
-					reject(error.message);
+					reject(error.response.data.message);
 				});
 		});
 	}
@@ -74,7 +74,7 @@ class CommunityService {
 					resolve(response.data);
 				})
 				.catch((error) => {
-					reject(error.message);
+					reject(error.response.data.message);
 				});
 		});
 	}
@@ -87,7 +87,7 @@ class CommunityService {
 					resolve(response.data);
 				})
 				.catch((error) => {
-					reject(error.message);
+					reject(error.response.data.message);
 				});
 		});
 	}
@@ -104,7 +104,7 @@ class CommunityService {
 					resolve(response.data);
 				})
 				.catch((error) => {
-					reject(error.message);
+					reject(error.response.data.message);
 				});
 		});
 	}
@@ -120,7 +120,7 @@ class CommunityService {
 					resolve(response.data);
 				})
 				.catch((error) => {
-					reject(error.message);
+					reject(error.response.data.message);
 				});
 		});
 	}
@@ -137,7 +137,7 @@ class CommunityService {
 					resolve(response.data);
 				})
 				.catch((error) => {
-					reject(error.message);
+					reject(error.response.data.message);
 				});
 		});
 	}
@@ -150,7 +150,7 @@ class CommunityService {
 					resolve(response.data);
 				})
 				.catch((error) => {
-					reject(error.message);
+					reject(error.response.data.message);
 				});
 		});
 	}

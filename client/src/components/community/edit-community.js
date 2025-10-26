@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CommunityService from "services/community-service";
 import { useAuthContext } from "contexts/auth-context";
 import { useModalContext } from "contexts/modal-context";
@@ -6,10 +6,18 @@ import useCommunity from "hooks/use-community";
 import "styles/modal.css";
 
 function EditCommunity(args) {
-	const community = useCommunity(args.id);
+	const { community } = useCommunity(args.id);
 
 	const [name, setName] = useState("");
 	const [description, setDescription] = useState("");
+	const [errorMessage, setErrorMessage] = useState(null);
+
+	useEffect(() => {
+		if (community) {
+			setName(community.name);
+			setDescription(community.description);
+		}
+	}, [community]);
 
 	const { getAccessToken } = useAuthContext();
 	const { closeModal, handleModalResult } = useModalContext();
@@ -21,7 +29,8 @@ function EditCommunity(args) {
 	const onEditCommunityClick = () => {
 		getAccessToken()
 			.then((accessToken) => {
-				CommunityService.putCommunity(
+				return CommunityService.putCommunity(
+					// return was missing here, meaning that my page gets rerendered before the query is executed
 					accessToken,
 					community.id,
 					name,
@@ -30,6 +39,9 @@ function EditCommunity(args) {
 			})
 			.then((response) => {
 				handleModalResult(response);
+			})
+			.catch((error) => {
+				setErrorMessage(error);
 			});
 	};
 
@@ -60,6 +72,7 @@ function EditCommunity(args) {
 				</div>
 			</div>
 			<div className="modal-footer">
+				{errorMessage && <p className="error-message">{errorMessage}</p>}
 				<button
 					className="submit-btn"
 					type="submit"
