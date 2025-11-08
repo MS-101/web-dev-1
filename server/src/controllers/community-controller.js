@@ -101,7 +101,7 @@ class CommunityController {
 		if (description !== undefined) updates.description = description;
 
 		try {
-			if (name !== undefined) {
+			if (name !== undefined && name !== community.name) {
 				const communityWithName = await Community.findOne({
 					where: {
 						name: name,
