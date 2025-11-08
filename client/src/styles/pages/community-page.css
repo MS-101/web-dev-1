@@ -15,6 +15,15 @@
 	width: 100%;
 }
 
+.community-header .icon {
+	width: 30px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-shrink: 0;
+	padding-right: 10px;
+}
+
 .community-header button {
 	width: 150px;
 	height: 80%;
@@ -40,13 +49,4 @@
 
 .desc-wrapper h3 {
 	width: 100%;
-}
-
-.icon {
-	width: 30px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	flex-shrink: 0;
-	padding-right: 10px;
 }

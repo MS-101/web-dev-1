@@ -5,6 +5,9 @@ import { useModalContext } from "contexts/modal-context";
 import SearchBar from "./search-bar";
 import "styles/navigation/top-panel.css";
 import { ModalTypes } from "components/modal";
+import DropdownMenu from "./dropdown-menu";
+import { FaUserCircle, FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
+import DropdownItem from "./dropdown-item";
 
 const TopPanel = () => {
 	const { user, clearAuthentication } = useAuthContext();
@@ -28,11 +31,24 @@ const TopPanel = () => {
 			<div className="SearchContainer">
 				<SearchBar />
 			</div>
-			<nav className="ButtonContainer">
+			<nav className="DropdownContainer">
 				{user ? (
-					<button onClick={onLogoutClick}>Logout</button>
+					<DropdownMenu icon={<FaUserCircle />} title={user.username}>
+						<DropdownItem
+							icon={<FaUserCircle />}
+							title="Profile"
+							to={`/user/${user.id}`}
+						/>
+						<DropdownItem
+							icon={<FaSignOutAlt />}
+							title="Logout"
+							onClick={onLogoutClick}
+						/>
+					</DropdownMenu>
 				) : (
-					<button onClick={onLoginClick}>Login</button>
+					<button onClick={onLoginClick}>
+						<FaSignInAlt /> Login
+					</button>
 				)}
 			</nav>
 		</nav>

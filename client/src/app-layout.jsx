@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 import ModalWrapper from "components/modal";
 import TopPanel from "components/navigation/top-panel";
 import SideBar from "components/navigation/sidebar";
-import "styles/app-layout.css";
+import "app-layout.css";
 
 const AppLayout = () => {
 	return (

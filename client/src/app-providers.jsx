@@ -5,10 +5,10 @@ import { ModalProvider } from "contexts/modal-context";
 
 const providers = [AuthProvider, NavigationProvider, ModalProvider];
 
-function Providers({ children }) {
+function AppProviders({ children }) {
 	return providers.reduceRight((acc, Provider) => {
 		return <Provider>{acc}</Provider>;
 	}, children);
 }
 
-export default Providers;
+export default AppProviders;

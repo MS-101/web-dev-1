@@ -1,0 +1,21 @@
+.DropdownItem {
+	height: 30px;
+	display: flex;
+	justify-content: left;
+	align-items: center;
+	font-size: large;
+	padding: 0px 10px;
+	cursor: pointer;
+}
+
+.DropdownItem:hover {
+	background-color: #777;
+}
+
+.DropdownItem .Icon {
+	width: 30px;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}

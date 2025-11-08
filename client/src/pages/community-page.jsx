@@ -40,7 +40,7 @@ const CommunityPage = () => {
 
 	const onSubscribeClick = () => {};
 
-	return communityLoaded ? (
+	return community ? (
 		<>
 			<img
 				className="community-banner"
@@ -80,10 +80,10 @@ const CommunityPage = () => {
 				</div>
 			</div>
 		</>
+	) : communityLoaded ? (
+		<h2>Community does not exist!</h2>
 	) : (
-		<>
-			<h2>Community does not exist!</h2>
-		</>
+		<p>Loading community...</p>
 	);
 };
 

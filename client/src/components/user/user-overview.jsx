@@ -1,0 +1,11 @@
+import React from "react";
+
+const UserOverview = () => {
+	return (
+		<>
+			<p>User overview.</p>
+		</>
+	);
+};
+
+export default UserOverview;
