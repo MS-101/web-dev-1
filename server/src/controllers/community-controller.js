@@ -1,8 +1,6 @@
 import Community from "../models/community.js";
 import CommunityMember from "../models/community-member.js";
-import CommunityMemberType, {
-	CommunityMemberTypeEnum,
-} from "../models/community-member-type.js";
+import CommunityModerator from "../models/community-moderator.js";
 import User from "../models/user.js";
 import Post from "../models/post.js";
 import { StatusCodes } from "http-status-codes";
@@ -10,13 +8,21 @@ import { Op } from "sequelize";
 
 class CommunityController {
 	static async getCommunities(req, res) {
+		const { authUser } = req.body;
 		const { query, lastId } = req.query;
 		const limit = 20;
 
 		try {
 			const communities = await Community.scope(
 				"defaultScope",
-				"membersCount"
+				"membersCount",
+				"moderatorsCount",
+				{
+					method: ["isMember", authUser ? authUser.id : null],
+				},
+				{
+					method: ["isModerator", authUser ? authUser.id : null],
+				}
 			).findAll({
 				where: {
 					...(query
@@ -64,10 +70,14 @@ class CommunityController {
 				description: description,
 			});
 
+			const communityModerator = await CommunityModerator.create({
+				id_user: authUser.id,
+				id_community: community.id,
+			});
+
 			const communityMember = await CommunityMember.create({
 				id_user: authUser.id,
 				id_community: community.id,
-				id_community_member_type: CommunityMemberTypeEnum.ADMIN,
 			});
 
 			return res.status(StatusCodes.CREATED).json({
@@ -136,7 +146,6 @@ class CommunityController {
 			await CommunityMember.create({
 				id_community: community.id,
 				id_user: authUser.id,
-				id_community_member_type: CommunityMemberTypeEnum.MEMBER,
 			});
 
 			return res.status(StatusCodes.OK).json({
@@ -252,17 +261,6 @@ class CommunityController {
 						required: true,
 						where: { id: community.id },
 					},
-					{
-						model: CommunityMemberType,
-						attributes: ["id", "name"],
-						required: true,
-						where: {
-							[Op.or]: [
-								{ id: CommunityMemberTypeEnum.MODERATOR },
-								{ id: CommunityMemberTypeEnum.ADMIN },
-							],
-						},
-					},
 				],
 				where: {
 					...(lastId ? { id: { [Op.gt]: lastId } } : {}),
@@ -285,7 +283,7 @@ class CommunityController {
 		const { community } = req.body;
 
 		try {
-			const communityMembers = await CommunityMember.findAll({
+			const communityModerators = await CommunityModerator.findAll({
 				attributes: [],
 				include: [
 					{
@@ -299,22 +297,11 @@ class CommunityController {
 						required: true,
 						where: { id: community.id },
 					},
-					{
-						model: CommunityMemberType,
-						attributes: ["id", "name"],
-						required: true,
-						where: {
-							[Op.or]: [
-								{ id: CommunityMemberTypeEnum.MODERATOR },
-								{ id: CommunityMemberTypeEnum.ADMIN },
-							],
-						},
-					},
 				],
 				order: [["id", "ASC"]],
 			});
 
-			return res.status(StatusCodes.OK).json(communityMembers);
+			return res.status(StatusCodes.OK).json(communityModerators);
 		} catch (error) {
 			console.log(error);
 

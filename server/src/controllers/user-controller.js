@@ -36,23 +36,23 @@ class UserController {
 		return res.status(StatusCodes.OK).json(user);
 	}
 
-	static async getUserCommunitites(req, res) {
-		const { user } = req.body;
+	static async getUserCommunities(req, res) {
+		const { authUser, user } = req.body;
 
 		try {
-			const communities = await Community.scope(
-				"defaultScope",
-				"membersCount"
-			).findAll({
-				include: {
-					model: CommunityMember,
-					attributes: [],
-					require: true,
-					where: {
-						id_user: user.id,
+			const communities = await user.getCommunityMemberships({
+				joinTableAttributes: [],
+				scope: [
+					"defaultScope",
+					"membersCount",
+					"moderatorsCount",
+					{
+						method: ["isMember", authUser ? authUser.id : null],
 					},
-				},
-				order: [["name", "ASC"]],
+					{
+						method: ["isModerator", authUser ? authUser.id : null],
+					},
+				],
 			});
 
 			return res.status(StatusCodes.OK).json(communities);

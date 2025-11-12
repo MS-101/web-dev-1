@@ -15,7 +15,9 @@ export const NavigationProvider = ({ children }) => {
 		communities: naviCommunities,
 		communitiesLoaded: naviCommunitiesLoaded,
 		fetchCommunities: fetchNaviCommunities,
+		addCommunity: addNaviCommunity,
 		updateCommunity: updateNaviCommunity,
+		removeCommunity: removeNaviCommunity,
 	} = useUserCommunities(user?.id);
 
 	return (
@@ -24,7 +26,9 @@ export const NavigationProvider = ({ children }) => {
 				naviCommunities,
 				naviCommunitiesLoaded,
 				fetchNaviCommunities,
+				addNaviCommunity,
 				updateNaviCommunity,
+				removeNaviCommunity,
 			}}
 		>
 			{children}

@@ -3,8 +3,8 @@ import dbConnection from "../config/database.js";
 import Community from "./community.js";
 import User from "./user.js";
 
-const CommunityMember = dbConnection.define(
-	"communityMember",
+const CommunityModerator = dbConnection.define(
+	"communityModerator",
 	{
 		id: {
 			type: DataTypes.INTEGER,
@@ -30,58 +30,57 @@ const CommunityMember = dbConnection.define(
 		},
 	},
 	{
-		tableName: "community_member",
+		tableName: "community_moderator",
 		timestamps: false,
 	}
 );
 
-Community.addScope("membersCount", {
+Community.addScope("moderatorsCount", {
 	subQuery: false,
 	attributes: [
 		[
 			Sequelize.literal(
-				"( SELECT COUNT(*) FROM community_member WHERE community_member.id_community = community.id )"
+				"( SELECT COUNT(*) FROM community_moderator WHERE community_moderator.id_community = community.id )"
 			),
-			"membersCount",
+			"moderatorsCount",
 		],
 	],
 });
 
-Community.addScope("isMember", (id_user) => ({
+Community.addScope("isModerator", (id_user) => ({
 	subQuery: false,
 	attributes: [
 		[
 			Sequelize.literal(
-				`( SELECT COUNT(*) FROM community_member WHERE id_community = community.id AND id_user = ${id_user} ) > 0`
+				`( SELECT COUNT(*) FROM community_moderator WHERE id_community = community.id AND id_user = ${id_user} ) > 0`
 			),
-			"isMember",
+			"isModerator",
 		],
 	],
 }));
 
 User.belongsToMany(Community, {
-	joinTableAttributes: [],
-	through: CommunityMember,
+	through: CommunityModerator,
+	as: "moderatedCommunities",
 	foreignKey: "id_user",
-	as: "communityMemberships",
 });
 Community.belongsToMany(User, {
-	through: CommunityMember,
+	through: CommunityModerator,
 	foreignKey: "id_community",
 });
 
-CommunityMember.belongsTo(Community, {
+CommunityModerator.belongsTo(Community, {
 	foreignKey: "id_community",
 });
-Community.hasMany(CommunityMember, {
+Community.hasMany(CommunityModerator, {
 	foreignKey: "id_community",
 });
 
-CommunityMember.belongsTo(User, {
+CommunityModerator.belongsTo(User, {
 	foreignKey: "id_user",
 });
-User.hasMany(CommunityMember, {
+User.hasMany(CommunityModerator, {
 	foreignKey: "id",
 });
 
-export default CommunityMember;
+export default CommunityModerator;

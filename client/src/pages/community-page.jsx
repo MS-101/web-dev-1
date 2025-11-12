@@ -4,7 +4,14 @@ import { useModalContext } from "contexts/modal-context";
 import { useNavigationContext } from "contexts/navigation-context";
 import { ModalTypes } from "components/modal";
 import { useParams } from "react-router-dom";
-import { FaUsers, FaPlus, FaEdit } from "react-icons/fa";
+import {
+	FaUsers,
+	FaPlus,
+	FaEdit,
+	FaSignInAlt,
+	FaSignOutAlt,
+} from "react-icons/fa";
+import CommentService from "services/comment-service";
 import useCommunityPosts from "hooks/use-community-posts";
 import Post from "components/post/post";
 import useCommunity from "hooks/use-community";
@@ -17,7 +24,8 @@ const CommunityPage = () => {
 	const { community, communityLoaded, updateCommunity } = useCommunity(id);
 
 	const { openModal } = useModalContext();
-	const { updateNaviCommunity } = useNavigationContext();
+	const { addNaviCommunity, updateNaviCommunity, removeNaviCommunity } =
+		useNavigationContext();
 
 	const onEditCommunityClick = () => {
 		openModal(ModalTypes.EDIT_COMMUNITY, { id }, (response) => {
@@ -38,7 +46,17 @@ const CommunityPage = () => {
 		});
 	};
 
-	const onSubscribeClick = () => {};
+	const onJoinClick = () => {
+		CommentService.joinCommunity(id).then(() => {
+			addNaviCommunity(community);
+		});
+	};
+
+	const onLeaveClick = () => {
+		CommentService.leaveCommunity(id).then(() => {
+			removeNaviCommunity(community);
+		});
+	};
 
 	return community ? (
 		<>
@@ -52,13 +70,25 @@ const CommunityPage = () => {
 					<FaUsers />
 				</div>
 				<h2>{community.name}</h2>
-				<button onClick={onCreatePostClick}>
-					<FaPlus /> Post
-				</button>
-				<button onClick={onEditCommunityClick}>
-					<FaEdit /> Edit
-				</button>
-				<button onClick={onSubscribeClick}>Subscribe</button>
+				{Boolean(community.isMember) && (
+					<button onClick={onCreatePostClick}>
+						<FaPlus /> Post
+					</button>
+				)}
+				{Boolean(community.isModerator) && (
+					<button onClick={onEditCommunityClick}>
+						<FaEdit /> Edit
+					</button>
+				)}
+				{Boolean(community.isMember) ? (
+					<button onClick={onLeaveClick}>
+						<FaSignOutAlt /> Leave
+					</button>
+				) : (
+					<button onClick={onJoinClick}>
+						<FaSignInAlt /> Join
+					</button>
+				)}
 			</div>
 			<div className="community-content">
 				<div className="community-feed">
@@ -69,7 +99,6 @@ const CommunityPage = () => {
 				<div className="community-info">
 					<h3>Description</h3>
 					<p>{community.description}</p>
-					<p>{community.members}</p>
 					<p>
 						<strong>Members:</strong> {community.membersCount}
 					</p>

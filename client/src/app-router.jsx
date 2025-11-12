@@ -8,6 +8,7 @@ import ExplorePage from "pages/explore-page";
 import CommunityPage from "pages/community-page";
 import UserPage from "pages/user-page";
 import SubscriptionsPage from "pages/subscriptions-page";
+import SearchPage from "pages/search-page";
 
 function AppRouter() {
 	return (
@@ -21,6 +22,7 @@ function AppRouter() {
 					<Route path="community/:id" element={<CommunityPage />} />
 					<Route path="user/:id/*" element={<UserPage />} />
 					<Route path="subscriptions" element={<SubscriptionsPage />} />
+					<Route path="search/*" element={<SearchPage />} />
 				</Route>
 			</Routes>
 		</BrowserRouter>

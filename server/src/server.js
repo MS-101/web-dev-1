@@ -5,12 +5,14 @@ import communityRoute from "./routes/community-route.js";
 import userRoute from "./routes/user-route.js";
 import postRoute from "./routes/post-route.js";
 import commentRoute from "./routes/comment-route.js";
+import { authOptionalAccessToken } from "./middlewares/auth-middlewares.js";
 
 const app = express();
 
 // middleware
 app.use(cors());
 app.use(express.json());
+app.use(authOptionalAccessToken);
 
 // routes
 app.use("/auth", authRoute);

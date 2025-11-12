@@ -9,7 +9,7 @@ userRoute.get("/", UserController.getUsers);
 userRoute.use("/:id", authUser, specificUserRoute);
 
 specificUserRoute.get("/", UserController.getUser);
-specificUserRoute.get("/community", UserController.getUserCommunitites);
+specificUserRoute.get("/community", UserController.getUserCommunities);
 specificUserRoute.get("/post", UserController.getUserPosts);
 
 export default userRoute;

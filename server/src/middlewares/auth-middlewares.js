@@ -6,13 +6,11 @@ import {
 } from "../helpers/jwt-helpers.js";
 import { StatusCodes } from "http-status-codes";
 
-export const authAccessToken = async (req, res, next) => {
+export const authOptionalAccessToken = async (req, res, next) => {
 	const accessToken = extractToken(req.headers);
 
 	if (!accessToken) {
-		return res.status(StatusCodes.UNAUTHORIZED).json({
-			message: "Access token missing!",
-		});
+		return next();
 	}
 
 	verifyAccessToken(accessToken)
@@ -28,6 +26,18 @@ export const authAccessToken = async (req, res, next) => {
 				message: "Invalid access token!",
 			});
 		});
+};
+
+export const authAccessToken = async (req, res, next) => {
+	const { authUser } = req.body;
+
+	if (!authUser) {
+		return res.status(StatusCodes.UNAUTHORIZED).json({
+			message: "Access token missing!",
+		});
+	}
+
+	next();
 };
 
 export const authRefreshToken = async (req, res, next) => {

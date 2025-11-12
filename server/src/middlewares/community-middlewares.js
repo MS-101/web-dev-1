@@ -1,15 +1,22 @@
 import Community from "../models/community.js";
 import CommunityMember from "../models/community-member.js";
-import { CommunityMemberTypeEnum } from "../models/community-member-type.js";
+import CommunityModerator from "../models/community-moderator.js";
 import { StatusCodes } from "http-status-codes";
-import { Op } from "sequelize";
 
 export const authCommunity = async (req, res, next) => {
+	const { authUser } = req.body;
 	const { id } = req.params;
 
 	const community = await Community.scope(
 		"defaultScope",
-		"membersCount"
+		"membersCount",
+		"moderatorsCount",
+		{
+			method: ["isMember", authUser ? authUser.id : null],
+		},
+		{
+			method: ["isModerator", authUser ? authUser.id : null],
+		}
 	).findOne({
 		where: {
 			id: id,
@@ -70,46 +77,20 @@ export const authCommunityMember = async (req, res, next) => {
 export const authCommunityModerator = async (req, res, next) => {
 	const { authUser, community } = req.body;
 
-	const communityMember = await CommunityMember.findOne({
+	const communityModerator = await CommunityModerator.findOne({
 		where: {
 			id_user: authUser.id,
 			id_community: community.id,
-			[Op.or]: [
-				{ id_community_member_type: CommunityMemberTypeEnum.MODERATOR },
-				{ id_community_member_type: CommunityMemberTypeEnum.ADMIN },
-			],
 		},
 	});
 
-	if (communityMember) {
-		req.body.communityMember = communityMember;
+	if (communityModerator) {
+		req.body.communityModerator = communityModerator;
 
 		next();
 	} else {
 		return res.status(StatusCodes.UNAUTHORIZED).json({
 			message: "You are not a moderator of this community!",
-		});
-	}
-};
-
-export const authCommunityAdmin = async (req, res, next) => {
-	const { authUser, community } = req.body;
-
-	const communityMember = await CommunityMember.findOne({
-		where: {
-			id_user: authUser.id,
-			id_community: community.id,
-			id_community_member_type: CommunityMemberTypeEnum.ADMIN,
-		},
-	});
-
-	if (communityMember) {
-		req.body.communityMember = communityMember;
-
-		next();
-	} else {
-		return res.status(StatusCodes.UNAUTHORIZED).json({
-			message: "You are not an admin of this community!",
 		});
 	}
 };

@@ -2,6 +2,8 @@ import React from "react";
 import useUser from "hooks/use-user";
 import { FaUser } from "react-icons/fa";
 import { useParams, Link, Routes, Route } from "react-router-dom";
+import NavigationMenu from "components/navigation/navigation-menu";
+import NavigationItem from "components/navigation/navigation-item";
 import UserOverview from "components/user/user-overview";
 import UserPosts from "components/user/user-posts";
 import UserComments from "components/user/user-comments";
@@ -21,17 +23,12 @@ const UserPage = () => {
 				<h2>{user.username}</h2>
 			</div>
 			<div className="user-body">
-				<nav className="user-nav">
-					<Link to="">
-						<button>Overview</button>
-					</Link>
-					<Link to="posts">
-						<button>Posts</button>
-					</Link>
-					<Link to="comments">
-						<button>Comments</button>
-					</Link>
-				</nav>
+				<NavigationMenu>
+					<NavigationItem to="" title="Overview" />
+					<NavigationItem to="posts" title="Posts" />
+					<NavigationItem to="comments" title="Comments" />
+				</NavigationMenu>
+
 				<div className="user-content">
 					<Routes>
 						<Route index element={<UserOverview userId={id} />} />

@@ -13,20 +13,22 @@ const useUserCommunities = (idUser) => {
 			});
 		} else {
 			setCommunities([]);
-			setCommunitiesLoaded(false);
+			setCommunitiesLoaded(true);
 		}
 	}, [idUser]);
 
+	const addCommunity = (community) => {
+		setCommunities((prev) => [...prev, community]);
+	};
+
+	const removeCommunity = (community) => {
+		setCommunities((prev) => prev.filter((c) => c.id !== community.id));
+	};
+
 	const updateCommunity = (community) => {
 		setCommunities((prev) => {
-			const index = prev.findIndex((c) => c.id === community.id);
-			if (index !== -1) {
-				const updated = [...prev];
-				updated[index] = community;
-				return updated;
-			} else {
-				return [...prev, community];
-			}
+			const updated = prev.map((c) => (c.id === community.id ? community : c));
+			return updated;
 		});
 	};
 
@@ -34,7 +36,14 @@ const useUserCommunities = (idUser) => {
 		fetchCommunities();
 	}, [fetchCommunities]);
 
-	return { communities, communitiesLoaded, fetchCommunities, updateCommunity };
+	return {
+		communities,
+		communitiesLoaded,
+		fetchCommunities,
+		addCommunity,
+		updateCommunity,
+		removeCommunity,
+	};
 };
 
 export default useUserCommunities;
