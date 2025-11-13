@@ -1,21 +1,35 @@
 import { useState, useEffect, useCallback } from "react";
 import UserService from "services/user-service";
+import { useAuthContext } from "contexts/auth-context";
 
 const useUserCommunities = (idUser) => {
 	const [communities, setCommunities] = useState([]);
 	const [communitiesLoaded, setCommunitiesLoaded] = useState(false);
 
+	const { authUser, getAccessToken } = useAuthContext();
+
 	const fetchCommunities = useCallback(() => {
 		if (idUser) {
-			UserService.getUserCommunities(idUser).then((response) => {
-				setCommunities(response);
-				setCommunitiesLoaded(true);
-			});
+			if (authUser) {
+				getAccessToken()
+					.then((accessToken) => {
+						return UserService.getUserCommunities(idUser, accessToken);
+					})
+					.then((communities) => {
+						setCommunities(communities);
+						setCommunitiesLoaded(true);
+					});
+			} else {
+				UserService.getUserCommunities(idUser).then((communities) => {
+					setCommunities(communities);
+					setCommunitiesLoaded(true);
+				});
+			}
 		} else {
 			setCommunities([]);
-			setCommunitiesLoaded(true);
+			setCommunitiesLoaded(false);
 		}
-	}, [idUser]);
+	}, [idUser, authUser, getAccessToken]);
 
 	const addCommunity = (community) => {
 		setCommunities((prev) => [...prev, community]);

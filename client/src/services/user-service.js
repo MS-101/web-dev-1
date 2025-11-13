@@ -1,9 +1,9 @@
-import { publicAxios } from "config/axios";
+import { authAxios, publicAxios } from "config/axios";
 
 class UserService {
 	static baseUrl = "/user";
 
-	static async getUsers(query, lastId) {
+	static async getUsers(query = null, lastId = null) {
 		return new Promise((resolve, reject) => {
 			publicAxios
 				.get(this.baseUrl, {
@@ -34,9 +34,11 @@ class UserService {
 		});
 	}
 
-	static async getUserCommunities(idUser) {
+	static async getUserCommunities(idUser, accessToken = null) {
 		return new Promise((resolve, reject) => {
-			publicAxios
+			const axios = accessToken ? authAxios(accessToken) : publicAxios;
+
+			axios
 				.get(`${this.baseUrl}/${idUser}/community/`)
 				.then((response) => {
 					resolve(response.data);

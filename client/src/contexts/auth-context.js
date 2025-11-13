@@ -13,7 +13,9 @@ export const AuthProvider = ({ children }) => {
 	const accessTokenKey = "banter-accessToken";
 	const refreshTokenKey = "banter-refreshToken";
 
-	const [user, setUser] = useState(JSON.parse(localStorage.getItem(userKey)));
+	const [authUser, setAuthUser] = useState(
+		JSON.parse(localStorage.getItem(userKey))
+	);
 	const [accessToken, setAccessToken] = useState(
 		localStorage.getItem(accessTokenKey)
 	);
@@ -50,7 +52,7 @@ export const AuthProvider = ({ children }) => {
 		const accessToken = data.accessToken;
 		const refreshToken = data.refreshToken;
 
-		setUser(user);
+		setAuthUser(user);
 		setAccessToken(accessToken);
 		setRefreshToken(refreshToken);
 
@@ -60,7 +62,7 @@ export const AuthProvider = ({ children }) => {
 	};
 
 	const clearAuthentication = () => {
-		setUser(null);
+		setAuthUser(null);
 		setAccessToken(null);
 		setRefreshToken(null);
 
@@ -74,7 +76,7 @@ export const AuthProvider = ({ children }) => {
 			value={{
 				setAuthentication,
 				clearAuthentication,
-				user,
+				authUser,
 				getAccessToken,
 			}}
 		>

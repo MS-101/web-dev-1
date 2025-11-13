@@ -3,9 +3,11 @@ import { publicAxios, authAxios } from "config/axios";
 class CommunityService {
 	static baseUrl = "/community";
 
-	static async getCommunities(query, lastId) {
+	static async getCommunities(query = null, lastId = null, accessToken = null) {
 		return new Promise((resolve, reject) => {
-			publicAxios
+			const axios = accessToken ? authAxios(accessToken) : publicAxios;
+
+			axios
 				.get(this.baseUrl, {
 					params: {
 						query: query,
@@ -37,9 +39,11 @@ class CommunityService {
 		});
 	}
 
-	static async getCommunity(idCommunity) {
+	static async getCommunity(idCommunity, accessToken = null) {
 		return new Promise((resolve, reject) => {
-			publicAxios
+			const axios = accessToken ? authAxios(accessToken) : publicAxios;
+
+			axios
 				.get(`${this.baseUrl}/${idCommunity}`)
 				.then((response) => {
 					resolve(response.data);

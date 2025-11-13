@@ -19,7 +19,7 @@ import {
 const Sidebar = () => {
 	const navigate = useNavigate();
 
-	const { user } = useAuthContext();
+	const { authUser } = useAuthContext();
 	const { openModal } = useModalContext();
 	const { naviCommunities, naviCommunitiesLoaded, updateNaviCommunity } =
 		useNavigationContext();
@@ -34,7 +34,7 @@ const Sidebar = () => {
 	return (
 		<nav className="Sidebar">
 			<ul>
-				{user && <SidebarItem title="Feed" icon={<FaHome />} to="/feed" />}
+				{authUser && <SidebarItem title="Feed" icon={<FaHome />} to="/feed" />}
 				<SidebarItem title="Trending" icon={<FaHotjar />} to="/trending" />
 				<SidebarItem title="Explore" icon={<FaWpexplorer />} to="/explore" />
 				{naviCommunitiesLoaded && (

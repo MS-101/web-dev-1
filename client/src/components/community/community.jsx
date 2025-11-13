@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { FaUsers } from "react-icons/fa";
 import { useNavigationContext } from "contexts/navigation-context";
-import CommentService from "services/comment-service";
+import { useAuthContext } from "contexts/auth-context";
+import CommunityService from "services/community-service";
 import "styles/community.css";
 
 function Community({ community }) {
@@ -10,19 +11,28 @@ function Community({ community }) {
 	const [isMember, setIsMember] = useState(Boolean(community.isMember));
 
 	const { addNaviCommunity, removeNaviCommunity } = useNavigationContext();
+	const { getAccessToken } = useAuthContext();
 
 	const joinCommunity = () => {
-		CommentService.joinCommunity(community.id).then(() => {
-			addNaviCommunity(community);
-			setIsMember(true);
-		});
+		getAccessToken()
+			.then((accessToken) => {
+				return CommunityService.joinCommunity(accessToken, community.id);
+			})
+			.then(() => {
+				addNaviCommunity(community);
+				setIsMember(true);
+			});
 	};
 
 	const leaveCommunity = () => {
-		CommentService.leaveCommunity(community.id).then(() => {
-			removeNaviCommunity(community);
-			setIsMember(false);
-		});
+		getAccessToken()
+			.then((accessToken) => {
+				return CommunityService.leaveCommunity(accessToken, community.id);
+			})
+			.then(() => {
+				removeNaviCommunity(community);
+				setIsMember(false);
+			});
 	};
 
 	return (

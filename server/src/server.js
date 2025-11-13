@@ -12,10 +12,10 @@ const app = express();
 // middleware
 app.use(cors());
 app.use(express.json());
-app.use(authOptionalAccessToken);
 
 // routes
 app.use("/auth", authRoute);
+app.use(authOptionalAccessToken);
 app.use("/user", userRoute);
 app.use("/community", communityRoute);
 app.use("/post", postRoute);

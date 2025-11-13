@@ -1,21 +1,35 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useContext } from "react";
 import CommunityService from "services/community-service";
+import { AuthContext } from "contexts/auth-context";
 
 const useCommunity = (idCommunity) => {
 	const [community, setCommunity] = useState(null);
 	const [communityLoaded, setCommunityLoaded] = useState(false);
 
+	const { authUser, getAccessToken } = useContext(AuthContext);
+
 	const fetchCommunity = useCallback(() => {
 		if (idCommunity) {
-			CommunityService.getCommunity(idCommunity).then((response) => {
-				setCommunity(response);
-				setCommunityLoaded(true);
-			});
+			if (authUser) {
+				getAccessToken()
+					.then((accessToken) => {
+						return CommunityService.getCommunity(idCommunity, accessToken);
+					})
+					.then((community) => {
+						setCommunity(community);
+						setCommunityLoaded(true);
+					});
+			} else {
+				CommunityService.getCommunity(idCommunity).then((community) => {
+					setCommunity(community);
+					setCommunityLoaded(true);
+				});
+			}
 		} else {
 			setCommunity(null);
 			setCommunityLoaded(false);
 		}
-	}, [idCommunity]);
+	}, [idCommunity, authUser, getAccessToken]);
 
 	const updateCommunity = (community) => {
 		setCommunity(community);

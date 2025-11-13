@@ -24,7 +24,14 @@
 	padding-right: 10px;
 }
 
-.community-header button {
+.community-actions {
+	display: flex;
+	align-items: center;
+	height: 100%;
+	gap: 10px;
+}
+
+.community-actions button {
 	width: 150px;
 	height: 80%;
 }

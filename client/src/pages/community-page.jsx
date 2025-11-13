@@ -1,5 +1,6 @@
 import React from "react";
 import ScrollableFeed from "react-scrollable-feed";
+import { useAuthContext } from "contexts/auth-context";
 import { useModalContext } from "contexts/modal-context";
 import { useNavigationContext } from "contexts/navigation-context";
 import { ModalTypes } from "components/modal";
@@ -11,7 +12,7 @@ import {
 	FaSignInAlt,
 	FaSignOutAlt,
 } from "react-icons/fa";
-import CommentService from "services/comment-service";
+import CommunityService from "services/community-service";
 import useCommunityPosts from "hooks/use-community-posts";
 import Post from "components/post/post";
 import useCommunity from "hooks/use-community";
@@ -22,7 +23,7 @@ const CommunityPage = () => {
 	const { id } = useParams();
 
 	const { community, communityLoaded, updateCommunity } = useCommunity(id);
-
+	const { authUser, getAccessToken } = useAuthContext();
 	const { openModal } = useModalContext();
 	const { addNaviCommunity, updateNaviCommunity, removeNaviCommunity } =
 		useNavigationContext();
@@ -47,15 +48,25 @@ const CommunityPage = () => {
 	};
 
 	const onJoinClick = () => {
-		CommentService.joinCommunity(id).then(() => {
-			addNaviCommunity(community);
-		});
+		getAccessToken()
+			.then((accessToken) => {
+				return CommunityService.joinCommunity(accessToken, id);
+			})
+			.then(() => {
+				addNaviCommunity(community);
+				community.isMember = true;
+			});
 	};
 
 	const onLeaveClick = () => {
-		CommentService.leaveCommunity(id).then(() => {
-			removeNaviCommunity(community);
-		});
+		getAccessToken()
+			.then((accessToken) => {
+				return CommunityService.leaveCommunity(accessToken, id);
+			})
+			.then(() => {
+				removeNaviCommunity(community);
+				community.isMember = false;
+			});
 	};
 
 	return community ? (
@@ -70,24 +81,28 @@ const CommunityPage = () => {
 					<FaUsers />
 				</div>
 				<h2>{community.name}</h2>
-				{Boolean(community.isMember) && (
-					<button onClick={onCreatePostClick}>
-						<FaPlus /> Post
-					</button>
-				)}
-				{Boolean(community.isModerator) && (
-					<button onClick={onEditCommunityClick}>
-						<FaEdit /> Edit
-					</button>
-				)}
-				{Boolean(community.isMember) ? (
-					<button onClick={onLeaveClick}>
-						<FaSignOutAlt /> Leave
-					</button>
-				) : (
-					<button onClick={onJoinClick}>
-						<FaSignInAlt /> Join
-					</button>
+				{authUser && (
+					<div className="community-actions">
+						{Boolean(community.isMember) && (
+							<button onClick={onCreatePostClick}>
+								<FaPlus /> Post
+							</button>
+						)}
+						{Boolean(community.isModerator) && (
+							<button onClick={onEditCommunityClick}>
+								<FaEdit /> Edit
+							</button>
+						)}
+						{Boolean(community.isMember) ? (
+							<button onClick={onLeaveClick}>
+								<FaSignOutAlt /> Leave
+							</button>
+						) : (
+							<button onClick={onJoinClick}>
+								<FaSignInAlt /> Join
+							</button>
+						)}
+					</div>
 				)}
 			</div>
 			<div className="community-content">

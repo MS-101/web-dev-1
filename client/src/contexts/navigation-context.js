@@ -9,7 +9,7 @@ export const useNavigationContext = () => {
 };
 
 export const NavigationProvider = ({ children }) => {
-	const { user } = useAuthContext();
+	const { authUser } = useAuthContext();
 
 	const {
 		communities: naviCommunities,
@@ -18,7 +18,7 @@ export const NavigationProvider = ({ children }) => {
 		addCommunity: addNaviCommunity,
 		updateCommunity: updateNaviCommunity,
 		removeCommunity: removeNaviCommunity,
-	} = useUserCommunities(user?.id);
+	} = useUserCommunities(authUser?.id);
 
 	return (
 		<NavigationContext.Provider

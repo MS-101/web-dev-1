@@ -10,7 +10,7 @@ import { FaUserCircle, FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
 import DropdownItem from "./dropdown-item";
 
 const TopPanel = () => {
-	const { user, clearAuthentication } = useAuthContext();
+	const { authUser, clearAuthentication } = useAuthContext();
 	const { openModal } = useModalContext();
 
 	const onLogoutClick = () => {
@@ -32,12 +32,12 @@ const TopPanel = () => {
 				<SearchBar />
 			</div>
 			<nav className="DropdownContainer">
-				{user ? (
-					<DropdownMenu icon={<FaUserCircle />} title={user.username}>
+				{authUser ? (
+					<DropdownMenu icon={<FaUserCircle />} title={authUser.username}>
 						<DropdownItem
 							icon={<FaUserCircle />}
 							title="Profile"
-							to={`/user/${user.id}`}
+							to={`/user/${authUser.id}`}
 						/>
 						<DropdownItem
 							icon={<FaSignOutAlt />}
