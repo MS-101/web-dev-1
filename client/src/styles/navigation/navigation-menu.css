@@ -5,15 +5,16 @@
 	align-items: center;
 	padding: 0;
 	border-bottom: 1px solid black;
-}
 
-.NavigationMenu ul {
-	list-style-type: none;
-	height: 100%;
-	padding: 0;
-	padding-bottom: 10px;
-	margin: 0;
-	display: flex;
-	flex-direction: row;
-	gap: 10px;
+	ul {
+		list-style-type: none;
+		height: 100%;
+		box-sizing: border-box;
+		padding: 0;
+		padding-bottom: 10px;
+		margin: 0;
+		display: flex;
+		flex-direction: row;
+		gap: 10px;
+	}
 }

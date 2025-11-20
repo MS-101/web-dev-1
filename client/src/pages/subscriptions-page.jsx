@@ -11,17 +11,17 @@ const SubscriptionsPage = () => {
 	const { communities, communitiesLoaded } = useUserCommunities(authUser?.id);
 
 	return (
-		<>
-			<div className="subscriptions-header">
+		<div className="subscriptions-page">
+			<div className="header">
 				<h2>Manage communities</h2>
 			</div>
-			<div className="subscriptions-content">
+			<div className="body">
 				<ScrollableFeed>
 					{communitiesLoaded &&
 						communities.map((element) => <Community community={element} />)}
 				</ScrollableFeed>
 			</div>
-		</>
+		</div>
 	);
 };
 

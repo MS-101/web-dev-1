@@ -13,8 +13,6 @@ function Community({ community }) {
 	const { addNaviCommunity, removeNaviCommunity } = useNavigationContext();
 	const { getAccessToken } = useAuthContext();
 
-	const onInfoClick = () => {};
-
 	const onJoinClick = () => {
 		getAccessToken()
 			.then((accessToken) => {
@@ -38,15 +36,15 @@ function Community({ community }) {
 	};
 
 	return (
-		<div className="community-card">
-			<Link className="community-info" to={`/community/${community.id}`}>
-				<div className="community-icon">
+		<div className="community">
+			<Link className="info" to={`/community/${community.id}`}>
+				<div className="icon">
 					<FaUsers />
 				</div>
-				<h2>{name}</h2>
+				<h2 className="title">{name}</h2>
 			</Link>
 
-			<div className="community-actions">
+			<div className="actions">
 				{isMember ? (
 					<button onClick={onLeaveClick}>
 						<FaSignOutAlt />

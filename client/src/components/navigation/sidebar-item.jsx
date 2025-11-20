@@ -4,7 +4,7 @@ import "styles/navigation/sidebar-item.css";
 
 const SidebarItem = ({ title, icon, to, onClick }) => {
 	const resolvedPath = useResolvedPath(to);
-	const isActive = useMatch({ path: resolvedPath.pathname, end: true });
+	const isActive = useMatch({ path: resolvedPath.pathname, end: false });
 
 	return to ? (
 		<Link to={to}>

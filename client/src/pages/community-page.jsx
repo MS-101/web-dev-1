@@ -3,6 +3,8 @@ import ScrollableFeed from "react-scrollable-feed";
 import { useAuthContext } from "contexts/auth-context";
 import { useModalContext } from "contexts/modal-context";
 import { useNavigationContext } from "contexts/navigation-context";
+import NavigationMenu from "components/navigation/navigation-menu";
+import NavigationItem from "components/navigation/navigation-item";
 import { ModalTypes } from "components/modal";
 import { useParams } from "react-router-dom";
 import {
@@ -47,7 +49,7 @@ const CommunityPage = () => {
 		});
 	};
 
-	const onJoinClick = () => {
+	const onJoinCommunityClick = () => {
 		getAccessToken()
 			.then((accessToken) => {
 				return CommunityService.joinCommunity(accessToken, id);
@@ -58,7 +60,7 @@ const CommunityPage = () => {
 			});
 	};
 
-	const onLeaveClick = () => {
+	const onLeaveCommunityClick = () => {
 		getAccessToken()
 			.then((accessToken) => {
 				return CommunityService.leaveCommunity(accessToken, id);
@@ -70,60 +72,76 @@ const CommunityPage = () => {
 	};
 
 	return community ? (
-		<>
-			<img
-				className="community-banner"
-				src={placeholder}
-				alt="Community Banner"
-			/>
-			<div className="community-header">
+		<div className="community-page">
+			<img className="banner" src={placeholder} alt="Community Banner" />
+			<div className="header">
 				<div className="icon">
 					<FaUsers />
 				</div>
-				<h2>{community.name}</h2>
+				<h2 className="title">{community.name}</h2>
 				{authUser && (
-					<div className="community-actions">
+					<div className="actions">
 						{Boolean(community.isMember) && (
-							<button onClick={onCreatePostClick}>
+							<button
+								className="create-post-button"
+								onClick={onCreatePostClick}
+							>
 								<FaPlus /> Post
 							</button>
 						)}
 						{Boolean(community.isModerator) && (
-							<button onClick={onEditCommunityClick}>
+							<button
+								className="edit-community-button"
+								onClick={onEditCommunityClick}
+							>
 								<FaEdit /> Edit
 							</button>
 						)}
 						{Boolean(community.isMember) ? (
-							<button onClick={onLeaveClick}>
+							<button
+								className="leave-community-button"
+								onClick={onLeaveCommunityClick}
+							>
 								<FaSignOutAlt /> Leave
 							</button>
 						) : (
-							<button onClick={onJoinClick}>
+							<button
+								className="join-community-button"
+								onClick={onJoinCommunityClick}
+							>
 								<FaSignInAlt /> Join
 							</button>
 						)}
 					</div>
 				)}
 			</div>
-			<div className="community-content">
-				<div className="community-feed">
+			<div className="body">
+				<div className="feed">
+					<NavigationMenu>
+						<NavigationItem to="" title="Posts" />
+						<NavigationItem to="members" title="Members" />
+						<NavigationItem to="moderators" title="Moderators" />
+					</NavigationMenu>
+
 					<ScrollableFeed onScroll={onPostScroll}>
 						{postsLoaded && posts.map((element) => <Post post={element} />)}
 					</ScrollableFeed>
 				</div>
-				<div className="community-info">
-					<h3>Description</h3>
-					<p>{community.description}</p>
-					<p>
-						<strong>Members:</strong> {community.membersCount}
-					</p>
-					<p>
-						<strong>Created:</strong>{" "}
-						{new Date(community.date).toLocaleDateString("sk-SK")}
-					</p>
+				<div className="info">
+					<div className="info-box">
+						<h3>Description</h3>
+						<p>{community.description}</p>
+						<p>
+							<strong>Members:</strong> {community.membersCount}
+						</p>
+						<p>
+							<strong>Created:</strong>{" "}
+							{new Date(community.date).toLocaleDateString("sk-SK")}
+						</p>
+					</div>
 				</div>
 			</div>
-		</>
+		</div>
 	) : communityLoaded ? (
 		<h2>Community does not exist!</h2>
 	) : (

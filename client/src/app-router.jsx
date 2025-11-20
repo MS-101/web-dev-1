@@ -19,7 +19,7 @@ function AppRouter() {
 					<Route path="feed" element={<FeedPage />} />
 					<Route path="trending" element={<TrendingPage />} />
 					<Route path="explore" element={<ExplorePage />} />
-					<Route path="community/:id" element={<CommunityPage />} />
+					<Route path="community/:id/*" element={<CommunityPage />} />
 					<Route path="user/:id/*" element={<UserPage />} />
 					<Route path="subscriptions" element={<SubscriptionsPage />} />
 					<Route path="search/*" element={<SearchPage />} />
