@@ -1,7 +1,7 @@
 import React from "react";
 import ScrollableFeed from "react-scrollable-feed";
 import Community from "components/community/community";
-import useUserCommunities from "hooks/use-user-communities";
+import useUserCommunities from "hooks/user/use-user-communities";
 import { useAuthContext } from "contexts/auth-context";
 import "styles/pages/subscriptions-page.css";
 

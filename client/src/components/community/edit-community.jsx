@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import CommunityService from "services/community-service";
 import { useAuthContext } from "contexts/auth-context";
 import { useModalContext } from "contexts/modal-context";
-import useCommunity from "hooks/use-community";
-import "styles/modal.css";
+import useCommunity from "hooks/community/use-community";
 
 function EditCommunity({ id }) {
 	const { community } = useCommunity(id);

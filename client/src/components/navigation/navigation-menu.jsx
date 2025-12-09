@@ -1,5 +1,5 @@
 import React from "react";
-import "styles/navigation/navigation-menu.css";
+import "styles/components/navigation/navigation-menu.css";
 
 const NavigationMenu = ({ children }) => {
 	return (

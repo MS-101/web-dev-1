@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext } from "react";
-import useUserCommunities from "hooks/use-user-communities";
+import useUserCommunities from "hooks/user/use-user-communities";
 import { useAuthContext } from "contexts/auth-context";
 
 export const NavigationContext = createContext();

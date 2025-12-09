@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "styles/navigation/dropdown-item.css";
+import "styles/components/navigation/dropdown-item.css";
 
 const DropdownItem = ({ title, icon, to, onClick }) => {
 	return to ? (

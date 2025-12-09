@@ -3,6 +3,7 @@ import PostService from "services/post-service";
 
 const usePost = (idPost) => {
 	const [post, setPost] = useState(null);
+	const [postLoaded, setPostLoaded] = useState(false);
 
 	useEffect(() => {
 		PostService.getPost(idPost).then((response) => {
@@ -10,7 +11,7 @@ const usePost = (idPost) => {
 		});
 	}, [idPost]);
 
-	return post;
+	return { post, postLoaded };
 };
 
 export default usePost;

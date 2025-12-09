@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import "styles/navigation/dropdown-menu.css";
+import "styles/components/navigation/dropdown-menu.css";
 
 const DropdownMenu = ({ title, icon, children }) => {
 	const [open, setOpen] = useState(false);

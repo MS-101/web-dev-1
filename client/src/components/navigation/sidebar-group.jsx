@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
-import "styles/navigation/sidebar-group.css";
+import "styles/components/navigation/sidebar-group.css";
 
 const SidebarGroup = ({ title, open: initOpen, children }) => {
 	const [open, setOpen] = useState(initOpen);

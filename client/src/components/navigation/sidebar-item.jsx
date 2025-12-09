@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useMatch, useResolvedPath } from "react-router-dom";
-import "styles/navigation/sidebar-item.css";
+import "styles/components/navigation/sidebar-item.css";
 
 const SidebarItem = ({ title, icon, to, onClick }) => {
 	const resolvedPath = useResolvedPath(to);

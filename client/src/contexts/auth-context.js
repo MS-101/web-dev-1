@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
 		const expiredTime = decodedToken.exp;
 		const currentTime = Date.now() / 1000;
 
-		return expiredTime >= currentTime - 10;
+		return expiredTime >= currentTime + 10;
 	};
 
 	const getAccessToken = async () => {

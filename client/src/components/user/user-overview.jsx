@@ -1,6 +1,6 @@
 import React from "react";
 
-const UserOverview = () => {
+const UserOverview = ({ user }) => {
 	return (
 		<>
 			<p>User overview.</p>

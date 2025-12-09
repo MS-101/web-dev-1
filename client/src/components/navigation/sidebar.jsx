@@ -6,7 +6,6 @@ import { useModalContext } from "contexts/modal-context";
 import { ModalTypes } from "components/modal";
 import SidebarGroup from "./sidebar-group";
 import SidebarItem from "./sidebar-item";
-import "styles/navigation/sidebar.css";
 import {
 	FaHome,
 	FaHotjar,
@@ -15,6 +14,7 @@ import {
 	FaUsers,
 	FaWpexplorer,
 } from "react-icons/fa";
+import "styles/components/navigation/sidebar.css";
 
 const Sidebar = () => {
 	const navigate = useNavigate();

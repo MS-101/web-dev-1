@@ -3,11 +3,11 @@ import { Link } from "react-router-dom";
 import { useAuthContext } from "contexts/auth-context";
 import { useModalContext } from "contexts/modal-context";
 import SearchBar from "./search-bar";
-import "styles/navigation/top-panel.css";
 import { ModalTypes } from "components/modal";
 import DropdownMenu from "./dropdown-menu";
 import { FaUserCircle, FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
 import DropdownItem from "./dropdown-item";
+import "styles/components/navigation/top-panel.css";
 
 const TopPanel = () => {
 	const { authUser, clearAuthentication } = useAuthContext();

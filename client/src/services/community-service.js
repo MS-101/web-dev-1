@@ -96,7 +96,7 @@ class CommunityService {
 		});
 	}
 
-	static async getCommunityPosts(idCommunity, lastId) {
+	static async getCommunityPosts(idCommunity, lastId = null) {
 		return new Promise((resolve, reject) => {
 			publicAxios
 				.get(`${this.baseUrl}/${idCommunity}/post`, {
@@ -129,10 +129,10 @@ class CommunityService {
 		});
 	}
 
-	static async getCommunityMembers(idCommunity, lastId) {
+	static async getCommunityMembers(idCommunity, lastId = null) {
 		return new Promise((resolve, reject) => {
 			publicAxios
-				.get(`${this.baseUrl}/${idCommunity}/members`, {
+				.get(`${this.baseUrl}/${idCommunity}/member`, {
 					params: {
 						lastId: lastId,
 					},
@@ -149,7 +149,7 @@ class CommunityService {
 	static async getCommunityModerators(idCommunity) {
 		return new Promise((resolve, reject) => {
 			publicAxios
-				.get(`${this.baseUrl}/${idCommunity}/moderators`)
+				.get(`${this.baseUrl}/${idCommunity}/moderator`)
 				.then((response) => {
 					resolve(response.data);
 				})

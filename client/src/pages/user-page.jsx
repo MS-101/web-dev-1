@@ -1,5 +1,5 @@
 import React from "react";
-import useUser from "hooks/use-user";
+import useUser from "hooks/user/use-user";
 import { FaUser } from "react-icons/fa";
 import { useParams, Routes, Route } from "react-router-dom";
 import NavigationMenu from "components/navigation/navigation-menu";
@@ -29,9 +29,9 @@ const UserPage = () => {
 			</NavigationMenu>
 			<div className="body">
 				<Routes>
-					<Route index element={<UserOverview userId={id} />} />
-					<Route path="posts" element={<UserPosts userId={id} />} />
-					<Route path="comments" element={<UserComments userId={id} />} />
+					<Route index element={<UserOverview user={user} />} />
+					<Route path="posts" element={<UserPosts user={user} />} />
+					<Route path="comments" element={<UserComments user={user} />} />
 				</Routes>
 			</div>
 		</div>

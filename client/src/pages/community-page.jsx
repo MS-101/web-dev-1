@@ -1,23 +1,17 @@
 import React from "react";
-import ScrollableFeed from "react-scrollable-feed";
 import { useAuthContext } from "contexts/auth-context";
 import { useModalContext } from "contexts/modal-context";
 import { useNavigationContext } from "contexts/navigation-context";
 import NavigationMenu from "components/navigation/navigation-menu";
 import NavigationItem from "components/navigation/navigation-item";
 import { ModalTypes } from "components/modal";
-import { useParams } from "react-router-dom";
-import {
-	FaUsers,
-	FaPlus,
-	FaEdit,
-	FaSignInAlt,
-	FaSignOutAlt,
-} from "react-icons/fa";
+import { useParams, Routes, Route } from "react-router-dom";
+import { FaUsers, FaEdit, FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
 import CommunityService from "services/community-service";
-import useCommunityPosts from "hooks/use-community-posts";
-import Post from "components/post/post";
-import useCommunity from "hooks/use-community";
+import CommunityPosts from "components/community/community-posts";
+import CommunityMembers from "components/community/community-members";
+import CommunityModerators from "components/community/community-moderators";
+import useCommunity from "hooks/community/use-community";
 import placeholder from "assets/placeholder.jpg";
 import "styles/pages/community-page.css";
 
@@ -34,18 +28,6 @@ const CommunityPage = () => {
 		openModal(ModalTypes.EDIT_COMMUNITY, { id }, (response) => {
 			updateCommunity(response.community);
 			updateNaviCommunity(response.community);
-		});
-	};
-
-	const { posts, postsLoaded, fetchNextPosts, addPost } = useCommunityPosts(id);
-
-	const onPostScroll = (isAtBottom) => {
-		if (isAtBottom) fetchNextPosts();
-	};
-
-	const onCreatePostClick = () => {
-		openModal(ModalTypes.CREATE_POST, { idCommunity: id }, (response) => {
-			addPost(response.post);
 		});
 	};
 
@@ -81,14 +63,6 @@ const CommunityPage = () => {
 				<h2 className="title">{community.name}</h2>
 				{authUser && (
 					<div className="actions">
-						{Boolean(community.isMember) && (
-							<button
-								className="create-post-button"
-								onClick={onCreatePostClick}
-							>
-								<FaPlus /> Post
-							</button>
-						)}
 						{Boolean(community.isModerator) && (
 							<button
 								className="edit-community-button"
@@ -116,16 +90,24 @@ const CommunityPage = () => {
 				)}
 			</div>
 			<div className="body">
-				<div className="feed">
+				<div className="sub-page">
 					<NavigationMenu>
 						<NavigationItem to="" title="Posts" />
 						<NavigationItem to="members" title="Members" />
 						<NavigationItem to="moderators" title="Moderators" />
 					</NavigationMenu>
 
-					<ScrollableFeed onScroll={onPostScroll}>
-						{postsLoaded && posts.map((element) => <Post post={element} />)}
-					</ScrollableFeed>
+					<Routes>
+						<Route index element={<CommunityPosts community={community} />} />
+						<Route
+							path="members"
+							element={<CommunityMembers community={community} />}
+						/>
+						<Route
+							path="moderators"
+							element={<CommunityModerators community={community} />}
+						/>
+					</Routes>
 				</div>
 				<div className="info">
 					<div className="info-box">
@@ -143,7 +125,7 @@ const CommunityPage = () => {
 			</div>
 		</div>
 	) : communityLoaded ? (
-		<h2>Community does not exist!</h2>
+		<h2>Community not found.</h2>
 	) : (
 		<p>Loading community...</p>
 	);

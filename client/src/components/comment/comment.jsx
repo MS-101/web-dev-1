@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function Comment(comment) {
+const Comment = ({ comment }) => {
 	const [user, setUser] = useState(comment.user);
 	const [text, setText] = useState(comment.text);
 
@@ -21,6 +21,6 @@ function Comment(comment) {
 			</div>
 		</div>
 	);
-}
+};
 
-export default Post;
+export default Comment;

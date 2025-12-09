@@ -4,9 +4,9 @@ import { Link } from "react-router-dom";
 import { useNavigationContext } from "contexts/navigation-context";
 import { useAuthContext } from "contexts/auth-context";
 import CommunityService from "services/community-service";
-import "styles/community.css";
+import "styles/components/community/community.css";
 
-function Community({ community }) {
+const Community = ({ community }) => {
 	const [name, setName] = useState(community.name);
 	const [isMember, setIsMember] = useState(Boolean(community.isMember));
 
@@ -37,14 +37,14 @@ function Community({ community }) {
 
 	return (
 		<div className="community">
-			<Link className="info" to={`/community/${community.id}`}>
+			<Link className="community-info" to={`/community/${community.id}`}>
 				<div className="icon">
 					<FaUsers />
 				</div>
 				<h2 className="title">{name}</h2>
 			</Link>
 
-			<div className="actions">
+			<div className="community-actions">
 				{isMember ? (
 					<button onClick={onLeaveClick}>
 						<FaSignOutAlt />
@@ -59,6 +59,6 @@ function Community({ community }) {
 			</div>
 		</div>
 	);
-}
+};
 
 export default Community;

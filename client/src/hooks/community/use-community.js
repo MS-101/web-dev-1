@@ -17,18 +17,17 @@ const useCommunity = (idCommunity) => {
 					})
 					.then((community) => {
 						setCommunity(community);
-						setCommunityLoaded(true);
 					});
 			} else {
 				CommunityService.getCommunity(idCommunity).then((community) => {
 					setCommunity(community);
-					setCommunityLoaded(true);
 				});
 			}
 		} else {
 			setCommunity(null);
-			setCommunityLoaded(false);
 		}
+
+		setCommunityLoaded(true);
 	}, [idCommunity, authUser, getAccessToken]);
 
 	const updateCommunity = (community) => {

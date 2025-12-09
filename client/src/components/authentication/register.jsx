@@ -3,7 +3,6 @@ import { useAuthContext } from "contexts/auth-context";
 import { useModalContext } from "contexts/modal-context";
 import { ModalTypes } from "components/modal";
 import AuthService from "services/auth-service";
-import "styles/modal.css";
 
 function Register() {
 	const { openModal, closeModal } = useModalContext();

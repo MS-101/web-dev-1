@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useMatch, useResolvedPath } from "react-router-dom";
-import "styles/navigation/navigation-item.css";
+import "styles/components/navigation/navigation-item.css";
 
 const NavigationItem = ({ title, to }) => {
 	const resolvedPath = useResolvedPath(to);

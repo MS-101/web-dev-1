@@ -2,26 +2,29 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"command": "npm start",
-			"name": "Run Client",
-			"request": "launch",
+			"name": "Run Server",
 			"type": "node-terminal",
+			"command": "nodemon npm start",
+			"request": "launch",
+			"cwd": "${workspaceFolder}/server",
+			"preLaunchTask": "Install Server"
+		},
+		{
+			"name": "Run Client",
+			"type": "node",
+			"request": "launch",
+			"runtimeExecutable": "npm",
+			"runtimeArgs": ["run", "start"],
 			"cwd": "${workspaceFolder}/client",
+			"console": "integratedTerminal",
 			"preLaunchTask": "Install Client"
 		},
 		{
-			"command": "nodemon npm start",
-			"name": "Run Server",
+			"name": "Launch Edge",
 			"request": "launch",
-			"type": "node-terminal",
-			"cwd": "${workspaceFolder}/server",
-			"preLaunchTask": "Install Server"
-		}
-	],
-	"compounds": [
-		{
-			"name": "Run Client and Server",
-			"configurations": ["Run Client", "Run Server"]
+			"type": "msedge",
+			"url": "http://localhost:3000",
+			"webRoot": "${workspaceFolder}/client"
 		}
 	]
 }

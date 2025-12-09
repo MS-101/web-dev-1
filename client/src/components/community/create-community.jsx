@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import CommunityService from "services/community-service";
 import { useAuthContext } from "contexts/auth-context";
 import { useModalContext } from "contexts/modal-context";
-import "styles/modal.css";
 
 function CreateCommunity() {
 	const { getAccessToken } = useAuthContext();

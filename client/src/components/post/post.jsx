@@ -1,30 +1,44 @@
-import { useState } from "react";
+import React from "react";
+import { FaUser, FaThumbsUp, FaThumbsDown, FaComment } from "react-icons/fa";
+import { useNavigate, Link } from "react-router-dom";
+import "styles/components/post/post.css";
 
-function Post({ post }) {
-	const [user, setUser] = useState(post.user);
-	const [title, setTitle] = useState(post.title);
-	const [body, setBody] = useState(post.body);
+const Post = ({ post }) => {
+	const navigate = useNavigate();
 
 	const onLikeCick = () => {};
 
 	const onDislikeClick = () => {};
 
-	const onCommentClick = () => {};
+	const onCommentClick = () => {
+		navigate(`/post/${post.id}`);
+	};
 
 	return (
-		<div>
-			<div>
-				<h2>{user.name}</h2>
-				<h2>{title}</h2>
-			</div>
-			<p>{body}</p>
-			<div>
-				<button onClick={onLikeCick}>Like</button>
-				<button onClick={onDislikeClick}>Dislike</button>
-				<button onClick={onCommentClick}>Comment</button>
+		<div className="post">
+			<Link to={`/user/${post.user.id}`} className="post-user">
+				<FaUser />
+				<h3 className="username">{post.user.username}</h3>
+			</Link>
+			<Link to={`/post/${post.id}`} className="post-info">
+				<h2 className="post-title">{post.title}</h2>
+				<p className="post-body">{post.body}</p>
+			</Link>
+			<div className="post-actions">
+				<button onClick={onLikeCick}>
+					<FaThumbsUp /> Like
+				</button>
+				<button onClick={onDislikeClick}>
+					<FaThumbsDown />
+					Dislike
+				</button>
+				<button onClick={onCommentClick}>
+					<FaComment />
+					Comment
+				</button>
 			</div>
 		</div>
 	);
-}
+};
 
 export default Post;

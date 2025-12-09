@@ -1,11 +1,11 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Navigate } from "react-router-dom";
-import { AuthContext } from "contexts/auth-context";
+import { useAuthContext } from "contexts/auth-context";
 
 const HomePage = () => {
-	const { user } = useContext(AuthContext);
+	const { authUser } = useAuthContext();
 
-	return user ? (
+	return authUser ? (
 		<Navigate to="/feed" replace />
 	) : (
 		<Navigate to="/trending" replace />

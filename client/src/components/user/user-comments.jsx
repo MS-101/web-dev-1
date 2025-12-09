@@ -1,6 +1,6 @@
 import React from "react";
 
-const UserComments = () => {
+const UserComments = ({ user }) => {
 	return (
 		<>
 			<p>User comments.</p>

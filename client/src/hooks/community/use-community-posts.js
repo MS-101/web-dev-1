@@ -8,17 +8,18 @@ const useCommunityPosts = (idCommunity) => {
 
 	const fetchTopPosts = useCallback(() => {
 		if (idCommunity) {
-			CommunityService.getCommunityPosts(idCommunity).then((response) => {
-				const curPosts = response;
+			CommunityService.getCommunityPosts(idCommunity).then((curPosts) => {
 				const lastPost = curPosts[curPosts.length - 1];
 
 				setPosts(curPosts);
 				setLastPostId(lastPost?.id);
-				setPostsLoaded(true);
 			});
 		} else {
 			setPosts([]);
+			setLastPostId(null);
 		}
+
+		setPostsLoaded(true);
 	}, [idCommunity]);
 
 	useEffect(() => {
