@@ -41,7 +41,6 @@ const Community = dbConnection.define(
 			attributes: ["id", "date", "name", "description"],
 			include: {
 				model: User,
-				attributes: ["id", "username"],
 			},
 		},
 	}

@@ -4,6 +4,7 @@
 	width: 100%;
 	height: 100%;
 	padding: 5px;
+	overflow-y: hidden;
 	box-sizing: border-box;
 
 	.create-post-button {
@@ -17,7 +18,7 @@
 		flex-direction: column;
 		gap: 10px;
 		width: 100%;
-		height: 100%;
+		flex: 1;
 		overflow-y: auto;
 	}
 }

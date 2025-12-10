@@ -51,7 +51,6 @@ const Post = dbConnection.define(
 				},
 				{
 					model: User,
-					attributes: ["id", "username"],
 					required: true,
 				},
 			],

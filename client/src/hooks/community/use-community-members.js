@@ -4,6 +4,7 @@ import "styles/components/community/community-members.css";
 
 const useCommunityMembers = (idCommunity) => {
 	const [members, setMembers] = useState([]);
+	const [lastMemberId, setLastMemberId] = useState(null);
 	const [membersLoaded, setMembersLoaded] = useState(false);
 
 	const fetchMembers = useCallback(() => {

@@ -181,7 +181,7 @@ class CommunityController {
 	static async getCommunityPosts(req, res) {
 		const { community } = req.body;
 		const { query, lastId } = req.query;
-		const limit = 20;
+		const limit = 5;
 
 		try {
 			const posts = await Post.scope("defaultScope", "ratings").findAll({
@@ -248,11 +248,10 @@ class CommunityController {
 
 		try {
 			const communityMembers = await CommunityMember.findAll({
-				attributes: [],
+				attributes: ["id"],
 				include: [
 					{
 						model: User,
-						attributes: ["id", "username"],
 						required: true,
 					},
 					{
@@ -284,11 +283,10 @@ class CommunityController {
 
 		try {
 			const communityModerators = await CommunityModerator.findAll({
-				attributes: [],
+				attributes: ["id"],
 				include: [
 					{
 						model: User,
-						attributes: ["id", "username"],
 						required: true,
 					},
 					{

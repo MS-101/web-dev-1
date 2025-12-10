@@ -49,8 +49,9 @@ class AuthController {
 				message: "Registration successfull!",
 				user: {
 					id: user.id,
-					email: user.email,
+					date: user.date,
 					username: user.username,
+					email: user.email,
 				},
 				accessToken: accessToken,
 				refreshToken: refreshToken,
@@ -67,14 +68,14 @@ class AuthController {
 	static async login(req, res) {
 		const { usernameOrEmail, password } = req.body;
 
-		let user = await User.findOne({
+		let user = await User.scope("auth").findOne({
 			where: {
 				email: usernameOrEmail,
 			},
 		});
 
 		if (user === null)
-			user = await User.findOne({
+			user = await User.scope("auth").findOne({
 				where: {
 					username: usernameOrEmail,
 				},
@@ -100,8 +101,9 @@ class AuthController {
 				message: "Login successfull!",
 				user: {
 					id: user.id,
-					email: user.email,
+					date: user.date,
 					username: user.username,
+					email: user.email,
 				},
 				accessToken: accessToken,
 				refreshToken: refreshToken,
@@ -128,8 +130,9 @@ class AuthController {
 				message: "Token refresh successfull!",
 				user: {
 					id: user.id,
-					email: user.email,
+					date: user.date,
 					username: user.username,
+					email: user.email,
 				},
 				accessToken: accessToken,
 				refreshToken: newRefreshToken,
