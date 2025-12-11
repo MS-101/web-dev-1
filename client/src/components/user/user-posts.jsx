@@ -1,20 +1,37 @@
-import React from "react";
-import ScrollableFeed from "react-scrollable-feed";
+import { React, useRef } from "react";
 import Post from "components/post/post";
 import useUserPosts from "hooks/user/use-user-posts";
 import "styles/components/user/user-posts.css";
 
 const UserPosts = ({ user }) => {
-	const { posts, postsLoaded, fetchNextPosts } = useUserPosts(user.id);
+	const { posts, postsLoading, fetchNextPosts } = useUserPosts(user.id);
 
-	const onPostScroll = (isAtBottom) => {
-		if (isAtBottom) fetchNextPosts();
+	const onPostScroll = () => {
+		if (postsLoading) return;
+
+		const feed = feedRef.current;
+		const threshold = 10;
+
+		if (feed.scrollTop + feed.clientHeight >= feed.scrollHeight - threshold) {
+			fetchNextPosts();
+		}
 	};
 
+	const feedRef = useRef(null);
+
 	return (
-		<ScrollableFeed className="user-posts" onScroll={onPostScroll}>
-			{postsLoaded && posts.map((element) => <Post post={element} />)}
-		</ScrollableFeed>
+		<div className="user-posts" onScroll={onPostScroll} ref={feedRef}>
+			{posts &&
+				posts.map((element) => (
+					<Post
+						key={element.id}
+						post={element}
+						displayCommunity={true}
+						displayUser={false}
+					/>
+				))}
+			{postsLoading && <p>Loading...</p>}
+		</div>
 	);
 };
 

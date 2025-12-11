@@ -5,25 +5,47 @@ import "styles/components/community/community-members.css";
 const useCommunityMembers = (idCommunity) => {
 	const [members, setMembers] = useState([]);
 	const [lastMemberId, setLastMemberId] = useState(null);
-	const [membersLoaded, setMembersLoaded] = useState(false);
+	const [membersLoading, setMembersLoading] = useState(false);
 
-	const fetchMembers = useCallback(() => {
+	const fetchTopMembers = useCallback(() => {
 		if (idCommunity) {
-			CommunityService.getCommunityMembers(idCommunity).then((response) => {
-				setMembers(response);
+			setMembersLoading(true);
+
+			CommunityService.getCommunityMembers(idCommunity).then((curMembers) => {
+				const lastMember = curMembers[curMembers.length - 1];
+
+				setMembers(curMembers);
+				setLastMemberId(lastMember?.id);
+				setMembersLoading(false);
 			});
 		} else {
 			setMembers([]);
+			setLastMemberId(null);
 		}
-
-		setMembersLoaded(true);
 	}, [idCommunity]);
 
 	useEffect(() => {
-		fetchMembers();
-	}, [fetchMembers]);
+		fetchTopMembers();
+	}, [fetchTopMembers]);
 
-	return { members, membersLoaded, fetchMembers };
+	const fetchNextMembers = useCallback(() => {
+		if (lastMemberId) {
+			setMembersLoading(true);
+
+			CommunityService.getCommunityMembers(idCommunity, lastMemberId).then(
+				(response) => {
+					const curMembers = response;
+					const lastMember = curMembers[curMembers.length - 1];
+
+					setMembers(members.concat(curMembers));
+					setLastMemberId(lastMember?.id);
+					setMembersLoading(false);
+				}
+			);
+		}
+	}, [idCommunity, members, lastMemberId]);
+
+	return { members, membersLoading, fetchTopMembers, fetchNextMembers };
 };
 
 export default useCommunityMembers;

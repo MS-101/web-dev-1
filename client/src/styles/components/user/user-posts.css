@@ -6,4 +6,5 @@
 	padding: 5px;
 	gap: 5px;
 	box-sizing: border-box;
+	overflow-y: auto;
 }

@@ -4,22 +4,23 @@ import CommunityService from "services/community-service";
 const useCommunityPosts = (idCommunity) => {
 	const [posts, setPosts] = useState([]);
 	const [lastPostId, setLastPostId] = useState(null);
-	const [postsLoaded, setPostsLoaded] = useState(false);
+	const [postsLoading, setPostsLoading] = useState(false);
 
 	const fetchTopPosts = useCallback(() => {
 		if (idCommunity) {
+			setPostsLoading(true);
+
 			CommunityService.getCommunityPosts(idCommunity).then((curPosts) => {
 				const lastPost = curPosts[curPosts.length - 1];
 
 				setPosts(curPosts);
 				setLastPostId(lastPost?.id);
+				setPostsLoading(false);
 			});
 		} else {
 			setPosts([]);
 			setLastPostId(null);
 		}
-
-		setPostsLoaded(true);
 	}, [idCommunity]);
 
 	useEffect(() => {
@@ -28,6 +29,8 @@ const useCommunityPosts = (idCommunity) => {
 
 	const fetchNextPosts = useCallback(() => {
 		if (lastPostId) {
+			setPostsLoading(true);
+
 			CommunityService.getCommunityPosts(idCommunity, lastPostId).then(
 				(response) => {
 					const curPosts = response;
@@ -35,6 +38,7 @@ const useCommunityPosts = (idCommunity) => {
 
 					setPosts(posts.concat(curPosts));
 					setLastPostId(lastPost?.id);
+					setPostsLoading(false);
 				}
 			);
 		}
@@ -44,7 +48,7 @@ const useCommunityPosts = (idCommunity) => {
 		setPosts((prev) => [post, ...prev]);
 	};
 
-	return { posts, postsLoaded, fetchTopPosts, fetchNextPosts, addPost };
+	return { posts, postsLoading, fetchTopPosts, fetchNextPosts, addPost };
 };
 
 export default useCommunityPosts;

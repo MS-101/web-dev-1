@@ -1,5 +1,4 @@
-import React from "react";
-import ScrollableFeed from "react-scrollable-feed";
+import { React, useRef } from "react";
 import { useModalContext } from "contexts/modal-context";
 import useCommunityPosts from "hooks/community/use-community-posts";
 import { ModalTypes } from "components/modal";
@@ -10,7 +9,7 @@ import "styles/components/community/community-posts.css";
 const CommunityPosts = ({ community }) => {
 	const { openModal } = useModalContext();
 
-	const { posts, postsLoaded, fetchNextPosts, addPost } = useCommunityPosts(
+	const { posts, postsLoading, fetchNextPosts, addPost } = useCommunityPosts(
 		community.id
 	);
 
@@ -24,9 +23,18 @@ const CommunityPosts = ({ community }) => {
 		);
 	};
 
-	const onPostScroll = (isAtBottom) => {
-		if (isAtBottom) fetchNextPosts();
+	const onPostScroll = () => {
+		if (postsLoading) return;
+
+		const feed = feedRef.current;
+		const threshold = 10;
+
+		if (feed.scrollTop + feed.clientHeight >= feed.scrollHeight - threshold) {
+			fetchNextPosts();
+		}
 	};
+
+	const feedRef = useRef(null);
 
 	return (
 		<div className="community-posts">
@@ -35,9 +43,18 @@ const CommunityPosts = ({ community }) => {
 					<FaPlus /> Post
 				</button>
 			)}
-			<ScrollableFeed className="post-feed" onScroll={onPostScroll}>
-				{postsLoaded && posts.map((element) => <Post post={element} />)}
-			</ScrollableFeed>
+			<div ref={feedRef} className="post-feed" onScroll={onPostScroll}>
+				{posts &&
+					posts.map((element, index) => (
+						<Post
+							key={index}
+							post={element}
+							displayCommunity={false}
+							displayUser={true}
+						/>
+					))}
+				{postsLoading && <p>Loading...</p>}
+			</div>
 		</div>
 	);
 };

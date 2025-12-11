@@ -1,5 +1,4 @@
 import React from "react";
-import ScrollableFeed from "react-scrollable-feed";
 import Community from "components/community/community";
 import useUserCommunities from "hooks/user/use-user-communities";
 import { useAuthContext } from "contexts/auth-context";
@@ -16,10 +15,10 @@ const SubscriptionsPage = () => {
 				<h2>Manage communities</h2>
 			</div>
 			<div className="body">
-				<ScrollableFeed>
-					{communitiesLoaded &&
-						communities.map((element) => <Community community={element} />)}
-				</ScrollableFeed>
+				{communitiesLoaded &&
+					communities.map((element, index) => (
+						<Community key={index} community={element} />
+					))}
 			</div>
 		</div>
 	);
