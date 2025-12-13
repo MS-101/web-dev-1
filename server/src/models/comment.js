@@ -49,6 +49,21 @@ const Comment = dbConnection.define(
 	{
 		tableName: "comment",
 		timestamps: false,
+		defaultScope: {
+			attributes: ["id", "date", "text"],
+			include: [
+				{
+					model: Post,
+					attributes: ["id", "date", "title", "body"],
+					required: true,
+				},
+				{
+					model: User,
+					attributes: ["id", "username"],
+					required: true,
+				},
+			],
+		},
 	}
 );
 
@@ -56,14 +71,14 @@ Comment.belongsTo(Post, {
 	foreignKey: "id_post",
 });
 Post.hasMany(Comment, {
-	foreignKey: "id",
+	foreignKey: "id_post",
 });
 
 Comment.belongsTo(User, {
 	foreignKey: "id_user",
 });
 User.hasMany(Comment, {
-	foreignKey: "id",
+	foreignKey: "id_user",
 });
 
 Comment.belongsTo(Comment, {
@@ -75,19 +90,15 @@ Comment.hasMany(Comment, {
 	foreignKey: "id_parent",
 });
 
-Comment.addScope("defaultScope", {
-	attributes: ["id", "date", "text"],
-	include: [
-		{
-			model: Post,
-			attributes: ["id", "date", "title", "body"],
-			required: true,
-		},
-		{
-			model: User,
-			attributes: ["id", "username"],
-			required: true,
-		},
+Post.addScope("commentsCount", {
+	subQuery: false,
+	attributes: [
+		[
+			Sequelize.literal(
+				"( SELECT COUNT(*) FROM comment WHERE comment.id_post = post.id )"
+			),
+			"commentsCount",
+		],
 	],
 });
 

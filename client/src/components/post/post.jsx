@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
 	FaUser,
 	FaUsers,
@@ -7,14 +7,62 @@ import {
 	FaComment,
 } from "react-icons/fa";
 import { useNavigate, Link } from "react-router-dom";
+import { useAuthContext } from "contexts/auth-context";
+import PostService from "services/post-service";
 import "styles/components/post/post.css";
 
 const Post = ({ post, displayCommunity = true, displayUser = true }) => {
 	const navigate = useNavigate();
+	const { authUser, getAccessToken } = useAuthContext();
 
-	const onLikeCick = () => {};
+	const [myReaction, setMyReaction] = useState(post.myReaction);
+	const [rating, setRating] = useState(post.rating);
 
-	const onDislikeClick = () => {};
+	const onLikeCick = () => {
+		if (myReaction === 1) {
+			getAccessToken()
+				.then((accessToken) => {
+					return PostService.deletePostReaction(accessToken, post.id);
+				})
+				.then(() => {
+					setRating(rating - 1);
+					setMyReaction(0);
+				});
+		} else {
+			getAccessToken()
+				.then((accessToken) => {
+					return PostService.postPostReaction(accessToken, post.id, true);
+				})
+				.then(() => {
+					if (myReaction === -1) setRating(rating + 2);
+					else setRating(rating + 1);
+					setMyReaction(1);
+				});
+		}
+	};
+
+	const onDislikeClick = () => {
+		if (myReaction === -1) {
+			getAccessToken()
+				.then((accessToken) => {
+					return PostService.deletePostReaction(accessToken, post.id);
+				})
+				.then(() => {
+					setRating(rating + 1);
+					setMyReaction(0);
+				});
+		} else {
+			getAccessToken()
+				.then((accessToken) => {
+					return PostService.postPostReaction(accessToken, post.id, false);
+				})
+				.then(() => {
+					if (myReaction === 1) setRating(rating - 2);
+					else setRating(rating - 1);
+					setMyReaction(-1);
+				});
+		}
+	};
 
 	const onCommentClick = () => {
 		navigate(`/post/${post.id}`);
@@ -39,15 +87,23 @@ const Post = ({ post, displayCommunity = true, displayUser = true }) => {
 				<p className="post-body">{post.body}</p>
 			</Link>
 			<div className="post-actions">
-				<div className="icon">
-					<FaThumbsUp onClick={onLikeCick} />
+				<div className="rating-actions">
+					<button className="like-btn" onClick={onLikeCick}>
+						<FaThumbsUp style={{ color: myReaction == 1 ? "red" : "black" }} />
+					</button>
+					{rating}
+					<button className="dislike-btn" onClick={onDislikeClick}>
+						<div
+							className="icon"
+							style={{ color: myReaction == -1 ? "red" : "black" }}
+						>
+							<FaThumbsDown />
+						</div>
+					</button>
 				</div>
-				<div className="icon">
-					<FaThumbsDown onClick={onDislikeClick} />
-				</div>
-				<div className="icon">
-					<FaComment onClick={onCommentClick} />
-				</div>
+				<button className="comment-btn" onClick={onCommentClick}>
+					<FaComment /> {post.commentsCount}
+				</button>
 			</div>
 		</div>
 	);

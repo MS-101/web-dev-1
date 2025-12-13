@@ -35,32 +35,6 @@ const PostReaction = dbConnection.define(
 	}
 );
 
-Post.addScope("ratings", {
-	subQuery: false,
-	attributes: [
-		"id",
-		[
-			Sequelize.literal(
-				"COUNT(post_likes.id_post) - COUNT(post_dislikes.id_post)"
-			),
-			"rating",
-		],
-	],
-	include: [
-		{
-			model: PostReaction,
-			attributes: [],
-			as: "post_likes",
-		},
-		{
-			model: PostReaction,
-			attributes: [],
-			as: "post_dislikes",
-		},
-	],
-	group: ["post.id"],
-});
-
 PostReaction.belongsTo(Post, {
 	foreignKey: "id_post",
 });
@@ -102,5 +76,43 @@ User.hasMany(PostReaction, {
 	},
 	as: "post_dislikes",
 });
+
+Post.addScope("ratings", {
+	subQuery: false,
+	attributes: [
+		"id",
+		[
+			Sequelize.literal(
+				"COUNT(post_likes.id_post) - COUNT(post_dislikes.id_post)"
+			),
+			"rating",
+		],
+	],
+	include: [
+		{
+			model: PostReaction,
+			attributes: [],
+			as: "post_likes",
+		},
+		{
+			model: PostReaction,
+			attributes: [],
+			as: "post_dislikes",
+		},
+	],
+	group: ["post.id"],
+});
+
+Post.addScope("myReaction", (id_user) => ({
+	subQuery: false,
+	attributes: [
+		[
+			Sequelize.literal(
+				`IFNULL((SELECT IF(is_positive = 1, 1, -1) FROM post_reaction WHERE id_post = post.id AND id_user = ${id_user}), 0)`
+			),
+			"myReaction",
+		],
+	],
+}));
 
 export default PostReaction;

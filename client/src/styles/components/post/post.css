@@ -62,11 +62,27 @@
 	.post-actions {
 		display: flex;
 		align-items: center;
-		height: 50px;
+		height: 40px;
 		gap: 10px;
 
-		.icon {
-			cursor: pointer;
+		button {
+			display: flex;
+			flex-direction: row;
+			justify-content: center;
+			align-items: center;
+			height: 40px;
+			gap: 10px;
+		}
+
+		.rating-actions {
+			display: flex;
+			flex-direction: row;
+			justify-content: center;
+			align-items: center;
+			height: 40px;
+			gap: 10px;
+			border: black solid 1px;
+			background-color: lightgray;
 		}
 	}
 }

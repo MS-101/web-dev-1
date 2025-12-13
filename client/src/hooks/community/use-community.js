@@ -1,12 +1,12 @@
-import { useState, useEffect, useCallback, useContext } from "react";
+import { useState, useEffect, useCallback } from "react";
 import CommunityService from "services/community-service";
-import { AuthContext } from "contexts/auth-context";
+import { useAuthContext } from "contexts/auth-context";
 
 const useCommunity = (idCommunity) => {
 	const [community, setCommunity] = useState(null);
 	const [communityLoaded, setCommunityLoaded] = useState(false);
 
-	const { authUser, getAccessToken } = useContext(AuthContext);
+	const { authUser, getAccessToken } = useAuthContext();
 
 	const fetchCommunity = useCallback(() => {
 		if (idCommunity) {

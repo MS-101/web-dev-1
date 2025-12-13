@@ -179,12 +179,19 @@ class CommunityController {
 	}
 
 	static async getCommunityPosts(req, res) {
-		const { community } = req.body;
+		const { authUser, community } = req.body;
 		const { query, lastId } = req.query;
 		const limit = 5;
 
 		try {
-			const posts = await Post.scope("defaultScope", "ratings").findAll({
+			const posts = await Post.scope(
+				"defaultScope",
+				"ratings",
+				"commentsCount",
+				{
+					method: ["myReaction", authUser ? authUser.id : null],
+				}
+			).findAll({
 				where: {
 					id_community: community.id,
 					...(query

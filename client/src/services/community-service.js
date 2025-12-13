@@ -96,9 +96,15 @@ class CommunityService {
 		});
 	}
 
-	static async getCommunityPosts(idCommunity, lastId = null) {
+	static async getCommunityPosts(
+		idCommunity,
+		lastId = null,
+		accessToken = null
+	) {
 		return new Promise((resolve, reject) => {
-			publicAxios
+			const axios = accessToken ? authAxios(accessToken) : publicAxios;
+
+			axios
 				.get(`${this.baseUrl}/${idCommunity}/post`, {
 					params: {
 						lastId: lastId,
