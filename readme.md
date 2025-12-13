@@ -18,17 +18,18 @@ This is a side project created for learning purposes. This website is inspired b
 
 - Authenthication
 - Navigation
+- Subscriptions Page
+- Community Page
+- User Page
 
 ## Planned Functionalities:
 
 - password reset via email
 - community tags
-- posts, comments and reactions in communities
 - media storage for user icons, community banners, community icons, post media and comment media
+- post page: page for discussion inside a specific post
 - feed page: page for displaying posts from subscribed communities
 - trending page: page for displaying recent posts
 - explore page: page for finding communities
-- subscriptions page: page for managing subscribed communities
 - search page: search communities, posts, comments, users
-- user interaction via instant messaging
 - deploy to Microsoft Azure
