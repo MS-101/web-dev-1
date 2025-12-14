@@ -21,13 +21,13 @@ This is a side project created for learning purposes. This website is inspired b
 - Subscriptions Page
 - Community Page
 - User Page
+- Post Page
 
 ## Planned Functionalities:
 
 - password reset via email
 - community tags
 - media storage for user icons, community banners, community icons, post media and comment media
-- post page: page for discussion inside a specific post
 - feed page: page for displaying posts from subscribed communities
 - trending page: page for displaying recent posts
 - explore page: page for finding communities

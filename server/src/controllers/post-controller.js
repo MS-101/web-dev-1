@@ -3,15 +3,22 @@ import { Op } from "sequelize";
 import Post from "../models/post.js";
 import PostReaction from "../models/post-reaction.js";
 import Comment from "../models/comment.js";
-import { setCommentResponses } from "../helpers/comment-helpers.js";
 
 class PostController {
 	static async getPosts(req, res) {
+		const { authUser } = req.body;
 		const { query, lastId } = req.query;
 		const limit = 20;
 
 		try {
-			const posts = await Post.scope("defaultScope", "ratings").findAll({
+			const posts = await Post.scope(
+				"defaultScope",
+				"ratings",
+				"commentsCount",
+				{
+					method: ["myReaction", authUser ? authUser.id : null],
+				}
+			).findAll({
 				where: {
 					...(query
 						? {
@@ -131,31 +138,21 @@ class PostController {
 	}
 
 	static async getPostResponses(req, res) {
-		const { post } = req.body;
+		const { post, authUser } = req.body;
 		const { lastId } = req.query;
-		const maxWidth = 20;
-		const maxDepth = 5;
 
 		try {
-			const { comments } = await Comment.scope(
-				"defaultScope",
-				"ratings"
-			).findAndCountAll({
+			const comments = await Comment.scope("defaultScope", "ratings", {
+				method: ["myReaction", authUser ? authUser.id : null],
+			}).findAll({
 				where: {
 					id_post: post.id,
-					id_parent: null,
 					...(lastId ? { id: { [Op.lt]: lastId } } : {}),
 				},
 				order: [["id", "DESC"]],
-				limit: maxWidth,
 			});
 
-			await setCommentResponses(comments, maxWidth, maxDepth);
-
-			return res.status(StatusCodes.OK).json({
-				comments: comments,
-				hasMore: commentsCount > maxWidth,
-			});
+			return res.status(StatusCodes.OK).json(comments);
 		} catch (error) {
 			console.log(error);
 

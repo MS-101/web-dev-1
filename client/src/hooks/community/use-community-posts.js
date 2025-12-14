@@ -1,5 +1,5 @@
-import { useAuthContext } from "contexts/auth-context";
 import { useState, useEffect, useCallback } from "react";
+import { useAuthContext } from "contexts/auth-context";
 import CommunityService from "services/community-service";
 
 const useCommunityPosts = (idCommunity) => {
@@ -42,28 +42,45 @@ const useCommunityPosts = (idCommunity) => {
 			setPosts([]);
 			setLastPostId(null);
 		}
-	}, [idCommunity]);
+	}, [idCommunity, authUser]);
 
 	useEffect(() => {
 		fetchTopPosts();
 	}, [fetchTopPosts]);
 
 	const fetchNextPosts = useCallback(() => {
-		if (lastPostId) {
+		if (idCommunity && lastPostId) {
 			setPostsLoading(true);
 
-			CommunityService.getCommunityPosts(idCommunity, lastPostId).then(
-				(response) => {
-					const curPosts = response;
-					const lastPost = curPosts[curPosts.length - 1];
+			if (authUser) {
+				getAccessToken()
+					.then((accessToken) => {
+						return CommunityService.getCommunityPosts(
+							idCommunity,
+							lastPostId,
+							accessToken
+						);
+					})
+					.then((curPosts) => {
+						const lastPost = curPosts[curPosts.length - 1];
 
-					setPosts(posts.concat(curPosts));
-					setLastPostId(lastPost?.id);
-					setPostsLoading(false);
-				}
-			);
+						setPosts(posts.concat(curPosts));
+						setLastPostId(lastPost?.id);
+						setPostsLoading(false);
+					});
+			} else {
+				CommunityService.getCommunityPosts(idCommunity, lastPostId).then(
+					(curPosts) => {
+						const lastPost = curPosts[curPosts.length - 1];
+
+						setPosts(posts.concat(curPosts));
+						setLastPostId(lastPost?.id);
+						setPostsLoading(false);
+					}
+				);
+			}
 		}
-	}, [idCommunity, posts, lastPostId]);
+	}, [idCommunity, posts, lastPostId, authUser]);
 
 	const addPost = (post) => {
 		setPosts((prev) => [post, ...prev]);

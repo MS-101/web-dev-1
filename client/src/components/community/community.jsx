@@ -11,7 +11,7 @@ const Community = ({ community }) => {
 	const [isMember, setIsMember] = useState(Boolean(community.isMember));
 
 	const { addNaviCommunity, removeNaviCommunity } = useNavigationContext();
-	const { getAccessToken } = useAuthContext();
+	const { authUser, getAccessToken } = useAuthContext();
 
 	const onJoinClick = () => {
 		getAccessToken()
@@ -44,19 +44,21 @@ const Community = ({ community }) => {
 				<h2 className="title">{name}</h2>
 			</Link>
 
-			<div className="community-actions">
-				{isMember ? (
-					<button onClick={onLeaveClick}>
-						<FaSignOutAlt />
-						Leave
-					</button>
-				) : (
-					<button onClick={onJoinClick}>
-						<FaSignInAlt />
-						Join
-					</button>
-				)}
-			</div>
+			{authUser && (
+				<div className="community-actions">
+					{isMember ? (
+						<button onClick={onLeaveClick}>
+							<FaSignOutAlt />
+							Leave
+						</button>
+					) : (
+						<button onClick={onJoinClick}>
+							<FaSignInAlt />
+							Join
+						</button>
+					)}
+				</div>
+			)}
 		</div>
 	);
 };

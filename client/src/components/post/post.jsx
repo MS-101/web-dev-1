@@ -19,6 +19,8 @@ const Post = ({ post, displayCommunity = true, displayUser = true }) => {
 	const [rating, setRating] = useState(post.rating);
 
 	const onLikeCick = () => {
+		if (!authUser) return;
+
 		if (myReaction === 1) {
 			getAccessToken()
 				.then((accessToken) => {
@@ -42,6 +44,8 @@ const Post = ({ post, displayCommunity = true, displayUser = true }) => {
 	};
 
 	const onDislikeClick = () => {
+		if (!authUser) return;
+
 		if (myReaction === -1) {
 			getAccessToken()
 				.then((accessToken) => {
@@ -93,12 +97,9 @@ const Post = ({ post, displayCommunity = true, displayUser = true }) => {
 					</button>
 					{rating}
 					<button className="dislike-btn" onClick={onDislikeClick}>
-						<div
-							className="icon"
+						<FaThumbsDown
 							style={{ color: myReaction == -1 ? "red" : "black" }}
-						>
-							<FaThumbsDown />
-						</div>
+						/>
 					</button>
 				</div>
 				<button className="comment-btn" onClick={onCommentClick}>

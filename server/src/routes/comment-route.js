@@ -20,11 +20,5 @@ specificCommentRoute.delete(
 	authAccessToken,
 	CommentController.deleteCommentReaction
 );
-specificCommentRoute.get("/response", CommentController.getCommentResponses);
-specificCommentRoute.post(
-	"/response",
-	authAccessToken,
-	CommentController.postCommentResponse
-);
 
 export default commentRoute;

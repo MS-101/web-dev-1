@@ -1,0 +1,49 @@
+.post-page {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+
+	.post {
+		width: 1;
+	}
+
+	.post-comments {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		height: 100%;
+		overflow: hidden;
+
+		.comment-input-container {
+			display: flex;
+			flex-direction: row;
+			width: 100%;
+			height: 80px;
+			margin-bottom: 10px;
+
+			.comment-input {
+				width: 100%;
+				height: 100%;
+				resize: none;
+				box-sizing: border-box;
+			}
+
+			.create-comment-btn {
+				width: 50px;
+				height: 100%;
+				margin-left: 10px;
+			}
+		}
+
+		.comment-feed {
+			display: flex;
+			flex-direction: column;
+			width: 100%;
+			height: 100%;
+			gap: 10px;
+			overflow-y: auto;
+		}
+	}
+}

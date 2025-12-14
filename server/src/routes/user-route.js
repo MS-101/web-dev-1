@@ -11,5 +11,6 @@ userRoute.use("/:id", authUser, specificUserRoute);
 specificUserRoute.get("/", UserController.getUser);
 specificUserRoute.get("/community", UserController.getUserCommunities);
 specificUserRoute.get("/post", UserController.getUserPosts);
+specificUserRoute.get("/comment", UserController.getUserComments);
 
 export default userRoute;

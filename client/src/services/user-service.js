@@ -49,10 +49,31 @@ class UserService {
 		});
 	}
 
-	static async getUserPosts(idUser, lastId) {
+	static async getUserPosts(idUser, lastId = null, accessToken = null) {
 		return new Promise((resolve, reject) => {
-			publicAxios
+			const axios = accessToken ? authAxios(accessToken) : publicAxios;
+
+			axios
 				.get(`${this.baseUrl}/${idUser}/post/`, {
+					params: {
+						lastId: lastId,
+					},
+				})
+				.then((response) => {
+					resolve(response.data);
+				})
+				.catch((error) => {
+					reject(error.message);
+				});
+		});
+	}
+
+	static async getUserComments(idUser, lastId = null, accessToken = null) {
+		return new Promise((resolve, reject) => {
+			const axios = accessToken ? authAxios(accessToken) : publicAxios;
+
+			axios
+				.get(`${this.baseUrl}/${idUser}/comment/`, {
 					params: {
 						lastId: lastId,
 					},

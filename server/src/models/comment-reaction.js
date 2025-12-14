@@ -35,32 +35,6 @@ const CommentReaction = dbConnection.define(
 	}
 );
 
-Comment.addScope("ratings", {
-	subQuery: false,
-	attributes: [
-		"id",
-		[
-			Sequelize.literal(
-				"COUNT(comment_likes.id_comment) - COUNT(comment_dislikes.id_comment)"
-			),
-			"rating",
-		],
-	],
-	include: [
-		{
-			model: CommentReaction,
-			attributes: [],
-			as: "comment_likes",
-		},
-		{
-			model: CommentReaction,
-			attributes: [],
-			as: "comment_dislikes",
-		},
-	],
-	group: ["comment.id"],
-});
-
 CommentReaction.belongsTo(Comment, {
 	foreignKey: "id_comment",
 });
@@ -102,5 +76,43 @@ User.hasMany(CommentReaction, {
 	},
 	as: "comment_dislikes",
 });
+
+Comment.addScope("ratings", {
+	subQuery: false,
+	attributes: [
+		"id",
+		[
+			Sequelize.literal(
+				"COUNT(comment_likes.id_comment) - COUNT(comment_dislikes.id_comment)"
+			),
+			"rating",
+		],
+	],
+	include: [
+		{
+			model: CommentReaction,
+			attributes: [],
+			as: "comment_likes",
+		},
+		{
+			model: CommentReaction,
+			attributes: [],
+			as: "comment_dislikes",
+		},
+	],
+	group: ["comment.id"],
+});
+
+Comment.addScope("myReaction", (id_user) => ({
+	subQuery: false,
+	attributes: [
+		[
+			Sequelize.literal(
+				`IFNULL((SELECT IF(is_positive = 1, 1, -1) FROM comment_reaction WHERE id_comment = comment.id AND id_user = ${id_user}), 0)`
+			),
+			"myReaction",
+		],
+	],
+}));
 
 export default CommentReaction;

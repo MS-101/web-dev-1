@@ -33,14 +33,6 @@ const Comment = dbConnection.define(
 				key: "id",
 			},
 		},
-		id_parent: {
-			type: DataTypes.INTEGER,
-			allowNull: true,
-			references: {
-				model: "comment",
-				key: "id",
-			},
-		},
 		text: {
 			type: DataTypes.STRING,
 			allowNull: false,
@@ -79,15 +71,6 @@ Comment.belongsTo(User, {
 });
 User.hasMany(Comment, {
 	foreignKey: "id_user",
-});
-
-Comment.belongsTo(Comment, {
-	as: "Parent",
-	foreignKey: "id_parent",
-});
-Comment.hasMany(Comment, {
-	as: "Children",
-	foreignKey: "id_parent",
 });
 
 Post.addScope("commentsCount", {

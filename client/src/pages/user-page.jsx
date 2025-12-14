@@ -4,9 +4,9 @@ import { FaUser } from "react-icons/fa";
 import { useParams, Routes, Route } from "react-router-dom";
 import NavigationMenu from "components/navigation/navigation-menu";
 import NavigationItem from "components/navigation/navigation-item";
-import UserOverview from "components/user/user-overview";
 import UserPosts from "components/user/user-posts";
 import UserComments from "components/user/user-comments";
+import UserCommunities from "components/user/user-communities";
 import "styles/pages/user-page.css";
 
 const UserPage = () => {
@@ -23,15 +23,15 @@ const UserPage = () => {
 				<h2 className="title">{user.username}</h2>
 			</div>
 			<NavigationMenu>
-				<NavigationItem to="" title="Overview" />
-				<NavigationItem to="posts" title="Posts" />
+				<NavigationItem to="" title="Posts" />
 				<NavigationItem to="comments" title="Comments" />
+				<NavigationItem to="communities" title="Communities" />
 			</NavigationMenu>
 			<div className="body">
 				<Routes>
-					<Route index element={<UserOverview user={user} />} />
-					<Route path="posts" element={<UserPosts user={user} />} />
+					<Route index element={<UserPosts user={user} />} />
 					<Route path="comments" element={<UserComments user={user} />} />
+					<Route path="communities" element={<UserCommunities user={user} />} />
 				</Routes>
 			</div>
 		</div>

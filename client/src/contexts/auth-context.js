@@ -59,6 +59,8 @@ export const AuthProvider = ({ children }) => {
 		localStorage.setItem(userKey, JSON.stringify(user));
 		localStorage.setItem(accessTokenKey, accessToken);
 		localStorage.setItem(refreshTokenKey, refreshToken);
+
+		window.location.reload();
 	};
 
 	const clearAuthentication = () => {
@@ -69,6 +71,8 @@ export const AuthProvider = ({ children }) => {
 		localStorage.removeItem(userKey);
 		localStorage.removeItem(accessTokenKey);
 		localStorage.removeItem(refreshTokenKey);
+
+		window.location.reload();
 	};
 
 	return (

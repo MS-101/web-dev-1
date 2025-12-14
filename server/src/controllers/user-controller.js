@@ -1,9 +1,8 @@
 import { StatusCodes } from "http-status-codes";
 import { Op } from "sequelize";
 import User from "../models/user.js";
-import Community from "../models/community.js";
 import Post from "../models/post.js";
-import CommunityMember from "../models/community-member.js";
+import Comment from "../models/comment.js";
 
 class UserController {
 	static async getUsers(req, res) {
@@ -66,12 +65,14 @@ class UserController {
 	}
 
 	static async getUserPosts(req, res) {
-		const { user } = req.body;
+		const { user, authUser } = req.body;
 		const { lastId } = req.query;
 		const limit = 20;
 
 		try {
-			const posts = await Post.scope("defaultScope", "ratings").findAll({
+			const posts = await Post.scope("defaultScope", "ratings", {
+				method: ["myReaction", authUser ? authUser.id : null],
+			}).findAll({
 				where: {
 					id_user: user.id,
 					...(lastId ? { id: { [Op.lt]: lastId } } : {}),
@@ -86,6 +87,33 @@ class UserController {
 
 			return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
 				message: "Failed to fetch user posts.",
+			});
+		}
+	}
+
+	static async getUserComments(req, res) {
+		const { user, authUser } = req.body;
+		const { lastId } = req.query;
+		const limit = 20;
+
+		try {
+			const comments = await Comment.scope("defaultScope", "ratings", {
+				method: ["myReaction", authUser ? authUser.id : null],
+			}).findAll({
+				where: {
+					id_user: user.id,
+					...(lastId ? { id: { [Op.lt]: lastId } } : {}),
+				},
+				order: [["id", "DESC"]],
+				limit: limit,
+			});
+
+			return res.status(StatusCodes.OK).json(comments);
+		} catch (error) {
+			console.log(error);
+
+			return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+				message: "Failed to fetch user comments.",
 			});
 		}
 	}

@@ -3,9 +3,11 @@ import { authAxios, publicAxios } from "config/axios";
 class PostService {
 	static baseUrl = "/post";
 
-	static async getPosts(query, lastId) {
+	static async getPosts(query, lastId, accessToken = null) {
 		return new Promise((resolve, reject) => {
-			publicAxios
+			const axios = accessToken ? authAxios(accessToken) : publicAxios;
+
+			axios
 				.get(this.baseUrl, {
 					params: {
 						query: query,
@@ -21,9 +23,11 @@ class PostService {
 		});
 	}
 
-	static async getPost(idPost) {
+	static async getPost(idPost, accessToken = null) {
 		return new Promise((resolve, reject) => {
-			publicAxios
+			const axios = accessToken ? authAxios(accessToken) : publicAxios;
+
+			axios
 				.get(`${this.baseUrl}/${idPost}`)
 				.then((response) => {
 					resolve(response.data);
@@ -86,9 +90,11 @@ class PostService {
 		});
 	}
 
-	static async getPostResponses(idComment, lastId) {
+	static async getPostResponses(idComment, lastId = null, accessToken = null) {
 		return new Promise((resolve, reject) => {
-			publicAxios
+			const axios = accessToken ? authAxios(accessToken) : publicAxios;
+
+			axios
 				.get(`${this.baseUrl}/${idComment}/response`, {
 					params: {
 						lastId: lastId,
