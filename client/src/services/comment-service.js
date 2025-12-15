@@ -3,6 +3,26 @@ import { publicAxios, authAxios } from "config/axios";
 class CommentService {
 	static baseUrl = "/comment";
 
+	static async getComments(query, lastId, accessToken = null) {
+		return new Promise((resolve, reject) => {
+			const axios = accessToken ? authAxios(accessToken) : publicAxios;
+
+			axios
+				.get(this.baseUrl, {
+					params: {
+						query: query,
+						lastId: lastId,
+					},
+				})
+				.then((response) => {
+					resolve(response.data);
+				})
+				.catch((error) => {
+					reject(error.message);
+				});
+		});
+	}
+
 	static async getComment(idComment) {
 		return new Promise((resolve, reject) => {
 			publicAxios

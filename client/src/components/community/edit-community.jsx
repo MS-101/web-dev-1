@@ -29,7 +29,6 @@ function EditCommunity({ id }) {
 		getAccessToken()
 			.then((accessToken) => {
 				return CommunityService.putCommunity(
-					// return was missing here, meaning that my page gets rerendered before the query is executed
 					accessToken,
 					community.id,
 					name,

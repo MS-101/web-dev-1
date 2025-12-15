@@ -6,6 +6,7 @@ import CommentController from "../controllers/comment-controller.js";
 const commentRoute = express.Router();
 const specificCommentRoute = express.Router();
 
+commentRoute.get("/", CommentController.getComments);
 commentRoute.use("/:id", authComment, specificCommentRoute);
 
 specificCommentRoute.get("/", CommentController.getComment);

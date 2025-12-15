@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
 import CommunityService from "services/community-service";
-import "styles/components/community/community-moderators.css";
 
 const useCommunityModerators = (idCommunity) => {
 	const [moderators, setModerators] = useState([]);

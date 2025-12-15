@@ -22,6 +22,7 @@ This is a side project created for learning purposes. This website is inspired b
 - Community Page
 - User Page
 - Post Page
+- Search Page
 
 ## Planned Functionalities:
 
@@ -31,5 +32,4 @@ This is a side project created for learning purposes. This website is inspired b
 - feed page: page for displaying posts from subscribed communities
 - trending page: page for displaying recent posts
 - explore page: page for finding communities
-- search page: search communities, posts, comments, users
 - deploy to Microsoft Azure

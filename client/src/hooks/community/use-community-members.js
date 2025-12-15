@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
 import CommunityService from "services/community-service";
-import "styles/components/community/community-members.css";
 
 const useCommunityMembers = (idCommunity) => {
 	const [members, setMembers] = useState([]);

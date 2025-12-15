@@ -1,8 +1,38 @@
 import { StatusCodes } from "http-status-codes";
 import { Op } from "sequelize";
+import Comment from "../models/comment.js";
 import CommentReaction from "../models/comment-reaction.js";
 
 class CommentController {
+	static async getComments(req, res) {
+		const { authUser } = req.body;
+		const { query, lastId } = req.query;
+
+		try {
+			const comments = await Comment.scope("defaultScope", "ratings", {
+				method: ["myReaction", authUser ? authUser.id : null],
+			}).findAll({
+				where: {
+					...(query
+						? {
+								text: { [Op.like]: `%${query}%` },
+						  }
+						: {}),
+					...(lastId ? { id: { [Op.lt]: lastId } } : {}),
+				},
+				order: [["id", "DESC"]],
+			});
+
+			return res.status(StatusCodes.OK).json(comments);
+		} catch (error) {
+			console.log(error);
+
+			return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+				message: "Failed to fetch comments!",
+			});
+		}
+	}
+
 	static async getComment(req, res) {
 		const { comment } = req.body;
 

@@ -50,8 +50,9 @@ const Sidebar = () => {
 							to={`/subscriptions`}
 						/>
 						{naviCommunities &&
-							naviCommunities.map((element) => (
+							naviCommunities.map((element, index) => (
 								<SidebarItem
+									key={index}
 									title={element.name}
 									icon={<FaUsers />}
 									to={`/community/${element.id}`}
