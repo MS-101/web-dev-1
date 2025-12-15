@@ -6,11 +6,15 @@ import Post from "components/post/post";
 import usePost from "hooks/post/use-post";
 import usePostComments from "hooks/post/use-post-comments";
 import { useAuthContext } from "contexts/auth-context";
+import { useModalContext } from "contexts/modal-context";
+import { ModalTypes } from "components/modal";
 import PostService from "services/post-service";
 import "styles/pages/post-page.css";
 
 const PostPage = () => {
 	const { id } = useParams();
+
+	const { openModal } = useModalContext();
 
 	const { authUser, getAccessToken } = useAuthContext();
 
@@ -21,7 +25,10 @@ const PostPage = () => {
 	const onCreateCommentClick = () => {
 		if (newCommentText.trim() === "") return;
 
-		if (!authUser) return;
+		if (!authUser) {
+			openModal(ModalTypes.LOGIN);
+			return;
+		}
 
 		getAccessToken()
 			.then((accessToken) => {

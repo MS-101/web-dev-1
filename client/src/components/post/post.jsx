@@ -7,19 +7,25 @@ import {
 	FaComment,
 } from "react-icons/fa";
 import { useNavigate, Link } from "react-router-dom";
+import { useModalContext } from "contexts/modal-context";
 import { useAuthContext } from "contexts/auth-context";
+import { ModalTypes } from "components/modal";
 import PostService from "services/post-service";
 import "styles/components/post/post.css";
 
 const Post = ({ post, displayCommunity = true, displayUser = true }) => {
 	const navigate = useNavigate();
+	const { openModal } = useModalContext();
 	const { authUser, getAccessToken } = useAuthContext();
 
 	const [myReaction, setMyReaction] = useState(post.myReaction);
 	const [rating, setRating] = useState(post.rating);
 
 	const onLikeCick = () => {
-		if (!authUser) return;
+		if (!authUser) {
+			openModal(ModalTypes.LOGIN);
+			return;
+		}
 
 		if (myReaction === 1) {
 			getAccessToken()
@@ -44,7 +50,10 @@ const Post = ({ post, displayCommunity = true, displayUser = true }) => {
 	};
 
 	const onDislikeClick = () => {
-		if (!authUser) return;
+		if (!authUser) {
+			openModal(ModalTypes.LOGIN);
+			return;
+		}
 
 		if (myReaction === -1) {
 			getAccessToken()
@@ -69,6 +78,11 @@ const Post = ({ post, displayCommunity = true, displayUser = true }) => {
 	};
 
 	const onCommentClick = () => {
+		if (!authUser) {
+			openModal(ModalTypes.LOGIN);
+			return;
+		}
+
 		navigate(`/post/${post.id}`);
 	};
 

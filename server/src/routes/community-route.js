@@ -35,12 +35,7 @@ specificCommunityRoute.post(
 	CommunityController.leaveCommunity
 );
 specificCommunityRoute.get("/post", CommunityController.getCommunityPosts);
-specificCommunityRoute.post(
-	"/post",
-	authAccessToken,
-	authCommunityMember,
-	CommunityController.postCommunityPost
-);
+specificCommunityRoute.post("/post", CommunityController.postCommunityPost);
 specificCommunityRoute.get("/member", CommunityController.getCommunityMembers);
 specificCommunityRoute.get(
 	"/moderator",

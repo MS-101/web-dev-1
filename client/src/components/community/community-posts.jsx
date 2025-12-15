@@ -1,4 +1,5 @@
 import { React, useRef } from "react";
+import { useAuthContext } from "contexts/auth-context";
 import { useModalContext } from "contexts/modal-context";
 import useCommunityPosts from "hooks/community/use-community-posts";
 import { ModalTypes } from "components/modal";
@@ -8,6 +9,7 @@ import "styles/components/community/community-posts.css";
 
 const CommunityPosts = ({ community }) => {
 	const { openModal } = useModalContext();
+	const { authUser } = useAuthContext();
 
 	const { posts, postsLoading, fetchNextPosts, addPost } = useCommunityPosts(
 		community.id
@@ -38,7 +40,7 @@ const CommunityPosts = ({ community }) => {
 
 	return (
 		<div className="community-posts">
-			{Boolean(community.isMember) && (
+			{authUser && (
 				<button className="create-post-button" onClick={onCreatePostClick}>
 					<FaPlus /> Post
 				</button>

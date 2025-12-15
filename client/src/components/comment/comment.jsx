@@ -2,17 +2,23 @@ import { React, useState } from "react";
 import { FaUser, FaUsers, FaThumbsUp, FaThumbsDown } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useAuthContext } from "contexts/auth-context";
+import { useModalContext } from "contexts/modal-context";
+import { ModalTypes } from "components/modal";
 import CommentService from "services/comment-service";
 import "styles/components/comment/comment.css";
 
 const Comment = ({ comment, displayCommunity = true, displayUser = true }) => {
 	const { authUser, getAccessToken } = useAuthContext();
+	const { openModal } = useModalContext();
 
 	const [myReaction, setMyReaction] = useState(comment.myReaction);
 	const [rating, setRating] = useState(comment.rating);
 
 	const onLikeCick = () => {
-		if (!authUser) return;
+		if (!authUser) {
+			openModal(ModalTypes.LOGIN);
+			return;
+		}
 
 		if (myReaction === 1) {
 			getAccessToken()
@@ -41,7 +47,10 @@ const Comment = ({ comment, displayCommunity = true, displayUser = true }) => {
 	};
 
 	const onDislikeClick = () => {
-		if (!authUser) return;
+		if (!authUser) {
+			openModal(ModalTypes.LOGIN);
+			return;
+		}
 
 		if (myReaction === -1) {
 			getAccessToken()
