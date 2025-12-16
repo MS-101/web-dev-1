@@ -16,20 +16,17 @@ This is a side project created for learning purposes. This website is inspired b
 
 ## Finished Functionalities:
 
-- Authenthication
-- Navigation
-- Subscriptions Page
-- Community Page
-- User Page
-- Post Page
-- Search Page
+- Authenthication: registration, login and logout
+- Feed page: page for displaying posts from subscribed communities
+- Trending page: page for displaying recent posts
+- Subscriptions Page: page for managing subscribed communities
+- Community Page: page for displaying community content
+- User Page: page for displaying user content
+- Post Page: page for post discussion
+- Search Page: page for searching all content
 
 ## Planned Functionalities:
 
 - password reset via email
-- community tags
+- deploy to AWS
 - media storage for user icons, community banners, community icons, post media and comment media
-- feed page: page for displaying posts from subscribed communities
-- trending page: page for displaying recent posts
-- explore page: page for finding communities
-- deploy to Microsoft Azure

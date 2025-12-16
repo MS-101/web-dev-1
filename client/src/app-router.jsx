@@ -4,7 +4,6 @@ import AppLayout from "app-layout";
 import HomePage from "pages/home-page";
 import FeedPage from "pages/feed-page";
 import TrendingPage from "pages/trending-page";
-import ExplorePage from "pages/explore-page";
 import CommunityPage from "pages/community-page";
 import PostPage from "pages/post-page";
 import UserPage from "pages/user-page";
@@ -19,7 +18,6 @@ function AppRouter() {
 					<Route index element={<HomePage />} />
 					<Route path="feed" element={<FeedPage />} />
 					<Route path="trending" element={<TrendingPage />} />
-					<Route path="explore" element={<ExplorePage />} />
 					<Route path="search/*" element={<SearchPage />} />
 					<Route path="subscriptions" element={<SubscriptionsPage />} />
 					<Route path="community/:id/*" element={<CommunityPage />} />

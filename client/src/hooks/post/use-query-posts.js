@@ -10,33 +10,28 @@ const useQueryPosts = (query) => {
 	const { authUser, getAccessToken } = useAuthContext();
 
 	const fetchTopPosts = useCallback(() => {
-		if (query) {
-			setPostsLoading(true);
+		setPostsLoading(true);
 
-			if (authUser) {
-				getAccessToken()
-					.then((accessToken) => {
-						return PostService.getPosts(query, null, accessToken);
-					})
-					.then((curPosts) => {
-						const lastPost = curPosts[curPosts.length - 1];
-
-						setPosts(curPosts);
-						setLastPostId(lastPost?.id);
-						setPostsLoading(false);
-					});
-			} else {
-				PostService.getPosts(query).then((curPosts) => {
+		if (authUser) {
+			getAccessToken()
+				.then((accessToken) => {
+					return PostService.getPosts(query, null, accessToken);
+				})
+				.then((curPosts) => {
 					const lastPost = curPosts[curPosts.length - 1];
 
 					setPosts(curPosts);
 					setLastPostId(lastPost?.id);
 					setPostsLoading(false);
 				});
-			}
 		} else {
-			setPosts([]);
-			setLastPostId(null);
+			PostService.getPosts(query).then((curPosts) => {
+				const lastPost = curPosts[curPosts.length - 1];
+
+				setPosts(curPosts);
+				setLastPostId(lastPost?.id);
+				setPostsLoading(false);
+			});
 		}
 	}, [query, authUser]);
 

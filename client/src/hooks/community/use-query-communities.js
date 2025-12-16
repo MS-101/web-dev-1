@@ -10,33 +10,28 @@ const useQueryCommunities = (query) => {
 	const { authUser, getAccessToken } = useAuthContext();
 
 	const fetchTopCommunities = useCallback(() => {
-		if (query) {
-			setCommunitiesLoading(true);
+		setCommunitiesLoading(true);
 
-			if (authUser) {
-				getAccessToken()
-					.then((accessToken) => {
-						return CommunityService.getCommunities(query, null, accessToken);
-					})
-					.then((curCommunities) => {
-						const lastCommunity = curCommunities[curCommunities.length - 1];
-
-						setCommunities(curCommunities);
-						setLastCommunityId(lastCommunity?.id);
-						setCommunitiesLoading(false);
-					});
-			} else {
-				CommunityService.getCommunities(query).then((curCommunities) => {
+		if (authUser) {
+			getAccessToken()
+				.then((accessToken) => {
+					return CommunityService.getCommunities(query, null, accessToken);
+				})
+				.then((curCommunities) => {
 					const lastCommunity = curCommunities[curCommunities.length - 1];
 
 					setCommunities(curCommunities);
 					setLastCommunityId(lastCommunity?.id);
 					setCommunitiesLoading(false);
 				});
-			}
 		} else {
-			setCommunities([]);
-			setLastCommunityId(null);
+			CommunityService.getCommunities(query).then((curCommunities) => {
+				const lastCommunity = curCommunities[curCommunities.length - 1];
+
+				setCommunities(curCommunities);
+				setLastCommunityId(lastCommunity?.id);
+				setCommunitiesLoading(false);
+			});
 		}
 	}, [query, authUser]);
 

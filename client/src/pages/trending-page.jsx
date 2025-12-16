@@ -1,10 +1,11 @@
 import React from "react";
+import QueryPosts from "components/post/query-posts";
+import "styles/pages/trending-page.css";
 
 const TrendingPage = () => {
 	return (
-		<div>
-			<h2>Trending Page</h2>
-			<p>Content of trending page.</p>
+		<div className="trending-page">
+			<QueryPosts />
 		</div>
 	);
 };

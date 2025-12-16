@@ -3,7 +3,7 @@ import useQueryPosts from "hooks/post/use-query-posts";
 import Post from "./post";
 import "styles/components/post/query-posts.css";
 
-const QueryPosts = ({ query }) => {
+const QueryPosts = ({ query = null }) => {
 	const { posts, postsLoading, fetchNextPosts } = useQueryPosts(query);
 
 	const onPostsScroll = () => {

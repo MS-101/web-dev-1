@@ -35,6 +35,36 @@ class UserController {
 		return res.status(StatusCodes.OK).json(user);
 	}
 
+	static async getUserFeed(req, res) {
+		const { user, authUser } = req.body;
+		const { lastId } = req.query;
+		const limit = 20;
+
+		try {
+			const communities = await user.getCommunityMemberships();
+			const communityIds = communities.map((c) => c.id);
+
+			const posts = await Post.scope("defaultScope", "ratings", {
+				method: ["myReaction", authUser ? authUser.id : null],
+			}).findAll({
+				where: {
+					id_community: { [Op.in]: communityIds },
+					...(lastId ? { id: { [Op.lt]: lastId } } : {}),
+				},
+				order: [["id", "DESC"]],
+				limit: limit,
+			});
+
+			return res.status(StatusCodes.OK).json(posts);
+		} catch (error) {
+			console.log(error);
+
+			return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+				message: "Failed to fetch user posts.",
+			});
+		}
+	}
+
 	static async getUserCommunities(req, res) {
 		const { authUser, user } = req.body;
 

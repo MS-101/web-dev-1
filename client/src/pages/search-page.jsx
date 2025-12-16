@@ -14,28 +14,22 @@ const SearchPage = () => {
 
 	return (
 		<div className="search-page">
-			<h2>Search Page</h2>
-			<div className="search-body">
-				<NavigationMenu>
-					<NavigationItem
-						to={`communities?query=${query}`}
-						title="Communities"
-					/>
-					<NavigationItem to={`posts?query=${query}`} title="Posts" />
-					<NavigationItem to={`comments?query=${query}`} title="Comments" />
-					<NavigationItem to={`users?query=${query}`} title="Users" />
-				</NavigationMenu>
+			<NavigationMenu>
+				<NavigationItem to={`communities?query=${query}`} title="Communities" />
+				<NavigationItem to={`posts?query=${query}`} title="Posts" />
+				<NavigationItem to={`comments?query=${query}`} title="Comments" />
+				<NavigationItem to={`users?query=${query}`} title="Users" />
+			</NavigationMenu>
 
-				<Routes>
-					<Route
-						path="communities"
-						element={<QueryCommunities query={query} />}
-					/>
-					<Route path="posts" element={<QueryPosts query={query} />} />
-					<Route path="comments" element={<QueryComments query={query} />} />
-					<Route path="users" element={<QueryUsers query={query} />} />
-				</Routes>
-			</div>
+			<Routes>
+				<Route
+					path="communities"
+					element={<QueryCommunities query={query} />}
+				/>
+				<Route path="posts" element={<QueryPosts query={query} />} />
+				<Route path="comments" element={<QueryComments query={query} />} />
+				<Route path="users" element={<QueryUsers query={query} />} />
+			</Routes>
 		</div>
 	);
 };

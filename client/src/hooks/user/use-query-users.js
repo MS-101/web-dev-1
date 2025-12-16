@@ -7,17 +7,15 @@ const useQueryUsers = (query) => {
 	const [usersLoading, setUsersLoading] = useState(false);
 
 	const fetchTopUsers = useCallback(() => {
-		if (query) {
-			setUsersLoading(true);
+		setUsersLoading(true);
 
-			UserService.getUsers(query).then((curUsers) => {
-				const lastUser = curUsers[curUsers.length - 1];
+		UserService.getUsers(query).then((curUsers) => {
+			const lastUser = curUsers[curUsers.length - 1];
 
-				setUsers(curUsers);
-				setLastUserId(lastUser?.id);
-				setUsersLoading(false);
-			});
-		}
+			setUsers(curUsers);
+			setLastUserId(lastUser?.id);
+			setUsersLoading(false);
+		});
 	}, [query]);
 
 	useEffect(() => {

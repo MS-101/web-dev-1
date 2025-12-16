@@ -10,33 +10,28 @@ const useQueryComments = (query) => {
 	const { authUser, getAccessToken } = useAuthContext();
 
 	const fetchTopComments = useCallback(() => {
-		if (query) {
-			setCommentsLoading(true);
+		setCommentsLoading(true);
 
-			if (authUser) {
-				getAccessToken()
-					.then((accessToken) => {
-						return CommentService.getComments(query, null, accessToken);
-					})
-					.then((curComments) => {
-						const lastComment = curComments[curComments.length - 1];
-
-						setComments(curComments);
-						setLastCommentId(lastComment?.id);
-						setCommentsLoading(false);
-					});
-			} else {
-				CommentService.getComments(query).then((curComments) => {
+		if (authUser) {
+			getAccessToken()
+				.then((accessToken) => {
+					return CommentService.getComments(query, null, accessToken);
+				})
+				.then((curComments) => {
 					const lastComment = curComments[curComments.length - 1];
 
 					setComments(curComments);
 					setLastCommentId(lastComment?.id);
 					setCommentsLoading(false);
 				});
-			}
 		} else {
-			setComments([]);
-			setLastCommentId(null);
+			CommentService.getComments(query).then((curComments) => {
+				const lastComment = curComments[curComments.length - 1];
+
+				setComments(curComments);
+				setLastCommentId(lastComment?.id);
+				setCommentsLoading(false);
+			});
 		}
 	}, [query, authUser]);
 

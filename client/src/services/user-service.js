@@ -34,6 +34,25 @@ class UserService {
 		});
 	}
 
+	static async getUserFeed(accessToken, idUser, lastId = null) {
+		return new Promise((resolve, reject) => {
+			const axios = accessToken ? authAxios(accessToken) : publicAxios;
+
+			axios
+				.get(`${this.baseUrl}/${idUser}/feed/`, {
+					params: {
+						lastId: lastId,
+					},
+				})
+				.then((response) => {
+					resolve(response.data);
+				})
+				.catch((error) => {
+					reject(error.message);
+				});
+		});
+	}
+
 	static async getUserCommunities(idUser, accessToken = null) {
 		return new Promise((resolve, reject) => {
 			const axios = accessToken ? authAxios(accessToken) : publicAxios;
