@@ -48,6 +48,36 @@ class AuthService {
 				});
 		});
 	}
+
+	static async requestPasswordReset(email) {
+		return new Promise((resolve, reject) => {
+			publicAxios
+				.post(`${this.baseUrl}/request-password-reset`, {
+					email: email,
+				})
+				.then((response) => {
+					resolve(response.data);
+				})
+				.catch((error) => {
+					reject(error.response.data.message);
+				});
+		});
+	}
+
+	static async resetPassword(resetToken, password) {
+		return new Promise((resolve, reject) => {
+			authAxios(resetToken)
+				.post(`${this.baseUrl}/reset-password`, {
+					password: password,
+				})
+				.then((response) => {
+					resolve(response.data);
+				})
+				.catch((error) => {
+					reject(error.response.data.message);
+				});
+		});
+	}
 }
 
 export default AuthService;

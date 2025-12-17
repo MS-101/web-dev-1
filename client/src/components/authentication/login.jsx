@@ -17,7 +17,7 @@ function Login() {
 	};
 
 	const onForgotPasswordClick = () => {
-		openModal(ModalTypes.RESET_PASSWORD);
+		openModal(ModalTypes.REQUEST_PASSWORD_RESET);
 	};
 
 	const onShowRegisterClick = () => {

@@ -118,21 +118,19 @@ class AuthController {
 	}
 
 	static async refresh(req, res) {
-		const refreshToken = extractToken(req.headers);
+		const { authUser } = req.body;
 
 		try {
-			const user = await verifyRefreshToken(refreshToken);
-
-			const accessToken = await signAccessToken(user);
-			const newRefreshToken = await signRefreshToken(user);
+			const accessToken = await signAccessToken(authUser);
+			const newRefreshToken = await signRefreshToken(authUser);
 
 			return res.status(StatusCodes.OK).json({
 				message: "Token refresh successfull!",
 				user: {
-					id: user.id,
-					date: user.date,
-					username: user.username,
-					email: user.email,
+					id: authUser.id,
+					date: authUser.date,
+					username: authUser.username,
+					email: authUser.email,
 				},
 				accessToken: accessToken,
 				refreshToken: newRefreshToken,
@@ -142,6 +140,55 @@ class AuthController {
 
 			return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
 				message: "Token refresh failed!",
+			});
+		}
+	}
+
+	static async requestPasswordReset(req, res) {
+		const { email } = req.body;
+
+		let user = await User.scope("auth").findOne({
+			where: {
+				email: email,
+			},
+		});
+
+		if (user === null)
+			return res.status(StatusCodes.NOT_FOUND).json({
+				message: "User with this email does not exist!",
+			});
+
+		try {
+			/*
+			Generate a password reset token and send it to the user's email.
+			*/
+
+			return res.status(StatusCodes.OK).json({
+				message: "Reset token sent to email!",
+			});
+		} catch (error) {
+			console.log(error);
+
+			return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+				message: "Password reset failed!",
+			});
+		}
+	}
+
+	static async resetPassword(req, res) {
+		const { authUser, password } = req.body;
+
+		authUser.password = await bcrypt.hash(password, 10);
+
+		try {
+			return res.status(StatusCodes.OK).json({
+				message: "Password reset successful!",
+			});
+		} catch (error) {
+			console.log(error);
+
+			return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+				message: "Password reset failed!",
 			});
 		}
 	}

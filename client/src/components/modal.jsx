@@ -3,7 +3,7 @@ import Modal from "react-modal";
 import { useModalContext } from "contexts/modal-context";
 import Login from "./authentication/login";
 import Register from "./authentication/register";
-import ResetPassword from "./authentication/reset-password";
+import RequestResetPassword from "./authentication/request-reset-password";
 import CreateCommunity from "./community/create-community";
 import EditCommunity from "./community/edit-community";
 import CreatePost from "./post/create-post";
@@ -13,6 +13,7 @@ export const ModalTypes = {
 	LOGIN: "LOGIN",
 	REGISTER: "REGISTER",
 	RESET_PASSWORD: "RESET_PASSWORD",
+	REQUEST_PASSWORD_RESET: "REQUEST_PASSWORD_RESET",
 	CREATE_COMMUNITY: "CREATE_COMMUNITY",
 	EDIT_COMMUNITY: "EDIT_COMMUNITY",
 	CREATE_POST: "CREATE_POST",
@@ -27,8 +28,8 @@ const ModalWrapper = () => {
 				return <Login />;
 			case ModalTypes.REGISTER:
 				return <Register />;
-			case ModalTypes.RESET_PASSWORD:
-				return <ResetPassword />;
+			case ModalTypes.REQUEST_PASSWORD_RESET:
+				return <RequestResetPassword />;
 			case ModalTypes.CREATE_COMMUNITY:
 				return <CreateCommunity />;
 			case ModalTypes.EDIT_COMMUNITY:

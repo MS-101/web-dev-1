@@ -44,10 +44,10 @@
 	height: 100%;
 	align-items: center;
 	justify-content: right;
-	padding: 2px;
 }
 
 .DropdownContainer Button {
 	width: 100px;
 	height: 80%;
+	margin-right: 5px;
 }
