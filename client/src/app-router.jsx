@@ -9,6 +9,7 @@ import PostPage from "pages/post-page";
 import UserPage from "pages/user-page";
 import SubscriptionsPage from "pages/subscriptions-page";
 import SearchPage from "pages/search-page";
+import ResetPasswordPage from "pages/reset-password-page";
 
 function AppRouter() {
 	return (
@@ -23,6 +24,7 @@ function AppRouter() {
 					<Route path="community/:id/*" element={<CommunityPage />} />
 					<Route path="post/:id/*" element={<PostPage />} />
 					<Route path="user/:id/*" element={<UserPage />} />
+					<Route path="reset-password" element={<ResetPasswordPage />} />
 				</Route>
 			</Routes>
 		</BrowserRouter>

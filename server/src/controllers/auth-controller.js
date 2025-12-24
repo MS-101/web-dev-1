@@ -1,11 +1,11 @@
 import bcrypt from "bcrypt";
 import User from "../models/user.js";
 import {
-	extractToken,
 	signAccessToken,
 	signRefreshToken,
-	verifyRefreshToken,
+	signResetToken,
 } from "../helpers/jwt-helpers.js";
+import { sendEmail } from "../helpers/email-helpers.js";
 import { StatusCodes } from "http-status-codes";
 
 class AuthController {
@@ -147,7 +147,7 @@ class AuthController {
 	static async requestPasswordReset(req, res) {
 		const { email } = req.body;
 
-		let user = await User.scope("auth").findOne({
+		const user = await User.scope("auth").findOne({
 			where: {
 				email: email,
 			},
@@ -159,9 +159,31 @@ class AuthController {
 			});
 
 		try {
-			/*
-			Generate a password reset token and send it to the user's email.
-			*/
+			const resetToken = await signResetToken(user);
+
+			const passwordResetUrl = `${process.env.BASE_URL}/reset-password?reset-token=${resetToken}`;
+
+			console.log("Generated password reset url: " + passwordResetUrl);
+
+			const success = await sendEmail(
+				email,
+				"Banter password reset request",
+				`
+					<p>We have received a request for password reset of your account. If you did not send this request you can ignore this message.</p>
+
+					<h3>Click the following button if you wish to change your password:</h3>
+
+					<a href="${passwordResetUrl}">
+						<button>Reset password</button>
+					</a>
+				`
+			);
+
+			if (!success) {
+				return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+					message: "Failed to send reset email!",
+				});
+			}
 
 			return res.status(StatusCodes.OK).json({
 				message: "Reset token sent to email!",
@@ -178,9 +200,21 @@ class AuthController {
 	static async resetPassword(req, res) {
 		const { authUser, password } = req.body;
 
-		authUser.password = await bcrypt.hash(password, 10);
-
 		try {
+			const user = await User.findOne({
+				where: {
+					email: authUser.email,
+				},
+			});
+
+			if (!user) throw new Error("User was not found!");
+
+			const hashedPassword = await bcrypt.hash(password, 10);
+
+			const updatedUser = await user.update({
+				password: hashedPassword,
+			});
+
 			return res.status(StatusCodes.OK).json({
 				message: "Password reset successful!",
 			});

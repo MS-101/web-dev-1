@@ -2,9 +2,17 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
+			"name": "Run Server (dev)",
+			"type": "node-terminal",
+			"command": "npm run dev",
+			"request": "launch",
+			"cwd": "${workspaceFolder}/server",
+			"preLaunchTask": "Install Server"
+		},
+		{
 			"name": "Run Server",
 			"type": "node-terminal",
-			"command": "nodemon npm start",
+			"command": "npm start",
 			"request": "launch",
 			"cwd": "${workspaceFolder}/server",
 			"preLaunchTask": "Install Server"
