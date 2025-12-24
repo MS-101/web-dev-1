@@ -12,6 +12,14 @@ class AuthController {
 	static async register(req, res) {
 		const { username, email, password } = req.body;
 
+		const emailRegex =
+			/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+
+		if (!emailRegex.test(email))
+			return res.status(StatusCodes.BAD_REQUEST).json({
+				message: "Email is invalid!",
+			});
+
 		const userWithUsername = await User.findOne({
 			where: {
 				username: username,
