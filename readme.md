@@ -24,9 +24,9 @@ This is a side project created for learning purposes. This website is inspired b
 - User Page: page for displaying user content
 - Post Page: page for post discussion
 - Search Page: page for searching all content
+- Reset Password Page: page for setting new password if user forgot the previous one
 
 ## Planned Functionalities:
 
-- password reset via email
 - deploy to AWS
 - media storage for user icons, community banners, community icons, post media and comment media
