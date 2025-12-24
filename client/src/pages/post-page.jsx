@@ -34,8 +34,8 @@ const PostPage = () => {
 			.then((accessToken) => {
 				return PostService.postPostResponse(accessToken, id, newCommentText);
 			})
-			.then((comment) => {
-				addComment(comment);
+			.then((response) => {
+				addComment(response.comment);
 				setNewCommentText("");
 			});
 	};
