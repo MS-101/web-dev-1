@@ -1,0 +1,16 @@
+services:
+  server:
+    build: ./server
+    container_name: banter-server
+    ports:
+      - "8081:8081"
+    restart: always
+
+  client:
+    build: ./client
+    container_name: banter-client
+    ports:
+      - "80:80"
+    restart: always
+    depends_on:
+      - server
