@@ -1,0 +1,7 @@
+services:
+  server:
+    build: .
+    container_name: banter-server
+    ports:
+      - "8081:8081"
+    restart: always
