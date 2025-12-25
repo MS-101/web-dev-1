@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useNavigationContext } from "contexts/navigation-context";
 import { useAuthContext } from "contexts/auth-context";
 import CommunityService from "services/community-service";
-import "styles/components/community/community.css";
+import "styles/components/community/community.scss";
 
 const Community = ({ community }) => {
 	const [name, setName] = useState(community.name);

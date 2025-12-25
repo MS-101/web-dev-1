@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import AuthService from "services/auth-service";
-import "styles/pages/reset-password-page.css";
+import "styles/pages/reset-password-page.scss";
 
 const ResetPasswordPage = () => {
 	const navigate = useNavigate();

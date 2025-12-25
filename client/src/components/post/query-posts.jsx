@@ -1,7 +1,7 @@
 import { React, useRef } from "react";
 import useQueryPosts from "hooks/post/use-query-posts";
 import Post from "./post";
-import "styles/components/post/query-posts.css";
+import "styles/components/post/query-posts.scss";
 
 const QueryPosts = ({ query = null }) => {
 	const { posts, postsLoading, fetchNextPosts } = useQueryPosts(query);

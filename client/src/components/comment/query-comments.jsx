@@ -1,7 +1,7 @@
 import { React, useRef } from "react";
 import useQueryComments from "hooks/comment/use-query-comments";
 import Comment from "./comment";
-import "styles/components/comment/query-comments.css";
+import "styles/components/comment/query-comments.scss";
 
 const QueryComments = ({ query }) => {
 	const { comments, commentsLoading, fetchNextComments } =

@@ -7,7 +7,7 @@ import RequestResetPassword from "./authentication/request-reset-password";
 import CreateCommunity from "./community/create-community";
 import EditCommunity from "./community/edit-community";
 import CreatePost from "./post/create-post";
-import "styles/components/modal.css";
+import "styles/components/modal.scss";
 
 export const ModalTypes = {
 	LOGIN: "LOGIN",

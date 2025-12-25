@@ -13,7 +13,7 @@ import CommunityMembers from "components/community/community-members";
 import CommunityModerators from "components/community/community-moderators";
 import useCommunity from "hooks/community/use-community";
 import placeholder from "assets/placeholder.jpg";
-import "styles/pages/community-page.css";
+import "styles/pages/community-page.scss";
 
 const CommunityPage = () => {
 	const { id } = useParams();

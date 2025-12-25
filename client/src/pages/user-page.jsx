@@ -7,7 +7,7 @@ import NavigationItem from "components/navigation/navigation-item";
 import UserPosts from "components/user/user-posts";
 import UserComments from "components/user/user-comments";
 import UserCommunities from "components/user/user-communities";
-import "styles/pages/user-page.css";
+import "styles/pages/user-page.scss";
 
 const UserPage = () => {
 	const { id } = useParams();

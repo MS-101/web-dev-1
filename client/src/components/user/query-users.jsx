@@ -1,7 +1,7 @@
 import { React, useRef } from "react";
 import useQueryUsers from "hooks/user/use-query-users";
 import User from "./user";
-import "styles/components/user/query-users.css";
+import "styles/components/user/query-users.scss";
 
 const QueryUsers = ({ query }) => {
 	const { users, usersLoading, fetchNextUsers } = useQueryUsers(query);

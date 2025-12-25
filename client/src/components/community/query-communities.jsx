@@ -1,7 +1,7 @@
 import { React, useRef } from "react";
 import useQueryCommunities from "hooks/community/use-query-communities";
 import Community from "./community";
-import "styles/components/community/query-communities.css";
+import "styles/components/community/query-communities.scss";
 
 const QueryCommunities = ({ query }) => {
 	const { communities, communitiesLoading, fetchNextCommunities } =

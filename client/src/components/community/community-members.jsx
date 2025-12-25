@@ -1,7 +1,7 @@
 import { React, useRef } from "react";
 import useCommunityMembers from "hooks/community/use-community-members";
 import User from "components/user/user";
-import "styles/components/community/community-members.css";
+import "styles/components/community/community-members.scss";
 
 const CommunityMembers = ({ community }) => {
 	const { members, membersLoading, fetchNextMembers } = useCommunityMembers(

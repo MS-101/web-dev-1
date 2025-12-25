@@ -5,7 +5,7 @@ import { useAuthContext } from "contexts/auth-context";
 import { useModalContext } from "contexts/modal-context";
 import { ModalTypes } from "components/modal";
 import CommentService from "services/comment-service";
-import "styles/components/comment/comment.css";
+import "styles/components/comment/comment.scss";
 
 const Comment = ({ comment, displayCommunity = true, displayUser = true }) => {
 	const { authUser, getAccessToken } = useAuthContext();

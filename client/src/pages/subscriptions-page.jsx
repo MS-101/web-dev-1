@@ -2,7 +2,7 @@ import React from "react";
 import Community from "components/community/community";
 import useUserCommunities from "hooks/user/use-user-communities";
 import { useAuthContext } from "contexts/auth-context";
-import "styles/pages/subscriptions-page.css";
+import "styles/pages/subscriptions-page.scss";
 
 const SubscriptionsPage = () => {
 	const { authUser } = useAuthContext();

@@ -6,7 +6,7 @@ import QueryComments from "components/comment/query-comments";
 import QueryUsers from "components/user/query-users";
 import NavigationMenu from "components/navigation/navigation-menu";
 import NavigationItem from "components/navigation/navigation-item";
-import "styles/pages/search-page.css";
+import "styles/pages/search-page.scss";
 
 const SearchPage = () => {
 	const [searchParams] = useSearchParams();

@@ -1,7 +1,7 @@
 import { React, useRef } from "react";
 import Comment from "components/comment/comment";
 import useUserComments from "hooks/user/use-user-comments";
-import "styles/components/user/user-comments.css";
+import "styles/components/user/user-comments.scss";
 
 const UserComments = ({ user }) => {
 	const { comments, commentsLoading, fetchNextComments } = useUserComments(

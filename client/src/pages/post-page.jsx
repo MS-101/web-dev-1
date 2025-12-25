@@ -9,7 +9,7 @@ import { useAuthContext } from "contexts/auth-context";
 import { useModalContext } from "contexts/modal-context";
 import { ModalTypes } from "components/modal";
 import PostService from "services/post-service";
-import "styles/pages/post-page.css";
+import "styles/pages/post-page.scss";
 
 const PostPage = () => {
 	const { id } = useParams();

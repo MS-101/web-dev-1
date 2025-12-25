@@ -2,7 +2,7 @@ import React from "react";
 import { Navigate } from "react-router-dom";
 import UserFeed from "components/user/user-feed";
 import { useAuthContext } from "contexts/auth-context";
-import "styles/pages/feed-page.css";
+import "styles/pages/feed-page.scss";
 
 const FeedPage = () => {
 	const { authUser } = useAuthContext();

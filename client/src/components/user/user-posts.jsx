@@ -1,7 +1,7 @@
 import { React, useRef } from "react";
 import Post from "components/post/post";
 import useUserPosts from "hooks/user/use-user-posts";
-import "styles/components/user/user-posts.css";
+import "styles/components/user/user-posts.scss";
 
 const UserPosts = ({ user }) => {
 	const { posts, postsLoading, fetchNextPosts } = useUserPosts(user.id);

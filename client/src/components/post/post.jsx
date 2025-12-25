@@ -11,7 +11,7 @@ import { useModalContext } from "contexts/modal-context";
 import { useAuthContext } from "contexts/auth-context";
 import { ModalTypes } from "components/modal";
 import PostService from "services/post-service";
-import "styles/components/post/post.css";
+import "styles/components/post/post.scss";
 
 const Post = ({ post, displayCommunity = true, displayUser = true }) => {
 	const navigate = useNavigate();

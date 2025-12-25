@@ -5,7 +5,7 @@ import useCommunityPosts from "hooks/community/use-community-posts";
 import { ModalTypes } from "components/modal";
 import Post from "components/post/post";
 import { FaPlus } from "react-icons/fa";
-import "styles/components/community/community-posts.css";
+import "styles/components/community/community-posts.scss";
 
 const CommunityPosts = ({ community }) => {
 	const { openModal } = useModalContext();

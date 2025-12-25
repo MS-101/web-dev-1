@@ -1,7 +1,7 @@
 import React from "react";
 import useCommunityModerators from "hooks/community/use-community-moderators";
 import User from "components/user/user";
-import "styles/components/community/community-moderators.css";
+import "styles/components/community/community-moderators.scss";
 
 const CommunityModerators = ({ community }) => {
 	const { moderators, moderatorsLoaded } = useCommunityModerators(

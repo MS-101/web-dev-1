@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import React from "react";
 import { FaUser } from "react-icons/fa";
-import "styles/components/user/user.css";
+import "styles/components/user/user.scss";
 
 const User = ({ user }) => {
 	return (

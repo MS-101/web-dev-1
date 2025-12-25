@@ -1,7 +1,7 @@
 import { React, useRef } from "react";
 import Post from "components/post/post";
 import useUserFeed from "hooks/user/use-user-feed";
-import "styles/components/user/user-feed.css";
+import "styles/components/user/user-feed.scss";
 
 const UserFeed = ({ user }) => {
 	const { posts, postsLoading, fetchNextPosts } = useUserFeed(user.id);
